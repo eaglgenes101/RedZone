@@ -12,3 +12,5 @@ slick
 src
 worlds
 
+.gitignore~
+
