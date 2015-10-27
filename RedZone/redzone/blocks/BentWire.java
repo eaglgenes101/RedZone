@@ -44,7 +44,7 @@ public class BentWire extends Wire
 	public boolean canConnect(int dx, int dy, int dz, int meta) 
 	{
 		if (dx > 1 || dx < -1 || dy > 1 || dy < -1 || dz > 1 || dz < -1) return false;
-		double[] locvec={1.0,0.0,1.0};
+		double[] locvec={-1.0,0.0,1.0};
 		double[] itsvec = Orienter.getDirection(locvec, meta);
 		int[] rounded = { (int)Math.round(itsvec[0]), (int)Math.round(itsvec[1]), (int)Math.round(itsvec[2]) };
 		boolean facingSideX = (rounded[0]==dx) && (dx != 0) && (dy == 0 || dz == 0);
