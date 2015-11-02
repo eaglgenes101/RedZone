@@ -106,8 +106,7 @@ public class Wire extends Block implements PoweredComponent
 	
 	public void tickMeFast(World w, int dimension, int x, int y, int z)
 	{
-		((PoweredComponent)this).powerBump(w, dimension, x, y, z); 
-		return;
+		((PoweredComponent)this).powerBump(w, dimension, x, y, z);
 	}
 	
 	@Override
