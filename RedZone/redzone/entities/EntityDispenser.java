@@ -15,11 +15,13 @@ import dangerzone.items.Item;
 
 public class EntityDispenser extends EntityChest
 {
+	int gencounter;
 
 	public EntityDispenser(World w)
 	{
 		super(w);
 		uniquename = "RedZone:EntityDispenser";
+		gencounter = 0;
 	}
 
 	public InventoryContainer getFirst()
@@ -62,6 +64,7 @@ public class EntityDispenser extends EntityChest
 
 	public void update(float deltaT)
 	{
+		System.out.println("I exist! " + gencounter);
 		if (world.getblock(dimension, (int) posx, (int) posy, (int) posz) != RedZoneMain.DISPENSER.blockID)
 		{
 			if (world.isServer)
@@ -88,7 +91,7 @@ public class EntityDispenser extends EntityChest
 	}
 	
 	public boolean rightClickedByPlayer(Player p, InventoryContainer ic){
-		if(world.getblock(dimension,  (int)posx, (int)posy, (int)posz) != RedZoneMain.DISPENSER.blockID){
+		if(world.getblock(dimension, (int)posx, (int)posy, (int)posz) != RedZoneMain.DISPENSER.blockID){
 			if(world.isServer){
 				dumpInventory();
 			}
@@ -129,7 +132,7 @@ public class EntityDispenser extends EntityChest
 		}
 	}
 
-	// Handle right-clicks by a phantom "player"
+	// Do right-clicks by a phantom "player"
 	public void rightclick(World world, int focus_x, int focus_y, int focus_z, int side, int eid)
 	{
 		Entity e = null;

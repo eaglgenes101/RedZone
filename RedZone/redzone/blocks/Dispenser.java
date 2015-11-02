@@ -15,6 +15,7 @@ import dangerzone.World;
 import dangerzone.blocks.Block;
 import dangerzone.entities.Entity;
 import dangerzone.gui.PlayerChestGUI;
+import dangerzone.threads.FastBlockTicker;
 
 public class Dispenser extends Block implements PoweredComponent
 {
@@ -55,6 +56,17 @@ public class Dispenser extends Block implements PoweredComponent
 		renderAllSides = true;
 		renderSmaller = true;
 		isSolidForRendering = false;
+	}
+	
+	@Override
+	public void tickMe(World w, int dimension, int x, int y, int z)
+	{
+		FastBlockTicker.addFastTick(dimension, x, y, z);
+	}
+	
+	public void tickMeFast(World w, int dimension, int x, int y, int z)
+	{
+		((PoweredComponent)this).powerBump(w, dimension, x, y, z);
 	}
 
 	@Override
@@ -188,7 +200,6 @@ public class Dispenser extends Block implements PoweredComponent
 		{ // where did our entity go???
 			if (!p.world.isServer)
 			{
-				System.out.printf("spawning new dispenser entity\n");
 				Entity eb = p.world.createEntityByName("RedZone:EntityDispenser", dimension, (float) (x) + 0.5f,
 						(float) (y) + 0.05f, (float) (z) + 0.5f);
 				if (eb != null)
@@ -201,7 +212,7 @@ public class Dispenser extends Block implements PoweredComponent
 		}
 
 		pcg.ec = ec;
-		System.out.printf("Chest entity ID = %d\n", ec.entityID);
+		// System.out.printf("Chest entity ID = %d\n", ec.entityID);
 		DangerZone.setActiveGui(pcg);
 		return false; // return FALSE because we kicked off a GUI! DO NOT PLACE
 						// A BLOCK!
