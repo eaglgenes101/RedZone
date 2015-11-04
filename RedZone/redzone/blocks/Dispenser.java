@@ -84,8 +84,10 @@ public class Dispenser extends Block implements PoweredComponent
 	@Override
 	public void finishStep(World w, int d, int x, int y, int z)
 	{
+		/*
 		if (!getStatus(w, d, x, y, z))
 			return;
+		*/
 			
 		double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR, w.getblockmeta(d, x, y, z));
 		int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]), 
@@ -124,19 +126,54 @@ public class Dispenser extends Block implements PoweredComponent
 				// System.out.printf("spawning new chest entity\n");
 				Entity eb = w.createEntityByName("RedZone:EntityDispenser", d, 
 						(float) (x) + 0.5f,
-						(float) (y) + 0.05f, 
+						(float) (y) + 0.5f, 
 						(float) (z) + 0.5f);
 				if (eb != null)
 				{
 					eb.init();
 					w.spawnEntityInWorld(eb);
+					//Now position the entity so it faces the right way. 
+					positionDispenserEntity(eb, w, d, x, y, z);
 				}
 			}
 		}
 		else
-			ed.rightclick(w, x+rounded[0], y+rounded[1], z+rounded[2], 
-					Orienter.getSideForm(rounded), 0);
+			ed.rightclick(w, x+rounded[0], y+rounded[1], z+rounded[2], Orienter.getSideForm(rounded), 0);
 
+	}
+	
+	private void positionDispenserEntity(Entity it, World w, int d, int x, int y, int z)
+	{
+		double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR, w.getblockmeta(d, x, y, z));
+		int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]), 
+				(int) Math.round(getRelativeForward[2])};
+		switch(Orienter.getSideForm(rounded))
+		{
+			case 0: //Top
+				it.rotation_pitch = 90;
+				break;
+			case 1: //Front
+				it.rotation_yaw = 0;
+				it.rotation_pitch = 0;
+				break;
+			case 2: //Back
+				it.rotation_yaw = 180;
+				it.rotation_pitch = 0;
+				break;
+			case 3: //Left
+				it.rotation_yaw = 90;
+				it.rotation_pitch = 0;
+				break;
+			case 4: //Right
+				it.rotation_yaw = 270;
+				it.rotation_pitch = 0;
+				break;
+			case 5: //Bottom
+				it.rotation_pitch = -90;
+				break;
+			default: //Dunno
+				break;
+		}
 	}
 
 	// The below methods were copied from DangerZone in accordance with the DangerZone license,
@@ -201,11 +238,12 @@ public class Dispenser extends Block implements PoweredComponent
 			if (!p.world.isServer)
 			{
 				Entity eb = p.world.createEntityByName("RedZone:EntityDispenser", dimension, (float) (x) + 0.5f,
-						(float) (y) + 0.05f, (float) (z) + 0.5f);
+						(float) (y) + 0.5f, (float) (z) + 0.5f);
 				if (eb != null)
 				{
 					eb.init();
 					p.world.spawnEntityInWorld(eb);
+					positionDispenserEntity(eb, p.world, p.dimension, x, y, z);
 				}
 			}
 			return false; // must click again...
@@ -224,11 +262,12 @@ public class Dispenser extends Block implements PoweredComponent
 		{
 			// System.out.printf("onBlockPlaced spawning new dispenser entity\n");
 			Entity eb = w.createEntityByName("RedZone:EntityDispenser", dimension, (float) (x) + 0.5f,
-					(float) (y) + 0.05f, (float) (z) + 0.5f);
+					(float) (y) + 0.5f, (float) (z) + 0.5f);
 			if (eb != null)
 			{
 				eb.init();
 				w.spawnEntityInWorld(eb);
+				positionDispenserEntity(eb, w, dimension, x, y, z);
 			}
 		}
 	}

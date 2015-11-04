@@ -16,18 +16,14 @@ import dangerzone.items.Item;
 public class EntityDispenser extends EntityChest
 {
 
-	public EntityDispenser(World w)
-	{
-		super(w);
-		uniquename = "RedZone:EntityDispenser";
-	}
-
 	public InventoryContainer getFirst()
 	{
-		for (InventoryContainer i : inventory)
+		for (int i = 0; i < inventory.length; i++)
 		{
-			if (i != null)
-				return i;
+			if (inventory[i] != null && inventory[i].count > 0 && (inventory[i].bid>0 || inventory[i].iid>0))
+			{
+				return inventory[i];
+			}
 		}
 		return null;
 	}
@@ -60,6 +56,14 @@ public class EntityDispenser extends EntityChest
 	 * COMPUTERS. Or your phone...
 	 */
 
+	public EntityDispenser(World w)
+	{
+		super(w);
+		uniquename = "RedZone:EntityDispenser";
+		width = 0.001f;
+		height = 0.001f;
+	}
+
 	public void update(float deltaT)
 	{
 		if (world.getblock(dimension, (int) posx, (int) posy, (int) posz) != RedZoneMain.DISPENSER.blockID)
@@ -82,20 +86,194 @@ public class EntityDispenser extends EntityChest
 			}
 		}
 
-		// kick entity out to other players!
+		// This is extremely stupid, but it has to be done...
+		// Yes, I copied a bunch of code.
+
 		motionx = motiony = motionz = 0;
-		((Entity)this).update(deltaT);
+		long too_long;
+		int different = 0;
+		float rate = DangerZone.entityupdaterate;
+		rate /= DangerZone.serverentityupdaterate;
+		// rate *= 0.75f;
+
+		lifetimeticker++; 
+		if (deltaT > 1.5f)
+			lifetimeticker += (int) ((deltaT + 0.5f) - 1);
+
+		// because we got blown into the low 20,000's one time... oops!
+		if (posy > 1024 && motiony > 0)
+		{
+			posy = 1024;
+			motiony = -1;
+		}
+
+		if (posy < -1024 && motiony < 0)
+		{
+			posy = -1024;
+			motiony = 1;
+		}
+
+		// Standard movement processing
+		if (!this.world.isServer)
+		{
+			if (movement_friction)
+			{
+				motionx *= (1.0f - (0.35f * deltaT * rate));
+				motiony *= (1.0f - (0.05f * deltaT * rate));
+				motionz *= (1.0f - (0.35f * deltaT * rate));
+				rotation_pitch_motion *= (1.0f - (0.25f * deltaT * rate));
+				rotation_yaw_motion *= (1.0f - (0.25f * deltaT * rate));
+				rotation_roll_motion *= (1.0f - (0.25f * deltaT * rate));
+			}
+			posy += motiony * deltaT * rate;
+			posx += motionx * deltaT * rate;
+			posz += motionz * deltaT * rate;
+			rotation_pitch += rotation_pitch_motion * deltaT * rate;
+			rotation_yaw += rotation_yaw_motion * deltaT * rate;
+			rotation_roll += rotation_roll_motion * deltaT * rate;
+
+			display_posx = posx;
+			display_posy = posy;
+			display_posz = posz;
+			display_rotation_pitch = rotation_pitch;
+			display_rotation_yaw = rotation_yaw;
+			display_rotation_roll = rotation_roll;
+
+		}
+		else
+		{
+			if (movement_friction)
+			{
+				motionx *= (1.0f - (0.35f * deltaT));
+				motiony *= (1.0f - (0.05f * deltaT));
+				motionz *= (1.0f - (0.35f * deltaT));
+				rotation_pitch_motion *= (1.0f - (0.25f * deltaT));
+				rotation_yaw_motion *= (1.0f - (0.25f * deltaT));
+				rotation_roll_motion *= (1.0f - (0.25f * deltaT));
+			}
+			posy += motiony * deltaT;
+			posx += motionx * deltaT;
+			posz += motionz * deltaT;
+			rotation_pitch += rotation_pitch_motion * deltaT;
+			rotation_yaw += rotation_yaw_motion * deltaT;
+			rotation_roll += rotation_roll_motion * deltaT;
+		}
+
+		while (rotation_yaw < 0)
+			rotation_yaw += 360f;
+		rotation_yaw %= 360f;
+		while (rotation_pitch < 0)
+			rotation_pitch += 360f;
+		rotation_pitch %= 360f;
+		while (rotation_roll < 0)
+			rotation_roll += 360f;
+		rotation_roll %= 360f;
+
+		while (rotation_yaw_head < 0)
+			rotation_yaw_head += 360f;
+		rotation_yaw_head %= 360f;
+		while (rotation_pitch_head < 0)
+			rotation_pitch_head += 360f;
+		rotation_pitch_head %= 360f;
+		while (rotation_roll_head < 0)
+			rotation_roll_head += 360f;
+		rotation_roll_head %= 360f;
+
+		// Try to make sure rider and mount are in sync...
+		Entity e = getRiddenEntity();
+		if (e != null)
+		{
+			motionx = e.motionx;
+			motiony = e.motiony;
+			motionz = e.motionz;
+			posx = (float) (e.posx + (Math.sin(Math.toRadians(e.rotation_yaw)) * e.getRiderXZoffset()));
+			posy = e.posy + e.getRiderYoffset();
+			posz = (float) (e.posz + (Math.cos(Math.toRadians(e.rotation_yaw)) * e.getRiderXZoffset()));
+			display_posx = posx;
+			display_posy = posy;
+			display_posz = posz;
+		}
+		e = getRiderEntity();
+		if (e != null)
+		{
+			e.motionx = motionx;
+			e.motiony = motiony;
+			e.motionz = motionz;
+			e.posx = (float) (posx + (Math.sin(Math.toRadians(rotation_yaw)) * getRiderXZoffset()));
+			e.posy = posy + getRiderYoffset();
+			e.posz = (float) (posz + (Math.cos(Math.toRadians(rotation_yaw)) * getRiderXZoffset()));
+			e.display_posx = e.posx;
+			e.display_posy = e.posy;
+			e.display_posz = e.posz;
+		}
+		if (!this.world.isServer)
+			return; // Only player on Client sends packets.
+
+		different = 0;
+		// See if we should send a position/rotation update to someone...
+		currtime = System.currentTimeMillis();
+		too_long = currtime - lasttime;
+		if (too_long >= 1000)
+			different++; // At least every second, regardless.
+		// if(too_long >= update_interval){
+		if (changed != 0)
+			different++;
+		if (prevdimension != dimension || prevposx != posx || prevposy != posy || prevposz != posz)
+			different++;
+		if (prevrotation_yaw != rotation_yaw || prevrotation_pitch != rotation_pitch
+				|| prevrotation_roll != rotation_roll)
+			different++;
+		if (prevrotation_yaw_head != rotation_yaw_head || prevrotation_pitch_head != rotation_pitch_head
+				|| prevrotation_roll_head != rotation_roll_head)
+			different++;
+		if (different == 0)
+		{ // keep sending for a few more...
+			diffticker++;
+			if (diffticker < 10)
+			{
+				different++;
+			}
+		}
+		else
+		{
+			diffticker = 0;
+		}
+
+		if (different != 0)
+		{
+			lasttime = currtime;
+			prevdimension = dimension;
+			prevposy = posy;
+			prevposx = posx;
+			prevposz = posz;
+			prevrotation_yaw = rotation_yaw;
+			prevrotation_pitch = rotation_pitch;
+			prevrotation_roll = rotation_roll;
+			prevrotation_yaw_head = rotation_yaw_head;
+			prevrotation_pitch_head = rotation_pitch_head;
+			prevrotation_roll_head = rotation_roll_head;
+
+			if (this.world.isServer)
+			{
+				// System.out.printf("time = %d\n", (int)(currtime%1000));
+				DangerZone.server.sendEntityUpdateToAll(this, false);
+			}
+		}
+		// }
 	}
-	
-	public boolean rightClickedByPlayer(Player p, InventoryContainer ic){
-		if(world.getblock(dimension, (int)posx, (int)posy, (int)posz) != RedZoneMain.DISPENSER.blockID){
-			if(world.isServer){
+
+	public boolean rightClickedByPlayer(Player p, InventoryContainer ic)
+	{
+		if (world.getblock(dimension, (int) posx, (int) posy, (int) posz) != RedZoneMain.DISPENSER.blockID)
+		{
+			if (world.isServer)
+			{
 				dumpInventory();
 			}
 			this.deadflag = true;
 			return false;
 		}
-		Blocks.rightClickOnBlock(RedZoneMain.DISPENSER.blockID, p, dimension, (int)posx, (int)posy, (int)posz);
+		Blocks.rightClickOnBlock(RedZoneMain.DISPENSER.blockID, p, dimension, (int) posx, (int) posy, (int) posz);
 		return false;
 	}
 
@@ -132,20 +310,18 @@ public class EntityDispenser extends EntityChest
 	// Do right-clicks by a phantom "player"
 	public void rightclick(World world, int focus_x, int focus_y, int focus_z, int side, int eid)
 	{
-		Entity e = null;
-		InventoryContainer ic = getFirst();
-		boolean rightcontinue = true;
-		//We don't have entity focus
 		if (world.isServer)
 		{
+			InventoryContainer ic = getFirst();
+			boolean rightcontinue = true;
 			if (ic != null)
 			{
 				Item it = ic.getItem();
 				if (it != null)
-					rightcontinue = it.onRightClick(this, e, ic);
+					rightcontinue = it.onRightClick(this, null, ic);
 				Block bl = ic.getBlock();
 				if (bl != null)
-					rightcontinue = bl.onRightClick(this, e, ic);
+					rightcontinue = bl.onRightClick(this, null, ic);
 				if (rightcontinue)
 				{
 					// System.out.printf("rt click server2 count = %d\n",
@@ -157,6 +333,8 @@ public class EntityDispenser extends EntityChest
 					}
 				}
 			}
+			else
+				System.out.println("Can't find an item!");
 		}
 	}
 
