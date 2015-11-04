@@ -15,13 +15,11 @@ import dangerzone.items.Item;
 
 public class EntityDispenser extends EntityChest
 {
-	int gencounter;
 
 	public EntityDispenser(World w)
 	{
 		super(w);
 		uniquename = "RedZone:EntityDispenser";
-		gencounter = 0;
 	}
 
 	public InventoryContainer getFirst()
@@ -64,7 +62,6 @@ public class EntityDispenser extends EntityChest
 
 	public void update(float deltaT)
 	{
-		System.out.println("I exist! " + gencounter);
 		if (world.getblock(dimension, (int) posx, (int) posy, (int) posz) != RedZoneMain.DISPENSER.blockID)
 		{
 			if (world.isServer)
@@ -87,7 +84,7 @@ public class EntityDispenser extends EntityChest
 
 		// kick entity out to other players!
 		motionx = motiony = motionz = 0;
-		super.update(deltaT);
+		((Entity)this).update(deltaT);
 	}
 	
 	public boolean rightClickedByPlayer(Player p, InventoryContainer ic){
