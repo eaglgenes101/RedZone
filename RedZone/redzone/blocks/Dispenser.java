@@ -138,7 +138,10 @@ public class Dispenser extends Block implements PoweredComponent
 			}
 		}
 		else
+		{
+			positionDispenserEntity(ed, w, d, x, y, z);
 			ed.rightclick(w, x+rounded[0], y+rounded[1], z+rounded[2], Orienter.getSideForm(rounded));
+		}
 
 	}
 	
