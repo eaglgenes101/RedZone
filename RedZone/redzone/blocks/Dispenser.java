@@ -138,7 +138,7 @@ public class Dispenser extends Block implements PoweredComponent
 			}
 		}
 		else
-			ed.rightclick(w, x+rounded[0], y+rounded[1], z+rounded[2], Orienter.getSideForm(rounded), 0);
+			ed.rightclick(w, x+rounded[0], y+rounded[1], z+rounded[2], Orienter.getSideForm(rounded));
 
 	}
 	
@@ -150,26 +150,26 @@ public class Dispenser extends Block implements PoweredComponent
 		switch(Orienter.getSideForm(rounded))
 		{
 			case 0: //Top
-				it.rotation_pitch = 90;
+				it.rotation_pitch_head = 90;
 				break;
 			case 1: //Front
-				it.rotation_yaw = 0;
-				it.rotation_pitch = 0;
+				it.rotation_yaw_head = 0;
+				it.rotation_pitch_head = 0;
 				break;
 			case 2: //Back
-				it.rotation_yaw = 180;
-				it.rotation_pitch = 0;
+				it.rotation_yaw_head = 180;
+				it.rotation_pitch_head = 0;
 				break;
 			case 3: //Left
-				it.rotation_yaw = 90;
-				it.rotation_pitch = 0;
+				it.rotation_yaw_head = 90;
+				it.rotation_pitch_head = 0;
 				break;
 			case 4: //Right
-				it.rotation_yaw = 270;
-				it.rotation_pitch = 0;
+				it.rotation_yaw_head = 270;
+				it.rotation_pitch_head = 0;
 				break;
 			case 5: //Bottom
-				it.rotation_pitch = -90;
+				it.rotation_pitch_head = -90;
 				break;
 			default: //Dunno
 				break;

@@ -20,7 +20,7 @@ public class EntityDispenser extends EntityChest
 	{
 		for (int i = 0; i < inventory.length; i++)
 		{
-			if (inventory[i] != null && inventory[i].count > 0 && (inventory[i].bid>0 || inventory[i].iid>0))
+			if (inventory[i] != null && inventory[i].count > 0)
 			{
 				return inventory[i];
 			}
@@ -96,7 +96,7 @@ public class EntityDispenser extends EntityChest
 		rate /= DangerZone.serverentityupdaterate;
 		// rate *= 0.75f;
 
-		lifetimeticker++; 
+		lifetimeticker++;
 		if (deltaT > 1.5f)
 			lifetimeticker += (int) ((deltaT + 0.5f) - 1);
 
@@ -308,7 +308,7 @@ public class EntityDispenser extends EntityChest
 	}
 
 	// Do right-clicks by a phantom "player"
-	public void rightclick(World world, int focus_x, int focus_y, int focus_z, int side, int eid)
+	public void rightclick(World world, int focus_x, int focus_y, int focus_z, int side)
 	{
 		if (world.isServer)
 		{
@@ -318,14 +318,18 @@ public class EntityDispenser extends EntityChest
 			{
 				Item it = ic.getItem();
 				if (it != null)
+				{
 					rightcontinue = it.onRightClick(this, null, ic);
+					System.out.println("Dispensing item...");
+				}
 				Block bl = ic.getBlock();
 				if (bl != null)
+				{
 					rightcontinue = bl.onRightClick(this, null, ic);
+					System.out.println("Dispensing block...");
+				}
 				if (rightcontinue)
 				{
-					// System.out.printf("rt click server2 count = %d\n",
-					// ic.count);
 					ic.count--;
 					if (ic.count <= 0)
 					{
@@ -334,7 +338,7 @@ public class EntityDispenser extends EntityChest
 				}
 			}
 			else
-				System.out.println("Can't find an item!");
+				System.out.println("Can't find anything to dispense!");
 		}
 	}
 
