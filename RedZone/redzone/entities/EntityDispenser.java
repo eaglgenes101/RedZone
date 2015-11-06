@@ -3,7 +3,6 @@ package redzone.entities;
 import redzone.base.RedZoneMain;
 import dangerzone.ChestInventoryPacket;
 import dangerzone.DangerZone;
-import dangerzone.GameModes;
 import dangerzone.InventoryContainer;
 import dangerzone.Player;
 import dangerzone.World;
@@ -312,10 +311,12 @@ public class EntityDispenser extends EntityChest
 	// Do right-clicks by a phantom "player"
 	public void rightclick(World world, int focus_x, int focus_y, int focus_z, int side)
 	{
-		InventoryContainer ic = getHotbar(gethotbarindex());
+		InventoryContainer ic = getFirst();
 		boolean rightcontinue = true;
+		
 		if (ic != null)
 		{
+			System.out.println("I'm here!");
 			Item it = ic.getItem();
 			if (it != null)
 				rightcontinue = it.onRightClick(this, null, ic);
@@ -324,6 +325,7 @@ public class EntityDispenser extends EntityChest
 				rightcontinue = bl.onRightClick(this, null, ic);
 			if (rightcontinue)
 			{
+				System.out.println("Decrementing!");
 				ic.count--;
 				if (ic.count <= 0)
 				{
@@ -331,6 +333,7 @@ public class EntityDispenser extends EntityChest
 				}
 			}
 		}
+		
 		int bid = 0;
 		int iid = 0;
 		if (ic != null)
@@ -341,7 +344,7 @@ public class EntityDispenser extends EntityChest
 				iid = ic.iid;
 			}
 		}
-		// System.out.printf("rt click client = %d, %d\n", bid, iid);
+		
 		if (focus_x > 0 && focus_y >= 0 && focus_z > 0)
 		{
 			int fbid = world.getblock(dimension, focus_x, focus_y, focus_z);
@@ -352,30 +355,28 @@ public class EntityDispenser extends EntityChest
 				{
 					Blocks.doPlaceBlock(bid, fbid, null, world, dimension, focus_x, focus_y, focus_z, side);
 				}
-				else
+				else if (ic != null && iid != 0)
 				{
-					if (ic != null && iid != 0)
+					boolean delme = Items.rightClickOnBlock(iid, null, dimension, focus_x, focus_y, focus_z, side);
+					world.playSound(Blocks.getHitSound(fbid), dimension, focus_x, focus_y, focus_z, 0.35f, 1.0f);
+					if (delme)
 					{
-						boolean delme = Items.rightClickOnBlock(iid, null, dimension, focus_x, focus_y, focus_z, side);
-						world.playSound(Blocks.getHitSound(fbid), dimension, focus_x, focus_y, focus_z, 0.35f, 1.0f);
-						if (delme)
+						if (ic.count == 1)
 						{
-							if (ic.count == 1)
-							{
-								ic.currentuses++;
-							}
-							else
-							{
-								ic.count--;
-								if (ic.count <= 0)
-									ic = null;
-							}
+							ic.currentuses++;
+						}
+						else
+						{
+							ic.count--;
+							if (ic.count <= 0)
+								ic = null;
 						}
 					}
 				}
 
 			}
 		}
+		
 	}
 
 }
