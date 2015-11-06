@@ -9,16 +9,16 @@ import redzone.entities.EntityDispenser;
 import redzone.mechanics.Orienter;
 import redzone.mechanics.PoweredComponent;
 import dangerzone.DangerZone;
-import dangerzone.Player;
+import dangerzone.InventoryContainer;
 import dangerzone.StitchedTexture;
 import dangerzone.World;
 import dangerzone.blocks.Block;
 import dangerzone.entities.Entity;
-import dangerzone.gui.PlayerChestGUI;
+import dangerzone.entities.EntityChest;
 import dangerzone.threads.FastBlockTicker;
 
 public class Dispenser extends Block implements PoweredComponent
-{
+{	
 	Texture ttop = null;
 	Texture tbottom = null;
 	Texture tleft = null;
@@ -95,8 +95,9 @@ public class Dispenser extends Block implements PoweredComponent
 		
 		List<Entity> nearby_list = null;
 		EntityDispenser ed = null;
+		EntityChest ec = null;
 
-		nearby_list = DangerZone.entityManager.findEntitiesInRange(2, d, x, y, z);
+		nearby_list = DangerZone.entityManager.findEntitiesInRange(4, d, x, y, z);
 		if (nearby_list != null)
 		{
 			if (!nearby_list.isEmpty())
@@ -116,12 +117,26 @@ public class Dispenser extends Block implements PoweredComponent
 						}
 						ed = null;
 					}
+					if (e instanceof EntityChest)
+					{
+						int dx = (int)e.posx - x;
+						int dy = (int)e.posy - y;
+						int dz = (int)e.posz - z;
+						int[] sideArray = {dx, dy, dz};
+						if (Orienter.getSideForm(sideArray) >= 0)
+						{
+							ec = (EntityChest) e;
+							System.out.println("Found a chest!");
+							break;
+						}
+						ec = null;
+					}
 				}
 			}
 		}
-		if (ed == null)
+		if (ec != null && ed == null)
 		{ // where did our entity go???
-			if (!w.isServer)
+			if (w.isServer)
 			{
 				// System.out.printf("spawning new chest entity\n");
 				Entity eb = w.createEntityByName("RedZone:EntityDispenser", d, 
@@ -132,15 +147,22 @@ public class Dispenser extends Block implements PoweredComponent
 				{
 					eb.init();
 					w.spawnEntityInWorld(eb);
-					//Now position the entity so it faces the right way. 
-					positionDispenserEntity(eb, w, d, x, y, z);
 				}
 			}
 		}
-		else
+		else if (ec != null)
 		{
 			positionDispenserEntity(ed, w, d, x, y, z);
-			ed.rightclick(w, x+rounded[0], y+rounded[1], z+rounded[2], Orienter.getSideForm(rounded));
+			InventoryContainer ic = null;
+			for (int i = 0; i < ec.inventory.length; i++)
+			{
+				if (ec.inventory[i] != null)
+				{
+					ic = ec.inventory[i];
+					break;
+				}
+			}
+			ed.rightclick(w, x+rounded[0], y+rounded[1], z+rounded[2], Orienter.getSideForm(rounded), ic);
 		}
 
 	}
@@ -206,62 +228,9 @@ public class Dispenser extends Block implements PoweredComponent
 	 * COMPUTERS. Or your phone...
 	 */
 
-	// Player right-clicked on this block
-	public boolean rightClickOnBlock(Player p, int dimension, int x, int y, int z)
-	{
-		PlayerChestGUI pcg = new PlayerChestGUI();
-		List<Entity> nearby_list = null;
-		EntityDispenser ec = null;
-		// Find our chest entity!
-		nearby_list = DangerZone.entityManager.findEntitiesInRange(2, dimension, x, y, z);
-		if (nearby_list != null)
-		{
-			if (!nearby_list.isEmpty())
-			{
-				Entity e = null;
-				ListIterator<Entity> li;
-				li = nearby_list.listIterator();
-				while (li.hasNext())
-				{
-					e = (Entity) li.next();
-					if (e instanceof EntityDispenser)
-					{
-						if ((int) e.posx == x && (int) e.posy == y && (int) e.posz == z)
-						{
-							ec = (EntityDispenser) e;
-							break;
-						}
-						ec = null;
-					}
-				}
-			}
-		}
-		if (ec == null)
-		{ // where did our entity go???
-			if (!p.world.isServer)
-			{
-				Entity eb = p.world.createEntityByName("RedZone:EntityDispenser", dimension, (float) (x) + 0.5f,
-						(float) (y) + 0.5f, (float) (z) + 0.5f);
-				if (eb != null)
-				{
-					eb.init();
-					p.world.spawnEntityInWorld(eb);
-					positionDispenserEntity(eb, p.world, p.dimension, x, y, z);
-				}
-			}
-			return false; // must click again...
-		}
-
-		pcg.ec = ec;
-		// System.out.printf("Chest entity ID = %d\n", ec.entityID);
-		DangerZone.setActiveGui(pcg);
-		return false; // return FALSE because we kicked off a GUI! DO NOT PLACE
-						// A BLOCK!
-	}
-
 	public void onBlockPlaced(World w, int dimension, int x, int y, int z)
 	{
-		if (!w.isServer)
+		if (w.isServer)
 		{
 			// System.out.printf("onBlockPlaced spawning new dispenser entity\n");
 			Entity eb = w.createEntityByName("RedZone:EntityDispenser", dimension, (float) (x) + 0.5f,
@@ -270,7 +239,6 @@ public class Dispenser extends Block implements PoweredComponent
 			{
 				eb.init();
 				w.spawnEntityInWorld(eb);
-				positionDispenserEntity(eb, w, dimension, x, y, z);
 			}
 		}
 	}
