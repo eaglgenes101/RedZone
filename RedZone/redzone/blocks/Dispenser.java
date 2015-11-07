@@ -84,11 +84,8 @@ public class Dispenser extends Block implements PoweredComponent
 	@Override
 	public void finishStep(World w, int d, int x, int y, int z)
 	{
-		/*
 		if (!getStatus(w, d, x, y, z))
 			return;
-		*/
-			
 		double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR, w.getblockmeta(d, x, y, z));
 		int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]), 
 				(int) Math.round(getRelativeForward[2])};
@@ -97,7 +94,7 @@ public class Dispenser extends Block implements PoweredComponent
 		EntityDispenser ed = null;
 		EntityChest ec = null;
 
-		nearby_list = DangerZone.entityManager.findEntitiesInRange(4, d, x, y, z);
+		nearby_list = DangerZone.entityManager.findEntitiesInRange(2, d, x, y, z);
 		if (nearby_list != null)
 		{
 			if (!nearby_list.isEmpty())
@@ -117,6 +114,20 @@ public class Dispenser extends Block implements PoweredComponent
 						}
 						ed = null;
 					}
+				}
+			}
+		}
+		
+		if (nearby_list != null)
+		{
+			if (!nearby_list.isEmpty())
+			{
+				Entity e = null;
+				ListIterator<Entity> li;
+				li = nearby_list.listIterator();
+				while (li.hasNext())
+				{
+					e = (Entity) li.next();
 					if (e instanceof EntityChest)
 					{
 						int dx = (int)e.posx - x;
@@ -126,7 +137,6 @@ public class Dispenser extends Block implements PoweredComponent
 						if (Orienter.getSideForm(sideArray) >= 0)
 						{
 							ec = (EntityChest) e;
-							System.out.println("Found a chest!");
 							break;
 						}
 						ec = null;
@@ -134,6 +144,7 @@ public class Dispenser extends Block implements PoweredComponent
 				}
 			}
 		}
+		
 		if (ec != null && ed == null)
 		{ // where did our entity go???
 			if (w.isServer)
@@ -150,7 +161,7 @@ public class Dispenser extends Block implements PoweredComponent
 				}
 			}
 		}
-		else if (ec != null)
+		else if (ec != null && w.isServer)
 		{
 			positionDispenserEntity(ed, w, d, x, y, z);
 			InventoryContainer ic = null;
@@ -159,6 +170,7 @@ public class Dispenser extends Block implements PoweredComponent
 				if (ec.inventory[i] != null)
 				{
 					ic = ec.inventory[i];
+					System.out.println("Found inventory container!");
 					break;
 				}
 			}

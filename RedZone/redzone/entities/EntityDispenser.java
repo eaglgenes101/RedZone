@@ -1,5 +1,7 @@
 package redzone.entities;
 
+import org.lwjgl.input.Mouse;
+
 import redzone.base.RedZoneMain;
 import dangerzone.InventoryContainer;
 import dangerzone.World;
@@ -50,7 +52,6 @@ public class EntityDispenser extends Entity
 	
 	public void update(float deltaT)
 	{
-		System.out.println("I'm here!");
 		if(world.getblock(dimension,  (int)posx, (int)posy, (int)posz) != RedZoneMain.DISPENSER.blockID){
 			this.deadflag = true;
 			return;
@@ -64,7 +65,6 @@ public class EntityDispenser extends Entity
 		boolean rightcontinue = true;
 		if (ic != null)
 		{
-			System.out.println("I'm here!");
 			Item it = ic.getItem();
 			if (it != null)
 				rightcontinue = it.onRightClick(this, null, ic);
