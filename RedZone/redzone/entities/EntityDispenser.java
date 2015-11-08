@@ -75,9 +75,8 @@ public class EntityDispenser extends Entity
 			int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]), 
 					(int) Math.round(getRelativeForward[2])};
 			positionSelf(world, dimension, (int)posx, (int)posy, (int)posz);
-			if (world.isServer)
-				rightclick(this.world, (int)posx, (int)posy, 
-						(int)posz, Orienter.getSideForm(rounded));
+			rightclick(this.world, (int)posx, (int)posy, 
+					(int)posz, Orienter.getSideForm(rounded));
 		}
 		super.update(deltaT);
 	}
@@ -204,10 +203,17 @@ public class EntityDispenser extends Entity
 			{
 				if (bid != 0)
 				{
-					Blocks.doPlaceBlock(bid, fbid, null, world, dimension, focus_x, focus_y, focus_z, side);
-					ic.count--;
-					if (ic.count <= 0)
-						ic = null;
+					double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR, 
+							world.getblockmeta(dimension, (int)posx, (int)posy, (int)posz));
+					int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]), 
+							(int) Math.round(getRelativeForward[2])};
+					if (world.getblock(dimension, (int)posx+rounded[0], (int)posy+rounded[1], (int)posz+rounded[2]) == 0)
+					{
+						Blocks.doPlaceBlock(bid, fbid, null, world, dimension, focus_x, focus_y, focus_z, side);
+						ic.count--;
+						if (ic.count <= 0)
+							ic = null;
+					}
 				}
 				else if (iid != 0)
 				{
