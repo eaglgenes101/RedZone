@@ -3,6 +3,7 @@ package redzone.blocks;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.lwjgl.input.Mouse;
 import org.newdawn.slick.opengl.Texture;
 
 import redzone.entities.EntityDispenser;
@@ -163,20 +164,15 @@ public class Dispenser extends Block implements PoweredComponent
 		}
 		else if (ec != null && w.isServer)
 		{
-			positionDispenserEntity(ed, w, d, x, y, z);
-			InventoryContainer ic = null;
-			for (int i = 0; i < ec.inventory.length; i++)
-			{
-				if (ec.inventory[i] != null)
-				{
-					ic = ec.inventory[i];
-					System.out.println("Found inventory container!");
-					break;
-				}
-			}
-			ed.rightclick(w, x+rounded[0], y+rounded[1], z+rounded[2], Orienter.getSideForm(rounded), ic);
+			positionDispenserEntity(ed, w, d, x, y, z);	
+			ed.targetX = x+rounded[0];
+			ed.targetY = y+rounded[1];
+			ed.targetZ = z+rounded[2];
+			ed.targetSide = Orienter.getSideForm(rounded);
+			ed.ec = ec;
+			ed.shouldOutput = true;
 		}
-
+		
 	}
 	
 	private void positionDispenserEntity(Entity it, World w, int d, int x, int y, int z)

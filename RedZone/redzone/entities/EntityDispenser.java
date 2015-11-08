@@ -8,11 +8,19 @@ import dangerzone.World;
 import dangerzone.blocks.Block;
 import dangerzone.blocks.Blocks;
 import dangerzone.entities.Entity;
+import dangerzone.entities.EntityChest;
 import dangerzone.items.Item;
 import dangerzone.items.Items;
 
 public class EntityDispenser extends Entity
 {
+	public boolean shouldOutput = false;
+	public int targetX = 0;
+	public int targetY = 0;
+	public int targetZ = 0;
+	public int targetSide = -1;
+	public EntityChest ec = null;
+	
 	public EntityDispenser(World w)
 	{
 		super(w);
@@ -52,17 +60,39 @@ public class EntityDispenser extends Entity
 	
 	public void update(float deltaT)
 	{
-		if(world.getblock(dimension,  (int)posx, (int)posy, (int)posz) != RedZoneMain.DISPENSER.blockID){
+		if(world.getblock(dimension, (int)posx, (int)posy, (int)posz) != RedZoneMain.DISPENSER.blockID)
+		{
 			this.deadflag = true;
 			return;
+		}
+		else if (shouldOutput)
+		{
+			if (world.isServer)
+				rightclick(this.world, targetX, targetY, targetZ, targetSide);
+			shouldOutput = false;
 		}
 		super.update(deltaT);
 	}
 
 	// Do right-clicks by a phantom "player"
-	public void rightclick(World world, int focus_x, int focus_y, int focus_z, int side, InventoryContainer ic)
+	public void rightclick(World world, int focus_x, int focus_y, int focus_z, int side)
 	{
 		boolean rightcontinue = true;
+		int inventoryIndex = -1;
+		for (int i = 0; i < ec.inventory.length; i++)
+		{
+			if (ec.getVarInventory(i) != null)
+			{
+				inventoryIndex = i;
+				System.out.println("Found inventory container!");
+				break;
+			}
+		}
+		if (inventoryIndex < 0)
+			return;
+		
+		InventoryContainer ic = ec.getVarInventory(inventoryIndex);
+		
 		if (ic != null)
 		{
 			Item it = ic.getItem();
@@ -75,6 +105,7 @@ public class EntityDispenser extends Entity
 			{
 				System.out.println("Decrementing!");
 				ic.count--;
+				ec.setVarInventoryChanged(inventoryIndex);
 				if (ic.count <= 0)
 				{
 					ic = null;
@@ -112,10 +143,12 @@ public class EntityDispenser extends Entity
 						if (ic.count == 1)
 						{
 							ic.currentuses++;
+							ec.setVarInventoryChanged(inventoryIndex);
 						}
 						else
 						{
 							ic.count--;
+							ec.setVarInventoryChanged(inventoryIndex);
 							if (ic.count <= 0)
 								ic = null;
 						}
