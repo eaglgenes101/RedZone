@@ -62,7 +62,7 @@ public class EntityDispenser extends Entity
 	public void update(float deltaT)
 	{
 		int myBlockID = world.getblock(dimension, (int)posx, (int)posy, (int)posz);
-		Block myBlock = (Dispenser)Blocks.getBlock(myBlockID);
+		Block myBlock = Blocks.getBlock(myBlockID);
 		if(myBlockID != RedZoneMain.DISPENSER.blockID)
 		{
 			this.deadflag = true;

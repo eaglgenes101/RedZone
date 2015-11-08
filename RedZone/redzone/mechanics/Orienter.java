@@ -33,17 +33,17 @@ public class Orienter
 	public static final double[] Z_REVERSE_QUARTER_TURN = {Math.sqrt(2)/2.0, 0, 0, -Math.sqrt(2)/2.0};
 	
 
-	public static final double[] WEST_VECTOR = {-1.0, 0.0, 0.0};
+	public static final double[] WEST_VECTOR = {1.0, 0.0, 0.0};
 	public static final double[] UP_VECTOR = {0.0, 1.0, 0.0};
 	public static final double[] NORTH_VECTOR = {0.0, 0.0, 1.0};
-	public static final double[] EAST_VECTOR = {1.0, 0.0, 0.0};
+	public static final double[] EAST_VECTOR = {-1.0, 0.0, 0.0};
 	public static final double[] DOWN_VECTOR = {0.0, -1.0, 0.0};
 	public static final double[] SOUTH_VECTOR = {0.0, 0.0, -1.0};
 
-	public static final int[] WEST_COMPARE = {-1, 0, 0};
+	public static final int[] WEST_COMPARE = {1, 0, 0};
 	public static final int[] UP_COMPARE = {0, 1, 0};
 	public static final int[] NORTH_COMPARE = {0, 0, 1};
-	public static final int[] EAST_COMPARE = {1, 0, 0};
+	public static final int[] EAST_COMPARE = {-1, 0, 0};
 	public static final int[] DOWN_COMPARE = {0, -1, 0};
 	public static final int[] SOUTH_COMPARE = {0, 0, -1};
 	
@@ -128,7 +128,7 @@ public class Orienter
 
 		while((meta&BlockRotation.X_MASK) > 0)
 		{
-			start = rotate(start, X_REVERSE_QUARTER_TURN);
+			start = rotate(start, X_QUARTER_TURN);
 			meta -= BlockRotation.X_ROT_90;
 		}
 		return start;
