@@ -76,8 +76,8 @@ public class EntityDispenser extends Entity
 					(int) Math.round(getRelativeForward[2])};
 			positionSelf(world, dimension, (int)posx, (int)posy, (int)posz);
 			if (world.isServer)
-				rightclick(this.world, (int)posx+rounded[0], (int)posy+rounded[1], 
-						(int)posz+rounded[2], Orienter.getSideForm(rounded));
+				rightclick(this.world, (int)posx, (int)posy, 
+						(int)posz, Orienter.getSideForm(rounded));
 		}
 		super.update(deltaT);
 	}
@@ -154,9 +154,6 @@ public class EntityDispenser extends Entity
 		if (ec == null)
 			return;
 		
-		System.out.println("Found a chest!");
-		
-		
 		boolean rightcontinue = true;
 		int inventoryIndex = -1;
 		for (int i = 0; i < ec.inventory.length; i++)
@@ -164,7 +161,6 @@ public class EntityDispenser extends Entity
 			if (ec.inventory[i] != null)
 			{
 				inventoryIndex = i;
-				System.out.println("Found inventory container!");
 				break;
 			}
 		}
@@ -183,9 +179,7 @@ public class EntityDispenser extends Entity
 				rightcontinue = bl.onRightClick(this, null, ic);
 			if (rightcontinue)
 			{
-				System.out.println("Decrementing!");
 				ic.count--;
-				ec.setVarInventoryChanged(inventoryIndex);
 				if (ic.count <= 0)
 				{
 					ic = null;
@@ -223,12 +217,10 @@ public class EntityDispenser extends Entity
 						if (ic.count == 1)
 						{
 							ic.currentuses++;
-							ec.setVarInventoryChanged(inventoryIndex);
 						}
 						else
 						{
 							ic.count--;
-							ec.setVarInventoryChanged(inventoryIndex);
 							if (ic.count <= 0)
 								ic = null;
 						}
