@@ -33,17 +33,17 @@ public class Orienter
 	public static final double[] Z_REVERSE_QUARTER_TURN = {Math.sqrt(2)/2.0, 0, 0, -Math.sqrt(2)/2.0};
 	
 
-	public static final double[] WEST_VECTOR = {1.0, 0.0, 0.0};
+	public static final double[] WEST_VECTOR = {-1.0, 0.0, 0.0};
 	public static final double[] UP_VECTOR = {0.0, 1.0, 0.0};
 	public static final double[] NORTH_VECTOR = {0.0, 0.0, 1.0};
-	public static final double[] EAST_VECTOR = {-1.0, 0.0, 0.0};
+	public static final double[] EAST_VECTOR = {1.0, 0.0, 0.0};
 	public static final double[] DOWN_VECTOR = {0.0, -1.0, 0.0};
 	public static final double[] SOUTH_VECTOR = {0.0, 0.0, -1.0};
 
-	public static final int[] WEST_COMPARE = {1, 0, 0};
+	public static final int[] WEST_COMPARE = {-1, 0, 0};
 	public static final int[] UP_COMPARE = {0, 1, 0};
 	public static final int[] NORTH_COMPARE = {0, 0, 1};
-	public static final int[] EAST_COMPARE = {-1, 0, 0};
+	public static final int[] EAST_COMPARE = {1, 0, 0};
 	public static final int[] DOWN_COMPARE = {0, -1, 0};
 	public static final int[] SOUTH_COMPARE = {0, 0, -1};
 	
@@ -137,8 +137,8 @@ public class Orienter
 	//side 0 = top (0, 1, 0)
 	//side 1 = front (0, 0, 1)
 	//side 2 = back (0, 0, -1)
-	//side 3 = left (1, 0, 0)
-	//side 4 = right (-1, 0, 0)
+	//side 3 = left (-1, 0, 0)
+	//side 4 = right (1, 0, 0)
 	//side 5 = bottom (0, -1, 0)
 	/**
 	 * Returns the enumerated side form of a position vector
@@ -158,7 +158,7 @@ public class Orienter
 				if (vec[2] == -1)
 					return -2;
 				else if (vec[2] == 0)
-					return 4; //(-1, 0, 0)
+					return 3; //(-1, 0, 0)
 				else if (vec[2] == 1)
 					return -2;
 				else return -1;
@@ -210,7 +210,7 @@ public class Orienter
 				if (vec[2] == -1)
 					return -2;
 				else if (vec[2] == 0)
-					return 3; //(1, 0, 0)
+					return 4; //(1, 0, 0)
 				else if (vec[2] == 1)
 					return -2;
 				else return -1;

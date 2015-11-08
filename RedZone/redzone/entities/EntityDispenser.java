@@ -181,9 +181,7 @@ public class EntityDispenser extends Entity
 			{
 				ic.count--;
 				if (ic.count <= 0)
-				{
 					ic = null;
-				}
 			}
 		}
 		
@@ -207,23 +205,19 @@ public class EntityDispenser extends Entity
 				if (bid != 0)
 				{
 					Blocks.doPlaceBlock(bid, fbid, null, world, dimension, focus_x, focus_y, focus_z, side);
+					ic.count--;
+					if (ic.count <= 0)
+						ic = null;
 				}
-				else if (ic != null && iid != 0)
+				else if (iid != 0)
 				{
 					boolean delme = Items.rightClickOnBlock(iid, null, dimension, focus_x, focus_y, focus_z, side);
 					world.playSound(Blocks.getHitSound(fbid), dimension, focus_x, focus_y, focus_z, 0.35f, 1.0f);
 					if (delme)
 					{
-						if (ic.count == 1)
-						{
-							ic.currentuses++;
-						}
-						else
-						{
-							ic.count--;
-							if (ic.count <= 0)
-								ic = null;
-						}
+						ic.count--;
+						if (ic.count <= 0)
+							ic = null;
 					}
 				}
 			}
