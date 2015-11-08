@@ -1,8 +1,15 @@
 package redzone.entities;
 
+import java.util.List;
+import java.util.ListIterator;
+
 import org.lwjgl.input.Mouse;
 
 import redzone.base.RedZoneMain;
+import redzone.blocks.Dispenser;
+import redzone.mechanics.Orienter;
+import dangerzone.ChestInventoryPacket;
+import dangerzone.DangerZone;
 import dangerzone.InventoryContainer;
 import dangerzone.World;
 import dangerzone.blocks.Block;
@@ -14,12 +21,6 @@ import dangerzone.items.Items;
 
 public class EntityDispenser extends Entity
 {
-	public boolean shouldOutput = false;
-	public int targetX = 0;
-	public int targetY = 0;
-	public int targetZ = 0;
-	public int targetSide = -1;
-	public EntityChest ec = null;
 	
 	public EntityDispenser(World w)
 	{
@@ -60,28 +61,107 @@ public class EntityDispenser extends Entity
 	
 	public void update(float deltaT)
 	{
-		if(world.getblock(dimension, (int)posx, (int)posy, (int)posz) != RedZoneMain.DISPENSER.blockID)
+		int myBlockID = world.getblock(dimension, (int)posx, (int)posy, (int)posz);
+		Block myBlock = (Dispenser)Blocks.getBlock(myBlockID);
+		if(myBlockID != RedZoneMain.DISPENSER.blockID)
 		{
 			this.deadflag = true;
 			return;
 		}
-		else if (shouldOutput)
+		else if (((Dispenser) myBlock).getStatus(world, dimension, (int)posx, (int)posy, (int)posz))
 		{
+			double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR, 
+					world.getblockmeta(dimension, (int)posx, (int)posy, (int)posz));
+			int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]), 
+					(int) Math.round(getRelativeForward[2])};
+			positionSelf(world, dimension, (int)posx, (int)posy, (int)posz);
 			if (world.isServer)
-				rightclick(this.world, targetX, targetY, targetZ, targetSide);
-			shouldOutput = false;
+				rightclick(this.world, (int)posx+rounded[0], (int)posy+rounded[1], 
+						(int)posz+rounded[2], Orienter.getSideForm(rounded));
 		}
 		super.update(deltaT);
+	}
+	
+	private void positionSelf(World w, int d, int x, int y, int z)
+	{
+		double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR, w.getblockmeta(d, x, y, z));
+		int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]), 
+				(int) Math.round(getRelativeForward[2])};
+		switch(Orienter.getSideForm(rounded))
+		{
+			case 0: //Top
+				rotation_pitch_head = 90;
+				break;
+			case 1: //Front
+				rotation_yaw_head = 0;
+				rotation_pitch_head = 0;
+				break;
+			case 2: //Back
+				rotation_yaw_head = 180;
+				rotation_pitch_head = 0;
+				break;
+			case 3: //Left
+				rotation_yaw_head = 90;
+				rotation_pitch_head = 0;
+				break;
+			case 4: //Right
+				rotation_yaw_head = 270;
+				rotation_pitch_head = 0;
+				break;
+			case 5: //Bottom
+				rotation_pitch_head = -90;
+				break;
+			default: //Dunno
+				break;
+		}
 	}
 
 	// Do right-clicks by a phantom "player"
 	public void rightclick(World world, int focus_x, int focus_y, int focus_z, int side)
 	{
+
+		List<Entity> nearby_list = null;
+		EntityChest ec = null;
+
+		nearby_list = DangerZone.entityManager.findEntitiesInRange(2, dimension, (int)posx, (int)posy, (int)posz);
+		if (nearby_list != null)
+		{
+			if (!nearby_list.isEmpty())
+			{
+				Entity e = null;
+				ListIterator<Entity> li;
+				li = nearby_list.listIterator();
+				while (li.hasNext())
+				{
+					e = (Entity) li.next();
+					if (e instanceof EntityChest)
+					{
+						int xdiff = (int)posx - (int)e.posx;
+						int ydiff = (int)posy - (int)e.posy;
+						int zdiff = (int)posz - (int)e.posz;
+						int[] checkArray = {xdiff, ydiff, zdiff};
+						if (Orienter.getSideForm(checkArray)>=0)
+						{
+							ec = (EntityChest) e;
+							break;
+						}
+						ec = null;
+					}
+				}
+			}
+		}
+		
+		if (ec == null)
+			return;
+		
+		System.out.println("Found a chest!");
+		
+		
 		boolean rightcontinue = true;
 		int inventoryIndex = -1;
 		for (int i = 0; i < ec.inventory.length; i++)
 		{
-			if (ec.getVarInventory(i) != null)
+			if (ec.inventory[i] != null)
 			{
 				inventoryIndex = i;
 				System.out.println("Found inventory container!");
@@ -91,7 +171,7 @@ public class EntityDispenser extends Entity
 		if (inventoryIndex < 0)
 			return;
 		
-		InventoryContainer ic = ec.getVarInventory(inventoryIndex);
+		InventoryContainer ic = ec.inventory[inventoryIndex];
 		
 		if (ic != null)
 		{

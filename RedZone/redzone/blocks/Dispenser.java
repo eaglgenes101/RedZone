@@ -85,15 +85,8 @@ public class Dispenser extends Block implements PoweredComponent
 	@Override
 	public void finishStep(World w, int d, int x, int y, int z)
 	{
-		if (!getStatus(w, d, x, y, z))
-			return;
-		double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR, w.getblockmeta(d, x, y, z));
-		int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]), 
-				(int) Math.round(getRelativeForward[2])};
-		
 		List<Entity> nearby_list = null;
 		EntityDispenser ed = null;
-		EntityChest ec = null;
 
 		nearby_list = DangerZone.entityManager.findEntitiesInRange(2, d, x, y, z);
 		if (nearby_list != null)
@@ -119,34 +112,7 @@ public class Dispenser extends Block implements PoweredComponent
 			}
 		}
 		
-		if (nearby_list != null)
-		{
-			if (!nearby_list.isEmpty())
-			{
-				Entity e = null;
-				ListIterator<Entity> li;
-				li = nearby_list.listIterator();
-				while (li.hasNext())
-				{
-					e = (Entity) li.next();
-					if (e instanceof EntityChest)
-					{
-						int dx = (int)e.posx - x;
-						int dy = (int)e.posy - y;
-						int dz = (int)e.posz - z;
-						int[] sideArray = {dx, dy, dz};
-						if (Orienter.getSideForm(sideArray) >= 0)
-						{
-							ec = (EntityChest) e;
-							break;
-						}
-						ec = null;
-					}
-				}
-			}
-		}
-		
-		if (ec != null && ed == null)
+		if (ed == null)
 		{ // where did our entity go???
 			if (w.isServer)
 			{
@@ -162,51 +128,7 @@ public class Dispenser extends Block implements PoweredComponent
 				}
 			}
 		}
-		else if (ec != null && w.isServer)
-		{
-			positionDispenserEntity(ed, w, d, x, y, z);	
-			ed.targetX = x+rounded[0];
-			ed.targetY = y+rounded[1];
-			ed.targetZ = z+rounded[2];
-			ed.targetSide = Orienter.getSideForm(rounded);
-			ed.ec = ec;
-			ed.shouldOutput = true;
-		}
 		
-	}
-	
-	private void positionDispenserEntity(Entity it, World w, int d, int x, int y, int z)
-	{
-		double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR, w.getblockmeta(d, x, y, z));
-		int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]), 
-				(int) Math.round(getRelativeForward[2])};
-		switch(Orienter.getSideForm(rounded))
-		{
-			case 0: //Top
-				it.rotation_pitch_head = 90;
-				break;
-			case 1: //Front
-				it.rotation_yaw_head = 0;
-				it.rotation_pitch_head = 0;
-				break;
-			case 2: //Back
-				it.rotation_yaw_head = 180;
-				it.rotation_pitch_head = 0;
-				break;
-			case 3: //Left
-				it.rotation_yaw_head = 90;
-				it.rotation_pitch_head = 0;
-				break;
-			case 4: //Right
-				it.rotation_yaw_head = 270;
-				it.rotation_pitch_head = 0;
-				break;
-			case 5: //Bottom
-				it.rotation_pitch_head = -90;
-				break;
-			default: //Dunno
-				break;
-		}
 	}
 
 	// The below methods were copied from DangerZone in accordance with the DangerZone license,
