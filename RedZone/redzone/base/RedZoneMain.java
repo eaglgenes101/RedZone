@@ -7,6 +7,8 @@ import redzone.blocks.JunctionWire;
 import redzone.blocks.JunctionWireActive;
 import redzone.blocks.PowerStick;
 import redzone.blocks.PowerStickInactive;
+import redzone.blocks.PressSwitch;
+import redzone.blocks.PressSwitchActive;
 import redzone.blocks.SmokeTester;
 import redzone.blocks.StraightWire;
 import redzone.blocks.StraightWireActive;
@@ -51,9 +53,12 @@ public class RedZoneMain extends BaseMod
 	public static Block POWER_STICK_INACTIVE = new PowerStickInactive("RedZone:Power Stick Inactive", "RedZone_res/blocks/power_stick_inactive.png");
 	public static Block SMOKE_TESTER = new SmokeTester("RedZone:Smoke Tester", "RedZone_res/blocks/smoketester.png");
 	public static Block DISPENSER = new Dispenser("RedZone:Dispenser");
+	public static Block PRESS_SWITCH = new PressSwitch("RedZone:Press Switch Block");
+	public static Block PRESS_SWITCH_ACTIVE = new PressSwitchActive("RedZone:Press Switch Active Block");
 	public static Item STRAIGHT_WIRE_ITEM = new WireItem("RedZone:Straight Wire", "RedZone_res/blocks/straight_inactive.png", STRAIGHT_WIRE);
 	public static Item BENT_WIRE_ITEM = new WireItem("RedZone:Bent Wire", "RedZone_res/blocks/bent_inactive.png", BENT_WIRE);
 	public static Item JUNCTION_WIRE_ITEM = new WireItem("RedZone:Junction Wire", "RedZone_res/blocks/junction_inactive.png", JUNCTION_WIRE);
+	public static Item PRESS_SWITCH_ITEM = new WireItem("RedZone:Press Switch", "RedZone_res/blocks/switch_off.png", PRESS_SWITCH);
 	
 	public RedZoneMain (){
 		super();
@@ -83,9 +88,12 @@ public class RedZoneMain extends BaseMod
 		Blocks.registerBlock(POWER_STICK_INACTIVE);
 		Blocks.registerBlock(SMOKE_TESTER);
 		Blocks.registerBlock(DISPENSER);
+		Blocks.registerBlock(PRESS_SWITCH);
+		Blocks.registerBlock(PRESS_SWITCH_ACTIVE);
 		Items.registerItem(STRAIGHT_WIRE_ITEM);
 		Items.registerItem(BENT_WIRE_ITEM);
 		Items.registerItem(JUNCTION_WIRE_ITEM);
+		Items.registerItem(PRESS_SWITCH_ITEM);
 		Entities.registerEntity(EntityDispenser.class, "RedZone:EntityDispenser", null);
 	}
 	
