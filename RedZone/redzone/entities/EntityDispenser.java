@@ -29,6 +29,7 @@ public class EntityDispenser extends Entity
 		ignoreCollisions = true;
 		width = 0.01f;
 		height = 0.01f;
+		setVarInt(21, 0);
 	}
 
 	// The below methods were copied from DangerZone in accordance with the
@@ -70,13 +71,17 @@ public class EntityDispenser extends Entity
 		}
 		else if (((Dispenser) myBlock).getStatus(world, dimension, (int)posx, (int)posy, (int)posz))
 		{
-			double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR, 
-					world.getblockmeta(dimension, (int)posx, (int)posy, (int)posz));
-			int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]), 
-					(int) Math.round(getRelativeForward[2])};
-			positionSelf(world, dimension, (int)posx, (int)posy, (int)posz);
-			rightclick(this.world, (int)posx, (int)posy, 
-					(int)posz, Orienter.getSideForm(rounded));
+			if (getVarInt(21)==(((Dispenser) myBlock).getCycle(world, dimension, (int)posx, (int)posy, (int)posz)?1:0))
+			{
+				double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR, 
+						world.getblockmeta(dimension, (int)posx, (int)posy, (int)posz));
+				int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]), 
+						(int) Math.round(getRelativeForward[2])};
+				positionSelf(world, dimension, (int)posx, (int)posy, (int)posz);
+				rightclick(this.world, (int)posx, (int)posy, 
+						(int)posz, Orienter.getSideForm(rounded));
+				setVarInt(21, ((Dispenser) myBlock).getCycle(world, dimension, (int)posx, (int)posy, (int)posz)?0:1);
+			}
 		}
 		super.update(deltaT);
 	}
