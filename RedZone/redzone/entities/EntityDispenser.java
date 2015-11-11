@@ -17,11 +17,12 @@ import dangerzone.blocks.Blocks;
 import dangerzone.entities.Entity;
 import dangerzone.entities.EntityChest;
 import dangerzone.items.Item;
+import dangerzone.items.ItemSpawnEgg;
 import dangerzone.items.Items;
 
 public class EntityDispenser extends Entity
 {
-	
+
 	public EntityDispenser(World w)
 	{
 		super(w);
@@ -59,75 +60,80 @@ public class EntityDispenser extends Entity
 	 * hacked it. DO NOT KEEP VALUABLE INFORMATION ON INTERNET-CONNECTED
 	 * COMPUTERS. Or your phone...
 	 */
-	
+
 	public void update(float deltaT)
 	{
-		int myBlockID = world.getblock(dimension, (int)posx, (int)posy, (int)posz);
+		int myBlockID = world.getblock(dimension, (int) posx, (int) posy, (int) posz);
 		Block myBlock = Blocks.getBlock(myBlockID);
-		if(myBlockID != RedZoneMain.DISPENSER.blockID)
+		if (myBlockID != RedZoneMain.DISPENSER.blockID)
 		{
 			this.deadflag = true;
 			return;
 		}
-		else if (((Dispenser) myBlock).getStatus(world, dimension, (int)posx, (int)posy, (int)posz))
+		else if (((Dispenser) myBlock).getStatus(world, dimension, (int) posx, (int) posy, (int) posz))
 		{
-			if (getVarInt(21)==(((Dispenser) myBlock).getCycle(world, dimension, (int)posx, (int)posy, (int)posz)?1:0))
+			if (getVarInt(21) == (((Dispenser) myBlock).getCycle(world, dimension, (int) posx, (int) posy, (int) posz) ? 1
+					: 0))
 			{
-				double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR, 
-						world.getblockmeta(dimension, (int)posx, (int)posy, (int)posz));
-				int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]), 
+				double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR,
+						world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
+				int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]),
 						(int) Math.round(getRelativeForward[2])};
-				positionSelf(world, dimension, (int)posx, (int)posy, (int)posz);
-				rightclick(this.world, (int)posx, (int)posy, 
-						(int)posz, Orienter.getSideForm(rounded));
-				setVarInt(21, ((Dispenser) myBlock).getCycle(world, dimension, (int)posx, (int)posy, (int)posz)?0:1);
+				positionSelf(world, dimension, (int) posx, (int) posy, (int) posz);
+				rightclick(this.world, Orienter.getSideForm(rounded));
+				setVarInt(21, ((Dispenser) myBlock).getCycle(world, dimension, (int) posx, (int) posy, (int) posz) ? 0
+						: 1);
 			}
 		}
 		super.update(deltaT);
 	}
-	
+
 	private void positionSelf(World w, int d, int x, int y, int z)
 	{
 		double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR, w.getblockmeta(d, x, y, z));
-		int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]), 
+		int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]),
 				(int) Math.round(getRelativeForward[2])};
-		switch(Orienter.getSideForm(rounded))
+		switch (Orienter.getSideForm(rounded))
 		{
-			case 0: //Top
+			case 0: // Top
 				rotation_pitch_head = 90;
 				break;
-			case 1: //Front
+			case 1: // Front
 				rotation_yaw_head = 0;
 				rotation_pitch_head = 0;
 				break;
-			case 2: //Back
+			case 2: // Back
 				rotation_yaw_head = 180;
 				rotation_pitch_head = 0;
 				break;
-			case 3: //Left
+			case 3: // Left
 				rotation_yaw_head = 90;
 				rotation_pitch_head = 0;
 				break;
-			case 4: //Right
+			case 4: // Right
 				rotation_yaw_head = 270;
 				rotation_pitch_head = 0;
 				break;
-			case 5: //Bottom
+			case 5: // Bottom
 				rotation_pitch_head = -90;
 				break;
-			default: //Dunno
+			default: // Dunno
 				break;
 		}
 	}
 
 	// Do right-clicks by a phantom "player"
-	public void rightclick(World world, int focus_x, int focus_y, int focus_z, int side)
+	public void rightclick(World world, int side)
 	{
+		double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR,
+				world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
+		int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]),
+				(int) Math.round(getRelativeForward[2])};
 
 		List<Entity> nearby_list = null;
 		EntityChest ec = null;
 
-		nearby_list = DangerZone.entityManager.findEntitiesInRange(2, dimension, (int)posx, (int)posy, (int)posz);
+		nearby_list = DangerZone.entityManager.findEntitiesInRange(2, dimension, (int) posx, (int) posy, (int) posz);
 		if (nearby_list != null)
 		{
 			if (!nearby_list.isEmpty())
@@ -140,11 +146,11 @@ public class EntityDispenser extends Entity
 					e = (Entity) li.next();
 					if (e instanceof EntityChest)
 					{
-						int xdiff = (int)posx - (int)e.posx;
-						int ydiff = (int)posy - (int)e.posy;
-						int zdiff = (int)posz - (int)e.posz;
+						int xdiff = (int) posx - (int) e.posx;
+						int ydiff = (int) posy - (int) e.posy;
+						int zdiff = (int) posz - (int) e.posz;
 						int[] checkArray = {xdiff, ydiff, zdiff};
-						if (Orienter.getSideForm(checkArray)>=0)
+						if (Orienter.getSideForm(checkArray) >= 0)
 						{
 							ec = (EntityChest) e;
 							break;
@@ -154,10 +160,10 @@ public class EntityDispenser extends Entity
 				}
 			}
 		}
-		
+
 		if (ec == null)
 			return;
-		
+
 		boolean rightcontinue = true;
 		int inventoryIndex = -1;
 		for (int i = 0; i < ec.inventory.length; i++)
@@ -170,25 +176,43 @@ public class EntityDispenser extends Entity
 		}
 		if (inventoryIndex < 0)
 			return;
-		
+
 		InventoryContainer ic = ec.inventory[inventoryIndex];
-		
+
 		if (ic != null)
 		{
-			Item it = ic.getItem();
-			if (it != null)
-				rightcontinue = it.onRightClick(this, null, ic);
-			Block bl = ic.getBlock();
-			if (bl != null)
-				rightcontinue = bl.onRightClick(this, null, ic);
-			if (rightcontinue)
+			if (ic.count > 0)
 			{
-				ic.count--;
-				if (ic.count <= 0)
-					ic = null;
+				Item it = ic.getItem();
+				if (it != null)
+				{
+					rightcontinue = it.onRightClick(this, null, ic);
+					if (it instanceof ItemSpawnEgg)
+					{
+						ItemSpawnEgg ise = (ItemSpawnEgg) it;
+						Entity e = world.createEntityByName(ise.critter, dimension, 1, 1, 1);
+						if (e != null)
+						{
+							e.init();
+							e.posx = posx+rounded[0]*e.width-e.width/2;
+							e.posy = posy+rounded[1]*e.height-e.height/2;
+							e.posz = posz+rounded[2]*e.width-e.width/2;
+							world.spawnEntityInWorld(e);
+						}
+					}
+				}
+				Block bl = ic.getBlock();
+				if (bl != null)
+					rightcontinue = bl.onRightClick(this, null, ic);
+				if (rightcontinue)
+				{
+					ic.count--;
+					if (ic.count <= 0)
+						ic = null;
+				}
 			}
 		}
-		
+
 		int bid = 0;
 		int iid = 0;
 		if (ic != null)
@@ -199,41 +223,34 @@ public class EntityDispenser extends Entity
 				iid = ic.iid;
 			}
 		}
-		
-		if (focus_x > 0 && focus_y >= 0 && focus_z > 0)
+
+		int fbid = world.getblock(dimension, (int) posx, (int) posy, (int) posz);
+		boolean cont = Blocks.rightClickOnBlock(fbid, null, dimension, (int) posx, (int) posy, (int) posz);
+		if (cont)
 		{
-			int fbid = world.getblock(dimension, focus_x, focus_y, focus_z);
-			boolean cont = Blocks.rightClickOnBlock(fbid, null, dimension, focus_x, focus_y, focus_z);
-			if (cont)
+			if (bid != 0)
 			{
-				if (bid != 0)
+				if (world
+						.getblock(dimension, (int) posx + rounded[0], (int) posy + rounded[1], (int) posz + rounded[2]) == 0)
 				{
-					double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR, 
-							world.getblockmeta(dimension, (int)posx, (int)posy, (int)posz));
-					int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]), 
-							(int) Math.round(getRelativeForward[2])};
-					if (world.getblock(dimension, (int)posx+rounded[0], (int)posy+rounded[1], (int)posz+rounded[2]) == 0)
-					{
-						Blocks.doPlaceBlock(bid, fbid, null, world, dimension, focus_x, focus_y, focus_z, side);
-						ic.count--;
-						if (ic.count <= 0)
-							ic = null;
-					}
+					Blocks.doPlaceBlock(bid, fbid, null, world, dimension, (int) posx, (int) posy, (int) posz, side);
+					ic.count--;
+					if (ic.count <= 0)
+						ic = null;
 				}
-				else if (iid != 0)
+			}
+			else if (iid != 0)
+			{
+				boolean delme = Items.rightClickOnBlock(iid, null, dimension, (int) posx, (int) posy, (int) posz, side);
+				world.playSound(Blocks.getHitSound(fbid), dimension, (int) posx, (int) posy, (int) posz, 0.35f, 1.0f);
+				if (delme)
 				{
-					boolean delme = Items.rightClickOnBlock(iid, null, dimension, focus_x, focus_y, focus_z, side);
-					world.playSound(Blocks.getHitSound(fbid), dimension, focus_x, focus_y, focus_z, 0.35f, 1.0f);
-					if (delme)
-					{
-						ic.count--;
-						if (ic.count <= 0)
-							ic = null;
-					}
+					ic.count--;
+					if (ic.count <= 0)
+						ic = null;
 				}
 			}
 		}
-		
-	}
 
+	}
 }

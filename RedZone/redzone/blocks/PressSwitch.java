@@ -45,7 +45,7 @@ public class PressSwitch extends Wire implements PoweredComponent
 		{
 			return true;
 		}
-		p.world.setblockandmeta(dimension, x, y, z,
+		p.world.setblockandmetanonotify(dimension, x, y, z,
 				RedZoneMain.PRESS_SWITCH_ACTIVE.blockID, 
 				p.world.getblockmeta(dimension, x, y, z) );
 		return false;
