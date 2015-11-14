@@ -67,7 +67,7 @@ public class RedZoneMain extends BaseMod
 	@Override
 	public String getModName()
 	{
-		return "RedZone v0.0.1";
+		return "RedZone v0.1.0";
 	}
 	
 	@Override

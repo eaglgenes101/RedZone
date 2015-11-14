@@ -1,12 +1,9 @@
 package redzone.blocks;
 
-import org.lwjgl.input.Mouse;
-
 import redzone.base.RedZoneMain;
 import redzone.mechanics.PoweredComponent;
 import dangerzone.Player;
 import dangerzone.World;
-import dangerzone.items.ItemPickAxe;
 
 public class PressSwitch extends Wire implements PoweredComponent
 {
