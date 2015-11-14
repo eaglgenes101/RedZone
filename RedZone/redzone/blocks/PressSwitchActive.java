@@ -28,13 +28,9 @@ public class PressSwitchActive extends PressSwitch implements PoweredComponent
 		return 63;
 	}
 	
-	public boolean leftClickOnBlock(Player p, int dimension, int x, int y, int z)
+	@Override
+	public boolean rightClickOnBlock(Player p, int dimension, int x, int y, int z)
 	{
-		if (p != null && p.getHotbar(p.gethotbarindex()).getItem() != null
-				&& p.getHotbar(p.gethotbarindex()).getItem() instanceof ItemPickAxe)
-		{
-			return true;
-		}
 		p.world.setblockandmetanonotify(dimension, x, y, z,
 				RedZoneMain.PRESS_SWITCH.blockID, 
 				p.world.getblockmeta(dimension, x, y, z) );

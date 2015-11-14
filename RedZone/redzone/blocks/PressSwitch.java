@@ -16,8 +16,6 @@ public class PressSwitch extends Wire implements PoweredComponent
 		super(n);
 
 		isStone = true;
-		mindamage = 2;
-		maxdamage = 1;
 
 		topname = "RedZone_res/blocks/transparent.png";
 		bottomname = "RedZone_res/blocks/switch_off.png";
@@ -38,13 +36,9 @@ public class PressSwitch extends Wire implements PoweredComponent
 		return RedZoneMain.PRESS_SWITCH_ITEM.itemID;
 	}
 
-	public boolean leftClickOnBlock(Player p, int dimension, int x, int y, int z)
+	@Override
+	public boolean rightClickOnBlock(Player p, int dimension, int x, int y, int z)
 	{
-		if (p != null && p.getHotbar(p.gethotbarindex()).getItem() != null
-				&& p.getHotbar(p.gethotbarindex()).getItem() instanceof ItemPickAxe)
-		{
-			return true;
-		}
 		p.world.setblockandmetanonotify(dimension, x, y, z,
 				RedZoneMain.PRESS_SWITCH_ACTIVE.blockID, 
 				p.world.getblockmeta(dimension, x, y, z) );
