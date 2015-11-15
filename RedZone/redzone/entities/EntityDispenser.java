@@ -250,6 +250,8 @@ public class EntityDispenser extends Entity
 				}
 			}
 		}
+		ChestInventoryPacket cip = new ChestInventoryPacket();
+		cip.inventoryUpdateToServer(ec.entityID, inventoryIndex, ic);
 
 	}
 }
