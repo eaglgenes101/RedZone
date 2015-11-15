@@ -19,6 +19,7 @@ import dangerzone.entities.EntityChest;
 import dangerzone.items.Item;
 import dangerzone.items.ItemSpawnEgg;
 import dangerzone.items.Items;
+import dangerzone.threads.FastBlockTicker;
 
 public class EntityDispenser extends Entity
 {
@@ -72,8 +73,7 @@ public class EntityDispenser extends Entity
 		}
 		else if (((Dispenser) myBlock).getStatus(world, dimension, (int) posx, (int) posy, (int) posz))
 		{
-			if (getVarInt(21) == (((Dispenser) myBlock).getCycle(world, dimension, (int) posx, (int) posy, (int) posz) ? 1
-					: 0))
+			if (FastBlockTicker.cycle%2 != getVarInt(21))
 			{
 				double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR,
 						world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
@@ -81,8 +81,7 @@ public class EntityDispenser extends Entity
 						(int) Math.round(getRelativeForward[2])};
 				positionSelf(world, dimension, (int) posx, (int) posy, (int) posz);
 				rightclick(this.world, Orienter.getSideForm(rounded));
-				setVarInt(21, ((Dispenser) myBlock).getCycle(world, dimension, (int) posx, (int) posy, (int) posz) ? 0
-						: 1);
+				setVarInt(21, FastBlockTicker.cycle%2);
 			}
 		}
 		super.update(deltaT);
@@ -107,11 +106,11 @@ public class EntityDispenser extends Entity
 				rotation_pitch_head = 0;
 				break;
 			case 3: // Left
-				rotation_yaw_head = 90;
+				rotation_yaw_head = 270;
 				rotation_pitch_head = 0;
 				break;
 			case 4: // Right
-				rotation_yaw_head = 270;
+				rotation_yaw_head = 90;
 				rotation_pitch_head = 0;
 				break;
 			case 5: // Bottom
