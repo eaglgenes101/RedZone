@@ -23,6 +23,8 @@ import dangerzone.threads.FastBlockTicker;
 
 public class EntityDispenser extends Entity
 {
+	
+	ChestInventoryPacket cip = null;
 
 	public EntityDispenser(World w)
 	{
@@ -32,6 +34,8 @@ public class EntityDispenser extends Entity
 		width = 0.01f;
 		height = 0.01f;
 		setVarInt(21, 0);
+		if (cip == null)
+			cip = new ChestInventoryPacket();
 	}
 
 	// The below methods were copied from DangerZone in accordance with the
@@ -132,7 +136,7 @@ public class EntityDispenser extends Entity
 		List<Entity> nearby_list = null;
 		EntityChest ec = null;
 
-		nearby_list = DangerZone.entityManager.findEntitiesInRange(2, dimension, (int) posx, (int) posy, (int) posz);
+		nearby_list = DangerZone.entityManager.findEntitiesInRange(5, dimension, (int) posx, (int) posy, (int) posz);
 		if (nearby_list != null)
 		{
 			if (!nearby_list.isEmpty())
@@ -167,7 +171,7 @@ public class EntityDispenser extends Entity
 		int inventoryIndex = -1;
 		for (int i = 0; i < ec.inventory.length; i++)
 		{
-			if (ec.inventory[i] != null)
+			if (ec.inventory[i] != null && ec.inventory[i].count > 0)
 			{
 				inventoryIndex = i;
 				break;
@@ -206,8 +210,6 @@ public class EntityDispenser extends Entity
 				if (rightcontinue)
 				{
 					ic.count--;
-					if (ic.count <= 0)
-						ic = null;
 				}
 			}
 		}
@@ -234,8 +236,6 @@ public class EntityDispenser extends Entity
 				{
 					Blocks.doPlaceBlock(bid, fbid, null, world, dimension, (int) posx, (int) posy, (int) posz, side);
 					ic.count--;
-					if (ic.count <= 0)
-						ic = null;
 				}
 			}
 			else if (iid != 0)
@@ -245,12 +245,12 @@ public class EntityDispenser extends Entity
 				if (delme)
 				{
 					ic.count--;
-					if (ic.count <= 0)
-						ic = null;
 				}
 			}
 		}
-		ChestInventoryPacket cip = new ChestInventoryPacket();
+		
+		if (ic != null && ic.count <= 0)
+			ic = null;
 		cip.inventoryUpdateToServer(ec.entityID, inventoryIndex, ic);
 
 	}
