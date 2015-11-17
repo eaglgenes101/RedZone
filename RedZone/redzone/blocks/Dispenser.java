@@ -51,11 +51,11 @@ public class Dispenser extends Block implements PoweredComponent
 		frontname = "RedZone_res/blocks/dispenser_front.png";
 		backname = "RedZone_res/blocks/dispenser_back.png";
 
+		mindamage = 5;
+		maxdamage = 80;
 		maxstack = 8;
 		isStone = true;
 		hasFront = true;
-		renderAllSides = true;
-		renderSmaller = true;
 		isSolidForRendering = false;
 	}
 	

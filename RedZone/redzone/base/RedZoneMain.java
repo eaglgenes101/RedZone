@@ -15,6 +15,7 @@ import redzone.blocks.StraightWireActive;
 import redzone.entities.EntityDispenser;
 import redzone.items.WireItem;
 import dangerzone.BaseMod;
+import dangerzone.Crafting;
 import dangerzone.blocks.Block;
 import dangerzone.blocks.Blocks;
 import dangerzone.entities.Entities;
@@ -95,6 +96,64 @@ public class RedZoneMain extends BaseMod
 		Items.registerItem(JUNCTION_WIRE_ITEM);
 		Items.registerItem(PRESS_SWITCH_ITEM);
 		Entities.registerEntity(EntityDispenser.class, "RedZone:EntityDispenser", null);
+		
+		Crafting.registerCraftingRecipe(Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, 
+				null, null, null, null, null, null, STRAIGHT_WIRE_ITEM, 6, true);
+		Crafting.registerCraftingRecipe(null, null, null, 
+				Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, null, null, null, STRAIGHT_WIRE_ITEM, 6, true);
+		Crafting.registerCraftingRecipe(null, null, null, 
+				null, null, null, Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, STRAIGHT_WIRE_ITEM, 6, true);
+		Crafting.registerCraftingRecipe(Items.lumpcopper, null, null, 
+				Items.lumpcopper, null, null, Items.lumpcopper, null, null, STRAIGHT_WIRE_ITEM, 6, true);
+		Crafting.registerCraftingRecipe(null, Items.lumpcopper, null,
+				null, Items.lumpcopper, null, null, Items.lumpcopper, null, STRAIGHT_WIRE_ITEM, 6, true);
+		Crafting.registerCraftingRecipe(null, null, Items.lumpcopper, 
+				null, null, Items.lumpcopper, null, null, Items.lumpcopper, STRAIGHT_WIRE_ITEM, 6, true);
+		
+		Crafting.registerCraftingRecipe(null, Items.lumpcopper, null,
+				Items.lumpcopper, Items.lumpcopper, null, null, null, null, BENT_WIRE_ITEM, 6, true);
+		Crafting.registerCraftingRecipe(null, Items.lumpcopper, null, 
+				null, Items.lumpcopper, Items.lumpcopper, null, null, null, BENT_WIRE_ITEM, 6, true);
+		Crafting.registerCraftingRecipe(null, null, null, 
+				Items.lumpcopper, Items.lumpcopper, null, null, Items.lumpcopper, null, BENT_WIRE_ITEM, 6, true);
+		Crafting.registerCraftingRecipe(null, null, null, 
+				null, Items.lumpcopper, Items.lumpcopper, null, Items.lumpcopper, null, BENT_WIRE_ITEM, 6, true);
+		
+		Crafting.registerCraftingRecipe(null, Items.lumpcopper, null, 
+				Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, 
+				null, Items.lumpcopper, null, JUNCTION_WIRE_ITEM, 10, true);
+		
+		Crafting.registerCraftingRecipe(Items.lumpcopper, null, null, 
+				Items.stick, null, null, null, null, null, POWER_STICK, 4, true);
+		Crafting.registerCraftingRecipe(null, Items.lumpcopper, null, 
+				null, Items.stick, null, null, null, null, POWER_STICK, 4, true);
+		Crafting.registerCraftingRecipe(null, null, Items.lumpcopper, 
+				null, null, Items.stick, null, null, null, POWER_STICK, 4, true);
+		Crafting.registerCraftingRecipe(null, null, null, 
+				Items.lumpcopper, null, null, Items.stick, null, null, POWER_STICK, 4, true);
+		Crafting.registerCraftingRecipe(null, null, null, 
+				null, Items.lumpcopper, null, null, Items.stick, null, POWER_STICK, 4, true);
+		Crafting.registerCraftingRecipe(null, null, null, 
+				null, null, Items.lumpcopper, null, null, Items.stick, POWER_STICK, 4, true);
+		
+		Crafting.registerCraftingRecipe(Blocks.stone, Blocks.stone, Blocks.stone, 
+				Blocks.stone, Items.firestick, Blocks.stone, 
+				Blocks.stone, Blocks.stone, Blocks.stone, SMOKE_TESTER, 1, true);
+		
+		Crafting.registerCraftingRecipe(null, Blocks.stone, Blocks.stone, 
+				null, null, null, null, null, null, PRESS_SWITCH_ITEM, 2, true);
+		Crafting.registerCraftingRecipe(Blocks.stone, Blocks.stone, null, 
+				null, null, null, null, null, null, PRESS_SWITCH_ITEM, 2, true);
+		Crafting.registerCraftingRecipe(null, null, null, 
+				Blocks.stone, Blocks.stone, null, null, null, null, PRESS_SWITCH_ITEM, 2, true);
+		Crafting.registerCraftingRecipe(null, null, null, 
+				null, Blocks.stone, Blocks.stone, null, null, null, PRESS_SWITCH_ITEM, 2, true);
+		Crafting.registerCraftingRecipe(null, null, null, 
+				null, null, null, Blocks.stone, Blocks.stone, null, PRESS_SWITCH_ITEM, 2, true);
+		Crafting.registerCraftingRecipe(null, null, null, 
+				null, null, null, null, Blocks.stone, Blocks.stone, PRESS_SWITCH_ITEM, 2, true);
+		
+		
 	}
 	
 	

@@ -6,6 +6,7 @@ import dangerzone.Player;
 import dangerzone.World;
 import dangerzone.blocks.Block;
 import dangerzone.items.ItemPickAxe;
+import dangerzone.items.Items;
 
 public class PressSwitchActive extends PressSwitch implements PoweredComponent
 {
@@ -29,8 +30,10 @@ public class PressSwitchActive extends PressSwitch implements PoweredComponent
 	}
 	
 	@Override
-	public boolean rightClickOnBlock(Player p, int dimension, int x, int y, int z)
+	public boolean leftClickOnBlock(Player p, int dimension, int x, int y, int z)
 	{
+		if (Items.getItem(p.getHotbar(p.gethotbarindex()).iid) instanceof ItemPickAxe )
+			return true;
 		p.world.setblockandmetanonotify(dimension, x, y, z,
 				RedZoneMain.PRESS_SWITCH.blockID, 
 				p.world.getblockmeta(dimension, x, y, z) );
