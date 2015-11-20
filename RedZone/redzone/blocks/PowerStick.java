@@ -54,11 +54,6 @@ public class PowerStick extends LightStick implements PoweredComponent
 		return 63;
 	}
 	
-	public void onBlockPlaced(World w, int dimension, int x, int y, int z)
-	{
-		FastBlockTicker.addFastTick(dimension, x, y, z);
-	}
-	
 	public int getBlockDrop(Player p, World w, int dimension, int x, int y, int z)
 	{
 		return RedZoneMain.POWER_STICK.blockID;
@@ -68,7 +63,7 @@ public class PowerStick extends LightStick implements PoweredComponent
 	public void tickMe(World w, int d, int x, int y, int z)
 	{
 		FastBlockTicker.addFastTick(d, x, y, z);
-		Utils.spawnParticlesFromServer(w, "DangerZone:ParticleFire", (w.getblockmeta(d, x, y, z)&POWER_MASK)/64, d, x+0.5f, y+0.5f, z+0.5f);
+		Utils.spawnParticlesFromServer(w, "DangerZone:ParticleFire", (w.getblockmeta(d, x, y, z)&POWER_MASK)/16, d, x+0.5f, y+0.5f, z+0.5f);
 	}
 	
 	public void finishStep(World w, int d, int x, int y, int z)
@@ -100,7 +95,6 @@ public class PowerStick extends LightStick implements PoweredComponent
 	public void tickMeFast(World w, int dimension, int x, int y, int z)
 	{
 		((PoweredComponent)this).powerBump(w, dimension, x, y, z); 
-		return;
 	}
 
 	@Override

@@ -1,9 +1,6 @@
 package redzone.blocks;
 
-import org.newdawn.slick.opengl.Texture;
-
 import redzone.mechanics.PoweredComponent;
-import dangerzone.StitchedTexture;
 import dangerzone.Utils;
 import dangerzone.World;
 import dangerzone.blocks.Block;
@@ -61,6 +58,11 @@ public class SmokeTester extends Block implements PoweredComponent
 	public void tickMe(World w, int d, int x, int y, int z)
 	{
 		FastBlockTicker.addFastTick(d, x, y, z);
+	}
+	
+	public void tickMeFast(World w, int d, int x, int y, int z)
+	{
+		((PoweredComponent)this).powerBump(w, d, x, y, z); 
 	}
 
 }
