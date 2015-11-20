@@ -3,19 +3,15 @@ package redzone.entities;
 import java.util.List;
 import java.util.ListIterator;
 
-import org.lwjgl.input.Mouse;
-
 import redzone.base.RedZoneMain;
 import redzone.blocks.Dispenser;
 import redzone.mechanics.Orienter;
-import dangerzone.ChestInventoryPacket;
 import dangerzone.DangerZone;
 import dangerzone.InventoryContainer;
 import dangerzone.World;
 import dangerzone.blocks.Block;
 import dangerzone.blocks.Blocks;
 import dangerzone.entities.Entity;
-import dangerzone.entities.EntityChest;
 import dangerzone.items.Item;
 import dangerzone.items.ItemSpawnEgg;
 import dangerzone.items.Items;
@@ -39,12 +35,10 @@ import dangerzone.threads.FastBlockTicker;
  * 
  * Dispenser Entity. 
  * 
-/*/
+ /*/
 
 public class EntityDispenser extends Entity
 {
-	
-	ChestInventoryPacket cip = null;
 
 	public EntityDispenser(World w)
 	{
@@ -54,8 +48,6 @@ public class EntityDispenser extends Entity
 		width = 0.01f;
 		height = 0.01f;
 		setVarInt(21, 0);
-		if (cip == null)
-			cip = new ChestInventoryPacket();
 	}
 
 	// The below methods were copied from DangerZone in accordance with the
@@ -97,15 +89,13 @@ public class EntityDispenser extends Entity
 		}
 		else if (((Dispenser) myBlock).getStatus(world, dimension, (int) posx, (int) posy, (int) posz))
 		{
-			if (FastBlockTicker.cycle%2 != getVarInt(21))
+			if (FastBlockTicker.cycle % 2 != getVarInt(21))
 			{
-				double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR,
-						world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
-				int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]),
-						(int) Math.round(getRelativeForward[2])};
+				double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR, world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
+				int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]), (int) Math.round(getRelativeForward[2])};
 				positionSelf(world, dimension, (int) posx, (int) posy, (int) posz);
 				rightclick(this.world, Orienter.getSideForm(rounded));
-				setVarInt(21, FastBlockTicker.cycle%2);
+				setVarInt(21, FastBlockTicker.cycle % 2);
 			}
 		}
 		super.update(deltaT);
@@ -114,8 +104,7 @@ public class EntityDispenser extends Entity
 	private void positionSelf(World w, int d, int x, int y, int z)
 	{
 		double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR, w.getblockmeta(d, x, y, z));
-		int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]),
-				(int) Math.round(getRelativeForward[2])};
+		int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]), (int) Math.round(getRelativeForward[2])};
 		switch (Orienter.getSideForm(rounded))
 		{
 			case 0: // Top
@@ -148,13 +137,11 @@ public class EntityDispenser extends Entity
 	// Do right-clicks by a phantom "player"
 	public void rightclick(World world, int side)
 	{
-		double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR,
-				world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
-		int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]),
-				(int) Math.round(getRelativeForward[2])};
+		double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR, world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
+		int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]), (int) Math.round(getRelativeForward[2])};
 
 		List<Entity> nearby_list = null;
-		EntityChest ec = null;
+		InventoryContainer ic = null;
 
 		nearby_list = DangerZone.entityManager.findEntitiesInRange(5, dimension, (int) posx, (int) posy, (int) posz);
 		if (nearby_list != null)
@@ -167,7 +154,7 @@ public class EntityDispenser extends Entity
 				while (li.hasNext())
 				{
 					e = (Entity) li.next();
-					if (e instanceof EntityChest)
+					if (e instanceof EntityItemSupplier)
 					{
 						int xdiff = (int) posx - (int) e.posx;
 						int ydiff = (int) posy - (int) e.posy;
@@ -175,63 +162,45 @@ public class EntityDispenser extends Entity
 						int[] checkArray = {xdiff, ydiff, zdiff};
 						if (Orienter.getSideForm(checkArray) >= 0)
 						{
-							ec = (EntityChest) e;
-							break;
+							if (((EntityItemSupplier) e).hasItem(this))
+							{
+								ic = ((EntityItemSupplier) e).get(this);
+								break;
+							}
 						}
-						ec = null;
 					}
 				}
 			}
 		}
 
-		if (ec == null)
-			return;
-
-		boolean rightcontinue = true;
-		int inventoryIndex = -1;
-		for (int i = 0; i < ec.inventory.length; i++)
+		if (ic == null)
 		{
-			if (ec.inventory[i] != null && ec.inventory[i].count > 0)
-			{
-				inventoryIndex = i;
-				break;
-			}
+			return;
 		}
-		if (inventoryIndex < 0)
-			return;
 
-		InventoryContainer ic = ec.inventory[inventoryIndex];
-
-		if (ic != null)
+		if (ic.count > 0)
 		{
-			if (ic.count > 0)
+			Item it = ic.getItem();
+			if (it != null)
 			{
-				Item it = ic.getItem();
-				if (it != null)
+				it.onRightClick(this, null, ic);
+				if (it instanceof ItemSpawnEgg)
 				{
-					rightcontinue = it.onRightClick(this, null, ic);
-					if (it instanceof ItemSpawnEgg)
+					ItemSpawnEgg ise = (ItemSpawnEgg) it;
+					Entity e = world.createEntityByName(ise.critter, dimension, 1, 1, 1);
+					if (e != null)
 					{
-						ItemSpawnEgg ise = (ItemSpawnEgg) it;
-						Entity e = world.createEntityByName(ise.critter, dimension, 1, 1, 1);
-						if (e != null)
-						{
-							e.init();
-							e.posx = posx+rounded[0]*e.width-e.width/2;
-							e.posy = posy+rounded[1]*e.height-e.height/2;
-							e.posz = posz+rounded[2]*e.width-e.width/2;
-							world.spawnEntityInWorld(e);
-						}
+						e.init();
+						e.posx = posx + rounded[0] * e.width - e.width / 2;
+						e.posy = posy + rounded[1] * e.height - e.height / 2;
+						e.posz = posz + rounded[2] * e.width - e.width / 2;
+						world.spawnEntityInWorld(e);
 					}
 				}
-				Block bl = ic.getBlock();
-				if (bl != null)
-					rightcontinue = bl.onRightClick(this, null, ic);
-				if (rightcontinue)
-				{
-					ic.count--;
-				}
 			}
+			Block bl = ic.getBlock();
+			if (bl != null)
+				bl.onRightClick(this, null, ic);
 		}
 
 		int bid = 0;
@@ -251,27 +220,17 @@ public class EntityDispenser extends Entity
 		{
 			if (bid != 0)
 			{
-				if (world
-						.getblock(dimension, (int) posx + rounded[0], (int) posy + rounded[1], (int) posz + rounded[2]) == 0)
+				if (world.getblock(dimension, (int) posx + rounded[0], (int) posy + rounded[1], (int) posz + rounded[2]) == 0)
 				{
 					Blocks.doPlaceBlock(bid, fbid, null, world, dimension, (int) posx, (int) posy, (int) posz, side);
-					ic.count--;
 				}
 			}
 			else if (iid != 0)
 			{
-				boolean delme = Items.rightClickOnBlock(iid, null, dimension, (int) posx, (int) posy, (int) posz, side);
+				Items.rightClickOnBlock(iid, null, dimension, (int) posx, (int) posy, (int) posz, side);
 				world.playSound(Blocks.getHitSound(fbid), dimension, (int) posx, (int) posy, (int) posz, 0.35f, 1.0f);
-				if (delme)
-				{
-					ic.count--;
-				}
 			}
 		}
-		
-		if (ic != null && ic.count <= 0)
-			ic = null;
-		cip.inventoryUpdateToServer(ec.entityID, inventoryIndex, ic);
 
 	}
 }

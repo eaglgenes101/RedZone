@@ -2,20 +2,15 @@ package redzone.blocks;
 
 import java.util.List;
 import java.util.ListIterator;
-
-import org.lwjgl.input.Mouse;
 import org.newdawn.slick.opengl.Texture;
 
 import redzone.entities.EntityDispenser;
-import redzone.mechanics.Orienter;
 import redzone.mechanics.PoweredComponent;
 import dangerzone.DangerZone;
-import dangerzone.InventoryContainer;
 import dangerzone.StitchedTexture;
 import dangerzone.World;
 import dangerzone.blocks.Block;
 import dangerzone.entities.Entity;
-import dangerzone.entities.EntityChest;
 import dangerzone.threads.FastBlockTicker;
 
 /*/

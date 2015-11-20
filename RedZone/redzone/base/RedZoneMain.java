@@ -6,6 +6,7 @@ import redzone.blocks.DetectorSwitch;
 import redzone.blocks.Dispenser;
 import redzone.blocks.JunctionWire;
 import redzone.blocks.JunctionWireActive;
+import redzone.blocks.Pipe;
 import redzone.blocks.PowerStick;
 import redzone.blocks.PowerStickInactive;
 import redzone.blocks.PressSwitch;
@@ -14,6 +15,7 @@ import redzone.blocks.SmokeTester;
 import redzone.blocks.StraightWire;
 import redzone.blocks.StraightWireActive;
 import redzone.entities.EntityDispenser;
+import redzone.entities.EntityPipe;
 import redzone.items.WireItem;
 import dangerzone.BaseMod;
 import dangerzone.Crafting;
@@ -58,6 +60,7 @@ public class RedZoneMain extends BaseMod
 	public static Block PRESS_SWITCH = new PressSwitch("RedZone:Press Switch Block");
 	public static Block PRESS_SWITCH_ACTIVE = new PressSwitchActive("RedZone:Press Switch Active Block");
 	public static Block DETECTOR_SWITCH = new DetectorSwitch("RedZone:Detector Switch Block");
+	public static Block PIPE = new Pipe("RedZone:Pipe");
 	public static Item STRAIGHT_WIRE_ITEM = new WireItem("RedZone:Straight Wire", "RedZone_res/blocks/straight_inactive.png", STRAIGHT_WIRE);
 	public static Item BENT_WIRE_ITEM = new WireItem("RedZone:Bent Wire", "RedZone_res/blocks/bent_inactive.png", BENT_WIRE);
 	public static Item JUNCTION_WIRE_ITEM = new WireItem("RedZone:Junction Wire", "RedZone_res/blocks/junction_inactive.png", JUNCTION_WIRE);
@@ -94,11 +97,13 @@ public class RedZoneMain extends BaseMod
 		Blocks.registerBlock(PRESS_SWITCH);
 		Blocks.registerBlock(PRESS_SWITCH_ACTIVE);
 		Blocks.registerBlock(DETECTOR_SWITCH);
+		Blocks.registerBlock(PIPE);
 		Items.registerItem(STRAIGHT_WIRE_ITEM);
 		Items.registerItem(BENT_WIRE_ITEM);
 		Items.registerItem(JUNCTION_WIRE_ITEM);
 		Items.registerItem(PRESS_SWITCH_ITEM);
 		Entities.registerEntity(EntityDispenser.class, "RedZone:EntityDispenser", null);
+		Entities.registerEntity(EntityPipe.class, "RedZone:EntityPipe", null);
 		
 		Crafting.registerCraftingRecipe(Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, 
 				null, null, null, null, null, null, STRAIGHT_WIRE_ITEM, 6, true);
@@ -159,7 +164,8 @@ public class RedZoneMain extends BaseMod
 		Crafting.registerCraftingRecipe(Items.lumptin, PRESS_SWITCH_ITEM, Items.lumptin, 
 				PRESS_SWITCH_ITEM, null, PRESS_SWITCH_ITEM, Items.lumptin, PRESS_SWITCH_ITEM, Items.lumptin, DETECTOR_SWITCH, 1, true);
 		
-		
+		Crafting.registerCraftingRecipe(Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, 
+				null, null, null, Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, PIPE, 1, true);
 	}
 	
 	
