@@ -40,7 +40,7 @@ public class EntityPipe extends EntityItemSupplier
 	public InventoryContainer get(Entity other)
 	{
 
-		double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR,
+		double[] getRelativeForward = Orienter.getDirection(Orienter.UP_VECTOR,
 				world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
 		int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]),
 				(int) Math.round(getRelativeForward[2])};
@@ -121,7 +121,7 @@ public class EntityPipe extends EntityItemSupplier
 	public boolean hasItem(Entity other)
 	{
 
-		double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR,
+		double[] getRelativeForward = Orienter.getDirection(Orienter.UP_VECTOR,
 				world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
 		int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]),
 				(int) Math.round(getRelativeForward[2])};
@@ -210,7 +210,6 @@ public class EntityPipe extends EntityItemSupplier
 	public void update(float deltaT)
 	{
 		int myBlockID = world.getblock(dimension, (int) posx, (int) posy, (int) posz);
-		Block myBlock = Blocks.getBlock(myBlockID);
 		if (myBlockID != RedZoneMain.PIPE.blockID)
 		{
 			this.deadflag = true;

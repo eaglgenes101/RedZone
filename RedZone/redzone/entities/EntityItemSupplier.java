@@ -10,7 +10,6 @@ public abstract class EntityItemSupplier extends Entity
 	public EntityItemSupplier(World w)
 	{
 		super(w);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**

@@ -7,11 +7,14 @@ import org.newdawn.slick.opengl.Texture;
 
 import redzone.entities.EntityDispenser;
 import redzone.entities.EntityPipe;
+import redzone.mechanics.PoweredComponent;
 import dangerzone.DangerZone;
 import dangerzone.StitchedTexture;
+import dangerzone.Utils;
 import dangerzone.World;
 import dangerzone.blocks.Block;
 import dangerzone.entities.Entity;
+import dangerzone.threads.FastBlockTicker;
 
 /*/
  * Copyright 2015 Eugene "eaglgenes101" Wang
@@ -33,7 +36,7 @@ import dangerzone.entities.Entity;
  * 
  /*/
 
-public class Pipe extends Block
+public class Pipe extends Block implements PoweredComponent
 {
 
 	Texture ttop = null;
@@ -75,12 +78,12 @@ public class Pipe extends Block
 	public Pipe(String n)
 	{
 		super(n, "");
-		topname = "RedZone_res/blocks/pipe_edge.png";
-		bottomname = "RedZone_res/blocks/pipe_edge.png";
+		topname = "RedZone_res/blocks/transparent.png";
+		bottomname = "RedZone_res/blocks/transparent.png";
 		leftname = "RedZone_res/blocks/pipe_edge.png";
 		rightname = "RedZone_res/blocks/pipe_edge.png";
-		frontname = "RedZone_res/blocks/transparent.png";
-		backname = "RedZone_res/blocks/transparent.png";
+		frontname = "RedZone_res/blocks/pipe_edge.png";
+		backname = "RedZone_res/blocks/pipe_edge.png";
 
 		mindamage = 5;
 		maxdamage = 80;
@@ -91,52 +94,24 @@ public class Pipe extends Block
 		renderSmaller = true;
 		renderAllSides = true;
 	}
-
-	// The below methods were copied from DangerZone in accordance with the DangerZone license,
-	// reproduced down below for your convenience. Please do follow it.
-
-	/*
-	 * This code is copyright Richard H. Clark, TheyCallMeDanger, OreSpawn,
-	 * 2015-2020. You may use this code for reference for modding the DangerZone
-	 * game program, and are perfectly welcome to cut'n'paste portions for your
-	 * mod as well. DO NOT USE THIS CODE FOR ANY PURPOSE OTHER THAN MODDING FOR
-	 * THE DANGERZONE GAME. DO NOT REDISTRIBUTE THIS CODE.
-	 * 
-	 * This copyright remains in effect until January 1st, 2021. At that time,
-	 * this code becomes public domain.
-	 * 
-	 * WARNING: There are bugs. Big bugs. Little bugs. Every size in-between
-	 * bugs. This code is NOT suitable for use in anything other than this
-	 * particular game. NO GUARANTEES of any sort are given, either express or
-	 * implied, and Richard H. Clark, TheyCallMeDanger, OreSpawn are not
-	 * responsible for any damages, direct, indirect, or otherwise. You should
-	 * have made backups. It's your own fault for not making them.
-	 * 
-	 * NO ATTEMPT AT SECURITY IS MADE. This code is USE AT YOUR OWN RISK.
-	 * Regardless of what you may think, the reality is, that the moment you
-	 * connected your computer to the Internet, Uncle Sam, among many others,
-	 * hacked it. DO NOT KEEP VALUABLE INFORMATION ON INTERNET-CONNECTED
-	 * COMPUTERS. Or your phone...
-	 */
 	
-	public void onBlockPlaced(World w, int dimension, int x, int y, int z)
+
+	@Override
+	public int basePowerLevel(World w, int d, int x, int y, int z)
 	{
-		if (w.isServer)
-		{
-			// System.out.printf("onBlockPlaced spawning new dispenser entity\n");
-			Entity eb = w.createEntityByName("RedZone:EntityPipe", dimension, (float) (x) + 0.5f,
-					(float) (y) + 0.5f, (float) (z) + 0.5f);
-			if (eb != null)
-			{
-				eb.init();
-				w.spawnEntityInWorld(eb);
-			}
-		}
+		return 0;
+	}
+
+	@Override
+	public boolean canConnect(int dx, int dy, int dz, int meta)
+	{
+		return false;
 	}
 	
 	@Override
-	public void tickMe(World w, int d, int x, int y, int z)
+	public void finishStep(World w, int d, int x, int y, int z)
 	{
+
 
 		List<Entity> nearby_list = null;
 		EntityPipe ed = null;
@@ -179,6 +154,59 @@ public class Pipe extends Block
 					eb.init();
 					w.spawnEntityInWorld(eb);
 				}
+			}
+		}
+	}
+	
+	@Override
+	public void tickMe(World w, int d, int x, int y, int z)
+	{
+		FastBlockTicker.addFastTick(d, x, y, z);
+	}
+	
+	public void tickMeFast(World w, int d, int x, int y, int z)
+	{
+		((PoweredComponent)this).powerBump(w, d, x, y, z); 
+	}
+
+	// The below methods were copied from DangerZone in accordance with the DangerZone license,
+	// reproduced down below for your convenience. Please do follow it.
+
+	/*
+	 * This code is copyright Richard H. Clark, TheyCallMeDanger, OreSpawn,
+	 * 2015-2020. You may use this code for reference for modding the DangerZone
+	 * game program, and are perfectly welcome to cut'n'paste portions for your
+	 * mod as well. DO NOT USE THIS CODE FOR ANY PURPOSE OTHER THAN MODDING FOR
+	 * THE DANGERZONE GAME. DO NOT REDISTRIBUTE THIS CODE.
+	 * 
+	 * This copyright remains in effect until January 1st, 2021. At that time,
+	 * this code becomes public domain.
+	 * 
+	 * WARNING: There are bugs. Big bugs. Little bugs. Every size in-between
+	 * bugs. This code is NOT suitable for use in anything other than this
+	 * particular game. NO GUARANTEES of any sort are given, either express or
+	 * implied, and Richard H. Clark, TheyCallMeDanger, OreSpawn are not
+	 * responsible for any damages, direct, indirect, or otherwise. You should
+	 * have made backups. It's your own fault for not making them.
+	 * 
+	 * NO ATTEMPT AT SECURITY IS MADE. This code is USE AT YOUR OWN RISK.
+	 * Regardless of what you may think, the reality is, that the moment you
+	 * connected your computer to the Internet, Uncle Sam, among many others,
+	 * hacked it. DO NOT KEEP VALUABLE INFORMATION ON INTERNET-CONNECTED
+	 * COMPUTERS. Or your phone...
+	 */
+	
+	public void onBlockPlaced(World w, int dimension, int x, int y, int z)
+	{
+		if (w.isServer)
+		{
+			// System.out.printf("onBlockPlaced spawning new dispenser entity\n");
+			Entity eb = w.createEntityByName("RedZone:EntityPipe", dimension, (float) (x) + 0.5f,
+					(float) (y) + 0.5f, (float) (z) + 0.5f);
+			if (eb != null)
+			{
+				eb.init();
+				w.spawnEntityInWorld(eb);
 			}
 		}
 	}
