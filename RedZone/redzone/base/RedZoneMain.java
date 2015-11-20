@@ -2,6 +2,7 @@ package redzone.base;
 
 import redzone.blocks.BentWire;
 import redzone.blocks.BentWireActive;
+import redzone.blocks.DetectorSwitch;
 import redzone.blocks.Dispenser;
 import redzone.blocks.JunctionWire;
 import redzone.blocks.JunctionWireActive;
@@ -56,6 +57,7 @@ public class RedZoneMain extends BaseMod
 	public static Block DISPENSER = new Dispenser("RedZone:Dispenser");
 	public static Block PRESS_SWITCH = new PressSwitch("RedZone:Press Switch Block");
 	public static Block PRESS_SWITCH_ACTIVE = new PressSwitchActive("RedZone:Press Switch Active Block");
+	public static Block DETECTOR_SWITCH = new DetectorSwitch("RedZone:Detector Switch Block");
 	public static Item STRAIGHT_WIRE_ITEM = new WireItem("RedZone:Straight Wire", "RedZone_res/blocks/straight_inactive.png", STRAIGHT_WIRE);
 	public static Item BENT_WIRE_ITEM = new WireItem("RedZone:Bent Wire", "RedZone_res/blocks/bent_inactive.png", BENT_WIRE);
 	public static Item JUNCTION_WIRE_ITEM = new WireItem("RedZone:Junction Wire", "RedZone_res/blocks/junction_inactive.png", JUNCTION_WIRE);
@@ -91,6 +93,7 @@ public class RedZoneMain extends BaseMod
 		Blocks.registerBlock(DISPENSER);
 		Blocks.registerBlock(PRESS_SWITCH);
 		Blocks.registerBlock(PRESS_SWITCH_ACTIVE);
+		Blocks.registerBlock(DETECTOR_SWITCH);
 		Items.registerItem(STRAIGHT_WIRE_ITEM);
 		Items.registerItem(BENT_WIRE_ITEM);
 		Items.registerItem(JUNCTION_WIRE_ITEM);
@@ -152,6 +155,9 @@ public class RedZoneMain extends BaseMod
 				null, null, null, Blocks.stone, Blocks.stone, null, PRESS_SWITCH_ITEM, 2, true);
 		Crafting.registerCraftingRecipe(null, null, null, 
 				null, null, null, null, Blocks.stone, Blocks.stone, PRESS_SWITCH_ITEM, 2, true);
+		
+		Crafting.registerCraftingRecipe(Items.lumptin, PRESS_SWITCH_ITEM, Items.lumptin, 
+				PRESS_SWITCH_ITEM, null, PRESS_SWITCH_ITEM, Items.lumptin, PRESS_SWITCH_ITEM, Items.lumptin, DETECTOR_SWITCH, 1, true);
 		
 		
 	}
