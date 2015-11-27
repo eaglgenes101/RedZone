@@ -145,7 +145,7 @@ public class EntityDispenser extends Entity
 		List<Entity> nearby_list = null;
 		InventoryContainer ic = null;
 
-		nearby_list = DangerZone.entityManager.findEntitiesInRange(5, dimension, (int) posx, (int) posy, (int) posz);
+		nearby_list = DangerZone.entityManager.findEntitiesInRange(3, dimension, (int) posx, (int) posy, (int) posz);
 		if (nearby_list != null)
 		{
 			if (!nearby_list.isEmpty())

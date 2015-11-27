@@ -22,7 +22,7 @@ import dangerzone.threads.FastBlockTicker;
 
 public class EntityPipe extends EntityItemSupplier
 {
-	
+
 	ChestInventoryPacket cip = null;
 
 	public EntityPipe(World w)
@@ -36,7 +36,7 @@ public class EntityPipe extends EntityItemSupplier
 		if (cip == null)
 			cip = new ChestInventoryPacket();
 	}
-	
+
 	public InventoryContainer get(Entity other)
 	{
 
@@ -45,20 +45,19 @@ public class EntityPipe extends EntityItemSupplier
 		int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]),
 				(int) Math.round(getRelativeForward[2])};
 		int[] backRounded = {-rounded[0], -rounded[1], -rounded[2]};
-		
+
 		int xsep = (int) posx - (int) other.posx;
 		int ysep = (int) posy - (int) other.posy;
 		int zsep = (int) posz - (int) other.posz;
-		
+
 		int[] sepArray = {xsep, ysep, zsep};
-		
-		System.out.println(Arrays.toString(sepArray));
-		
-		if (!(Arrays.equals(sepArray, rounded) || Arrays.equals(sepArray, backRounded)))
+
+		if (!(Arrays.equals(sepArray, rounded)))
 			return new InventoryContainer();
-		
+
 		List<Entity> nearby_list = null;
 		EntityChest ec = null;
+		EntityItemSupplier eis = null;
 
 		nearby_list = DangerZone.entityManager.findEntitiesInRange(5, dimension, (int) posx, (int) posy, (int) posz);
 		if (nearby_list != null)
@@ -77,9 +76,22 @@ public class EntityPipe extends EntityItemSupplier
 						int ydiff = (int) posy - (int) e.posy;
 						int zdiff = (int) posz - (int) e.posz;
 						int[] checkArray = {xdiff, ydiff, zdiff};
-						if (Arrays.equals(checkArray, rounded) || Arrays.equals(checkArray, backRounded))
+						if (Arrays.equals(checkArray, backRounded))
 						{
-							ec = (EntityChest)e;
+							ec = (EntityChest) e;
+							break;
+						}
+					}
+					else if (e instanceof EntityItemSupplier)
+					{
+
+						int xdiff = (int) posx - (int) e.posx;
+						int ydiff = (int) posy - (int) e.posy;
+						int zdiff = (int) posz - (int) e.posz;
+						int[] checkArray = {xdiff, ydiff, zdiff};
+						if (Arrays.equals(checkArray, backRounded))
+						{
+							eis = (EntityItemSupplier) e;
 							break;
 						}
 					}
@@ -87,37 +99,42 @@ public class EntityPipe extends EntityItemSupplier
 			}
 		}
 
-		if (ec == null)
-			return new InventoryContainer();
-		
-		
-		InventoryContainer ic = null;
-		int inventoryIndex = -1;
-		
-		for (int i = 0; i < ec.inventory.length; i++)
+		if (ec != null)
 		{
-			if (ec.inventory[i] != null && ec.inventory[i].count > 0)
-			{
-				ic = ec.inventory[i];
-				inventoryIndex = i;
-				break;
-			}
-		}
-		
-		if (inventoryIndex == -1 || ic == null)
-			return new InventoryContainer();
-		
-		InventoryContainer returnIC = new InventoryContainer(ic.bid, ic.iid, 1, ic.currentuses);
-		
-		ic.count--;
 
-		if (ic.count <= 0)
-			ic = null;
-		cip.inventoryUpdateToServer(ec.entityID, inventoryIndex, ic);
-		
-		return returnIC;
+			InventoryContainer ic = null;
+			int inventoryIndex = -1;
+
+			for (int i = 0; i < ec.inventory.length; i++)
+			{
+				if (ec.inventory[i] != null && ec.inventory[i].count > 0)
+				{
+					ic = ec.inventory[i];
+					inventoryIndex = i;
+					break;
+				}
+			}
+
+			if (inventoryIndex == -1 || ic == null)
+				return new InventoryContainer();
+
+			InventoryContainer returnIC = new InventoryContainer(ic.bid, ic.iid, 1, ic.currentuses);
+
+			ic.count--;
+
+			if (ic.count <= 0)
+				ic = null;
+			cip.inventoryUpdateToServer(ec.entityID, inventoryIndex, ic);
+
+			return returnIC;
+		}
+		else if (eis != null)
+		{
+			return eis.get(this);
+		}
+		return new InventoryContainer();
 	}
-	
+
 	public boolean hasItem(Entity other)
 	{
 
@@ -126,19 +143,20 @@ public class EntityPipe extends EntityItemSupplier
 		int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]),
 				(int) Math.round(getRelativeForward[2])};
 		int[] backRounded = {-rounded[0], -rounded[1], -rounded[2]};
-		
+
 		int xsep = (int) posx - (int) other.posx;
 		int ysep = (int) posy - (int) other.posy;
 		int zsep = (int) posz - (int) other.posz;
-		
+
 		int[] sepArray = {xsep, ysep, zsep};
-		if (!(Arrays.equals(sepArray, rounded) || Arrays.equals(sepArray, backRounded)))
+		if (!(Arrays.equals(sepArray, rounded)))
 			return false;
 
 		List<Entity> nearby_list = null;
 		EntityChest ec = null;
+		EntityItemSupplier eis = null;
 
-		nearby_list = DangerZone.entityManager.findEntitiesInRange(5, dimension, (int) posx, (int) posy, (int) posz);
+		nearby_list = DangerZone.entityManager.findEntitiesInRange(3, dimension, (int) posx, (int) posy, (int) posz);
 		if (nearby_list != null)
 		{
 			if (!nearby_list.isEmpty())
@@ -155,9 +173,21 @@ public class EntityPipe extends EntityItemSupplier
 						int ydiff = (int) posy - (int) e.posy;
 						int zdiff = (int) posz - (int) e.posz;
 						int[] checkArray = {xdiff, ydiff, zdiff};
-						if (Arrays.equals(checkArray, rounded) || Arrays.equals(checkArray, backRounded))
+						if (Arrays.equals(checkArray, backRounded))
 						{
-							ec = (EntityChest)e;
+							ec = (EntityChest) e;
+							break;
+						}
+					}
+					else if (e instanceof EntityItemSupplier)
+					{
+						int xdiff = (int) posx - (int) e.posx;
+						int ydiff = (int) posy - (int) e.posy;
+						int zdiff = (int) posz - (int) e.posz;
+						int[] checkArray = {xdiff, ydiff, zdiff};
+						if (Arrays.equals(checkArray, backRounded))
+						{
+							eis = (EntityItemSupplier) e;
 							break;
 						}
 					}
@@ -165,17 +195,20 @@ public class EntityPipe extends EntityItemSupplier
 			}
 		}
 
-		if (ec == null)
-			return false;
-
-		for (int i = 0; i < ec.inventory.length; i++)
+		if (ec != null)
 		{
-			if (ec.inventory[i] != null && ec.inventory[i].count > 0)
+			for (int i = 0; i < ec.inventory.length; i++)
 			{
-				return true;
+				if (ec.inventory[i] != null && ec.inventory[i].count > 0)
+				{
+					return true;
+				}
 			}
 		}
-		
+		if (eis != null)
+		{
+			return eis.hasItem(this);
+		}
 		return false;
 	}
 

@@ -127,7 +127,7 @@ public class Pipe extends Block implements PoweredComponent
 				while (li.hasNext())
 				{
 					e = (Entity) li.next();
-					if (e instanceof EntityDispenser)
+					if (e instanceof EntityPipe)
 					{
 						if ((int) e.posx == x && (int) e.posy == y && (int) e.posz == z)
 						{
