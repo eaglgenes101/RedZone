@@ -21,18 +21,20 @@ public abstract class EntityItemSupplier extends Entity
 	 * implement.
 	 * 
 	 * @param other The Entity calling this method
+	 * @param power The amount of carrying power left
 	 * @return A new InventoryContainer holding the item
 	 **/
-	public abstract InventoryContainer get(Entity other);
+	public abstract InventoryContainer get(Entity other, int power);
 	
 	/**
 	 * Tests whether a filled InventoryContainer can be retrieved from the Item
 	 * Supplier Entity. Should be consistent with get(). 
 	 * 
 	 * @param other The Entity calling this method
+	 * @param power The amount of carrying power left
 	 * @return Whether the Entity will deliver a filled InventoryContainer if
 	 * get() is called right now. 
 	 **/
-	public abstract boolean hasItem(Entity other);
+	public abstract boolean hasItem(Entity other, int power);
 
 }

@@ -37,8 +37,12 @@ public class EntityPipe extends EntityItemSupplier
 			cip = new ChestInventoryPacket();
 	}
 
-	public InventoryContainer get(Entity other)
+	@Override
+	public InventoryContainer get(Entity other, int power)
 	{
+		
+		if (power <= 0)
+			return new InventoryContainer();
 
 		double[] getRelativeForward = Orienter.getDirection(Orienter.UP_VECTOR,
 				world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
@@ -130,13 +134,16 @@ public class EntityPipe extends EntityItemSupplier
 		}
 		else if (eis != null)
 		{
-			return eis.get(this);
+			return eis.get(this, power-1);
 		}
 		return new InventoryContainer();
 	}
 
-	public boolean hasItem(Entity other)
+	@Override
+	public boolean hasItem(Entity other, int power)
 	{
+		if (power <= 0)
+			return false;
 
 		double[] getRelativeForward = Orienter.getDirection(Orienter.UP_VECTOR,
 				world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
@@ -207,7 +214,7 @@ public class EntityPipe extends EntityItemSupplier
 		}
 		if (eis != null)
 		{
-			return eis.hasItem(this);
+			return eis.hasItem(this, power-1);
 		}
 		return false;
 	}
