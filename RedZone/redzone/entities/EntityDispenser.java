@@ -164,9 +164,9 @@ public class EntityDispenser extends Entity
 						int[] checkArray = {xdiff, ydiff, zdiff};
 						if (Orienter.getSideForm(checkArray) >= 0)
 						{
-							if (((EntityItemSupplier) e).hasItem(this, 63))
+							if (((EntityItemSupplier) e).hasItem(this, 7))
 							{
-								ic = ((EntityItemSupplier) e).get(this, 63);
+								ic = ((EntityItemSupplier) e).get(this, 7);
 								break;
 							}
 						}
