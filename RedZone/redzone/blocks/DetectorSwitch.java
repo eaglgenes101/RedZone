@@ -30,7 +30,7 @@ import dangerzone.items.Items;
  * 
  * Detector Switch. 
  * 
- /*/
+/*/
 
 public class DetectorSwitch extends Wire
 {

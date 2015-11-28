@@ -37,7 +37,7 @@ import dangerzone.threads.FastBlockTicker;
  * 
  * Dispenser Entity. 
  * 
- /*/
+/*/
 
 public class EntityDispenser extends Entity
 {

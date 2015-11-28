@@ -31,10 +31,9 @@ import dangerzone.threads.FastBlockTicker;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
+ * Item Pipe.  
  * 
- * Pipe.  
- * 
- /*/
+/*/
 
 public class Pipe extends Block implements PoweredComponent
 {

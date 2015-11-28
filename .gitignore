@@ -12,5 +12,6 @@ slick
 src
 worlds
 
-.gitignore~
+.Rhistory
+*~
 

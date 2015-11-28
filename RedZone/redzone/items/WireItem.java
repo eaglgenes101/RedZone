@@ -1,5 +1,9 @@
 package redzone.items;
 
+import dangerzone.Player;
+import dangerzone.blocks.Block;
+import dangerzone.items.Item;
+
 /*/
  * Copyright 2015 Eugene "eaglgenes101" Wang
  *
@@ -19,10 +23,6 @@ package redzone.items;
  * Wire item. 
  * 
 /*/
-
-import dangerzone.Player;
-import dangerzone.blocks.Block;
-import dangerzone.items.Item;
 
 public class WireItem extends Item
 {
