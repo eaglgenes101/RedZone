@@ -1,28 +1,11 @@
-import redzone.blocks.BentWire;
-import redzone.blocks.BentWireActive;
-import redzone.blocks.DetectorSwitch;
-import redzone.blocks.Dispenser;
-import redzone.blocks.JunctionWire;
-import redzone.blocks.JunctionWireActive;
-import redzone.blocks.Pipe;
-import redzone.blocks.PowerStick;
-import redzone.blocks.PowerStickInactive;
-import redzone.blocks.PressSwitch;
-import redzone.blocks.PressSwitchActive;
 import redzone.blocks.RedZoneBlocks;
-import redzone.blocks.SmokeTester;
-import redzone.blocks.StraightWire;
-import redzone.blocks.StraightWireActive;
 import redzone.entities.EntityDispenser;
 import redzone.entities.EntityPipe;
 import redzone.items.RedZoneItems;
-import redzone.items.WireItem;
 import dangerzone.BaseMod;
 import dangerzone.Crafting;
-import dangerzone.blocks.Block;
 import dangerzone.blocks.Blocks;
 import dangerzone.entities.Entities;
-import dangerzone.items.Item;
 import dangerzone.items.Items;
 
 /*/

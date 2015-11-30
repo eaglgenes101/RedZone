@@ -60,12 +60,12 @@ public class Dispenser extends Block implements PoweredComponent
 	public Dispenser(String n)
 	{
 		super(n, "");
-		topname = "RedZone_res/blocks/dispenser_top.png";
-		bottomname = "RedZone_res/blocks/dispenser_bottom.png";
-		leftname = "RedZone_res/blocks/dispenser_left.png";
-		rightname = "RedZone_res/blocks/dispenser_right.png";
-		frontname = "RedZone_res/blocks/dispenser_front.png";
-		backname = "RedZone_res/blocks/dispenser_back.png";
+		topname = "RedZone_res/res/blocks/dispenser_top.png";
+		bottomname = "RedZone_res/res/blocks/dispenser_bottom.png";
+		leftname = "RedZone_res/res/blocks/dispenser_left.png";
+		rightname = "RedZone_res/res/blocks/dispenser_right.png";
+		frontname = "RedZone_res/res/blocks/dispenser_front.png";
+		backname = "RedZone_res/res/blocks/dispenser_back.png";
 
 		mindamage = 5;
 		maxdamage = 80;

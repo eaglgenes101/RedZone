@@ -77,12 +77,12 @@ public class Pipe extends Block implements PoweredComponent
 	public Pipe(String n)
 	{
 		super(n, "");
-		topname = "RedZone_res/blocks/transparent.png";
-		bottomname = "RedZone_res/blocks/transparent.png";
-		leftname = "RedZone_res/blocks/pipe_edge.png";
-		rightname = "RedZone_res/blocks/pipe_edge.png";
-		frontname = "RedZone_res/blocks/pipe_edge.png";
-		backname = "RedZone_res/blocks/pipe_edge.png";
+		topname = "RedZone_res/res/blocks/transparent.png";
+		bottomname = "RedZone_res/res/blocks/transparent.png";
+		leftname = "RedZone_res/res/blocks/pipe_edge.png";
+		rightname = "RedZone_res/res/blocks/pipe_edge.png";
+		frontname = "RedZone_res/res/blocks/pipe_edge.png";
+		backname = "RedZone_res/res/blocks/pipe_edge.png";
 
 		mindamage = 5;
 		maxdamage = 80;

@@ -8,8 +8,6 @@ import dangerzone.Player;
 import dangerzone.World;
 import dangerzone.entities.Entity;
 import dangerzone.entities.EntityLiving;
-import dangerzone.items.ItemPickAxe;
-import dangerzone.items.Items;
 
 /*/
  * Copyright 2015 Eugene "eaglgenes101" Wang
@@ -43,12 +41,12 @@ public class DetectorSwitch extends Wire
 		maxdamage = 20;
 		showInInventory = true;
 
-		topname = "RedZone_res/blocks/detector.png";
-		bottomname = "RedZone_res/blocks/detector.png";
-		leftname = "RedZone_res/blocks/detector.png";
-		rightname = "RedZone_res/blocks/detector.png";
-		frontname = "RedZone_res/blocks/detector.png";
-		backname = "RedZone_res/blocks/detector.png";
+		topname = "RedZone_res/res/blocks/detector.png";
+		bottomname = "RedZone_res/res/blocks/detector.png";
+		leftname = "RedZone_res/res/blocks/detector.png";
+		rightname = "RedZone_res/res/blocks/detector.png";
+		frontname = "RedZone_res/res/blocks/detector.png";
+		backname = "RedZone_res/res/blocks/detector.png";
 	}
 
 	@Override

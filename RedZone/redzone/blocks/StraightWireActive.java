@@ -26,12 +26,12 @@ public class StraightWireActive extends StraightWire
 	public StraightWireActive(String n)
 	{
 		super(n);
-		topname = "RedZone_res/blocks/transparent.png";
-		bottomname = "RedZone_res/blocks/straight_active.png";
-		leftname = "RedZone_res/blocks/transparent.png";
-		rightname = "RedZone_res/blocks/transparent.png";
-		frontname = "RedZone_res/blocks/transparent.png";
-		backname = "RedZone_res/blocks/transparent.png";
+		topname = "RedZone_res/res/blocks/transparent.png";
+		bottomname = "RedZone_res/res/blocks/straight_active.png";
+		leftname = "RedZone_res/res/blocks/transparent.png";
+		rightname = "RedZone_res/res/blocks/transparent.png";
+		frontname = "RedZone_res/res/blocks/transparent.png";
+		backname = "RedZone_res/res/blocks/transparent.png";
 	}
 
 }

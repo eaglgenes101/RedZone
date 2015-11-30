@@ -37,12 +37,12 @@ public class PressSwitch extends Wire
 		mindamage = 5;
 		maxdamage = 20;
 
-		topname = "RedZone_res/blocks/transparent.png";
-		bottomname = "RedZone_res/blocks/switch_off.png";
-		leftname = "RedZone_res/blocks/transparent.png";
-		rightname = "RedZone_res/blocks/transparent.png";
-		frontname = "RedZone_res/blocks/transparent.png";
-		backname = "RedZone_res/blocks/transparent.png";
+		topname = "RedZone_res/res/blocks/transparent.png";
+		bottomname = "RedZone_res/res/blocks/switch_off.png";
+		leftname = "RedZone_res/res/blocks/transparent.png";
+		rightname = "RedZone_res/res/blocks/transparent.png";
+		frontname = "RedZone_res/res/blocks/transparent.png";
+		backname = "RedZone_res/res/blocks/transparent.png";
 	}
 
 	@Override
