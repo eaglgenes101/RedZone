@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import dangerzone.Player;
 import dangerzone.World;
-import redzone.base.RedZoneMain;
+import redzone.items.RedZoneItems;
 import redzone.mechanics.Orienter;
 
 /*/
@@ -67,7 +67,7 @@ public class JunctionWire extends Wire
 	
 	public void finishStep(World w, int d, int x, int y, int z)
 	{
-		int toBlockID = (w.getblockmeta(d, x, y, z)&POWER_MASK)==0 ? RedZoneMain.JUNCTION_WIRE.blockID : RedZoneMain.JUNCTION_WIRE_ACTIVE.blockID;
+		int toBlockID = (w.getblockmeta(d, x, y, z)&POWER_MASK)==0 ? RedZoneBlocks.JUNCTION_WIRE.blockID : RedZoneBlocks.JUNCTION_WIRE_ACTIVE.blockID;
 		w.setblockandmetanonotify(d, x, y, z, toBlockID, w.getblockmeta(d, x, y, z));
 		return;
 	}
@@ -75,7 +75,7 @@ public class JunctionWire extends Wire
 	
 	public int getItemDrop(Player p, World w, int dimension, int x, int y, int z)
 	{
-		return RedZoneMain.JUNCTION_WIRE_ITEM.itemID;
+		return RedZoneItems.JUNCTION_WIRE_ITEM.itemID;
 	}
 
 }

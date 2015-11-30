@@ -18,7 +18,7 @@ limitations under the License.
     <target name="create_jar">
     	<delete dir="${basedir}/mods/RedZone.jar"/>
         <jar destfile="${basedir}/mods/RedZone.jar" level="9">
-            <fileset dir="${basedir}/bin"/>
+            <fileset dir="${basedir}/bin/redzone"/>
         	<fileset dir="${basedir}/RedZone_res"/>
         </jar>
     </target>

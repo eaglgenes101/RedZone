@@ -2,7 +2,7 @@ package redzone.blocks;
 
 import dangerzone.Player;
 import dangerzone.World;
-import redzone.base.RedZoneMain;
+import redzone.items.RedZoneItems;
 import redzone.mechanics.Orienter;
 
 /*/
@@ -55,7 +55,7 @@ public class BentWire extends Wire
 	
 	public void finishStep(World w, int d, int x, int y, int z)
 	{
-		int toBlockID = (w.getblockmeta(d, x, y, z)&POWER_MASK)==0 ? RedZoneMain.BENT_WIRE.blockID : RedZoneMain.BENT_WIRE_ACTIVE.blockID;
+		int toBlockID = (w.getblockmeta(d, x, y, z)&POWER_MASK)==0 ? RedZoneBlocks.BENT_WIRE.blockID : RedZoneBlocks.BENT_WIRE_ACTIVE.blockID;
 		w.setblockandmetanonotify(d, x, y, z, toBlockID, w.getblockmeta(d, x, y, z));
 		return;
 	}
@@ -64,7 +64,7 @@ public class BentWire extends Wire
 	
 	public int getItemDrop(Player p, World w, int dimension, int x, int y, int z)
 	{
-		return RedZoneMain.BENT_WIRE_ITEM.itemID;
+		return RedZoneItems.BENT_WIRE_ITEM.itemID;
 	}
 
 }

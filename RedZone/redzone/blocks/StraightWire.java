@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import dangerzone.Player;
 import dangerzone.World;
-import redzone.base.RedZoneMain;
+import redzone.items.RedZoneItems;
 import redzone.mechanics.Orienter;
 
 /*/
@@ -65,14 +65,14 @@ public class StraightWire extends Wire
 	
 	public void finishStep(World w, int d, int x, int y, int z)
 	{
-		int toBlockID = (w.getblockmeta(d, x, y, z)&POWER_MASK)==0 ? RedZoneMain.STRAIGHT_WIRE.blockID : RedZoneMain.STRAIGHT_WIRE_ACTIVE.blockID;
+		int toBlockID = (w.getblockmeta(d, x, y, z)&POWER_MASK)==0 ? RedZoneBlocks.STRAIGHT_WIRE.blockID : RedZoneBlocks.STRAIGHT_WIRE_ACTIVE.blockID;
 		w.setblockandmetanonotify(d, x, y, z, toBlockID, w.getblockmeta(d, x, y, z));
 		return;
 	}
 	
 	public int getItemDrop(Player p, World w, int dimension, int x, int y, int z)
 	{
-		return RedZoneMain.STRAIGHT_WIRE_ITEM.itemID;
+		return RedZoneItems.STRAIGHT_WIRE_ITEM.itemID;
 	}
 	
 	

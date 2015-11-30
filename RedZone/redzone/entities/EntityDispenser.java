@@ -3,10 +3,8 @@ package redzone.entities;
 import java.util.List;
 import java.util.ListIterator;
 
-import org.lwjgl.input.Mouse;
-
-import redzone.base.RedZoneMain;
 import redzone.blocks.Dispenser;
+import redzone.blocks.RedZoneBlocks;
 import redzone.mechanics.Orienter;
 import dangerzone.DangerZone;
 import dangerzone.InventoryContainer;
@@ -84,7 +82,7 @@ public class EntityDispenser extends Entity
 	{
 		int myBlockID = world.getblock(dimension, (int) posx, (int) posy, (int) posz);
 		Block myBlock = Blocks.getBlock(myBlockID);
-		if (myBlockID != RedZoneMain.DISPENSER.blockID)
+		if (myBlockID != RedZoneBlocks.DISPENSER.blockID)
 		{
 			this.deadflag = true;
 			return;

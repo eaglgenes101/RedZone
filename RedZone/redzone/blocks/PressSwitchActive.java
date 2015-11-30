@@ -1,6 +1,5 @@
 package redzone.blocks;
 
-import redzone.base.RedZoneMain;
 import dangerzone.Player;
 import dangerzone.World;
 import dangerzone.items.ItemPickAxe;
@@ -53,7 +52,7 @@ public class PressSwitchActive extends PressSwitch
 		if (Items.getItem(p.getHotbar(p.gethotbarindex()).iid) instanceof ItemPickAxe )
 			return true;
 		p.world.setblockandmetanonotify(dimension, x, y, z,
-				RedZoneMain.PRESS_SWITCH.blockID, 
+				RedZoneBlocks.PRESS_SWITCH.blockID, 
 				p.world.getblockmeta(dimension, x, y, z) );
 		return false;
 	}

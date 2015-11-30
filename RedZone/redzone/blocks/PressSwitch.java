@@ -1,6 +1,6 @@
 package redzone.blocks;
 
-import redzone.base.RedZoneMain;
+import redzone.items.RedZoneItems;
 import dangerzone.Player;
 import dangerzone.World;
 import dangerzone.items.ItemPickAxe;
@@ -53,7 +53,7 @@ public class PressSwitch extends Wire
 
 	public int getItemDrop(Player p, World w, int dimension, int x, int y, int z)
 	{
-		return RedZoneMain.PRESS_SWITCH_ITEM.itemID;
+		return RedZoneItems.PRESS_SWITCH_ITEM.itemID;
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class PressSwitch extends Wire
 		if (Items.getItem(p.getHotbar(p.gethotbarindex()).iid) instanceof ItemPickAxe )
 			return true;
 		p.world.setblockandmetanonotify(dimension, x, y, z,
-				RedZoneMain.PRESS_SWITCH_ACTIVE.blockID, 
+				RedZoneBlocks.PRESS_SWITCH_ACTIVE.blockID, 
 				p.world.getblockmeta(dimension, x, y, z) );
 		return false;
 	}

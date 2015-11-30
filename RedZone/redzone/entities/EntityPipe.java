@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 
-import redzone.base.RedZoneMain;
 import redzone.blocks.Dispenser;
+import redzone.blocks.RedZoneBlocks;
 import redzone.mechanics.Orienter;
 import dangerzone.ChestInventoryPacket;
 import dangerzone.DangerZone;
@@ -270,7 +270,7 @@ public class EntityPipe extends EntityItemSupplier
 	public void update(float deltaT)
 	{
 		int myBlockID = world.getblock(dimension, (int) posx, (int) posy, (int) posz);
-		if (myBlockID != RedZoneMain.PIPE.blockID)
+		if (myBlockID != RedZoneBlocks.PIPE.blockID)
 		{
 			this.deadflag = true;
 			return;

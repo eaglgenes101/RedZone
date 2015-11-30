@@ -3,7 +3,6 @@ package redzone.blocks;
 import java.util.List;
 import java.util.ListIterator;
 
-import redzone.base.RedZoneMain;
 import dangerzone.DangerZone;
 import dangerzone.Player;
 import dangerzone.World;
@@ -61,7 +60,7 @@ public class DetectorSwitch extends Wire
 	@Override
 	public int getBlockDrop(Player p, World w, int dimension, int x, int y, int z)
 	{
-		return RedZoneMain.DETECTOR_SWITCH.blockID;
+		return RedZoneBlocks.DETECTOR_SWITCH.blockID;
 	}
 
 	public int basePowerLevel(World w, int d, int x, int y, int z)

@@ -1,9 +1,7 @@
 package redzone.blocks;
 
-
 import java.util.Arrays;
 
-import redzone.base.RedZoneMain;
 import redzone.mechanics.Orienter;
 import redzone.mechanics.PoweredComponent;
 import dangerzone.Player;
@@ -56,7 +54,7 @@ public class PowerStick extends LightStick implements PoweredComponent
 	
 	public int getBlockDrop(Player p, World w, int dimension, int x, int y, int z)
 	{
-		return RedZoneMain.POWER_STICK.blockID;
+		return RedZoneBlocks.POWER_STICK.blockID;
 	}
 	
 	@Override
@@ -86,7 +84,7 @@ public class PowerStick extends LightStick implements PoweredComponent
 							}
 						}
 				}
-		int toBlockID = wasPowered ? RedZoneMain.POWER_STICK_INACTIVE.blockID : RedZoneMain.POWER_STICK.blockID;
+		int toBlockID = wasPowered ? RedZoneBlocks.POWER_STICK_INACTIVE.blockID : RedZoneBlocks.POWER_STICK.blockID;
 		w.setblockandmetanonotify(d, x, y, z, toBlockID, w.getblockmeta(d, x, y, z));
 		return;
 	}
