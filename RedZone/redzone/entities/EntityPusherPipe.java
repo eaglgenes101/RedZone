@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import redzone.blocks.Dispenser;
+import redzone.blocks.PusherPipe;
 import redzone.blocks.RedZoneBlocks;
 import redzone.mechanics.Orienter;
 import dangerzone.DangerZone;
@@ -39,7 +40,7 @@ public class EntityPusherPipe extends EntityPipe
 			return;
 		}
 		
-		else if (((Dispenser) myBlock).getStatus(world, dimension, (int) posx, (int) posy, (int) posz))
+		else if ( ((PusherPipe) myBlock).getStatus(world, dimension, (int) posx, (int) posy, (int) posz))
 		{
 			if (FastBlockTicker.cycle % 2 != getVarInt(21))
 			{
