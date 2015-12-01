@@ -35,7 +35,7 @@ import dangerzone.threads.FastBlockTicker;
  * 
 /*/
 
-public class Pipe extends Block implements PoweredComponent
+public class Pipe extends Block
 {
 
 	Texture ttop = null;
@@ -94,24 +94,15 @@ public class Pipe extends Block implements PoweredComponent
 		renderAllSides = true;
 	}
 	
-
 	@Override
-	public int basePowerLevel(World w, int d, int x, int y, int z)
+	public void tickMe(World w, int d, int x, int y, int z)
 	{
-		return 0;
-	}
-
-	@Override
-	public boolean canConnect(int dx, int dy, int dz, int meta)
-	{
-		return false;
+		FastBlockTicker.addFastTick(d, x, y, z);
 	}
 	
-	@Override
-	public void finishStep(World w, int d, int x, int y, int z)
+	public void tickMeFast(World w, int d, int x, int y, int z)
 	{
-
-
+		FastBlockTicker.addFastTick(d, x, y, z);
 		List<Entity> nearby_list = null;
 		EntityPipe ed = null;
 
@@ -155,17 +146,6 @@ public class Pipe extends Block implements PoweredComponent
 				}
 			}
 		}
-	}
-	
-	@Override
-	public void tickMe(World w, int d, int x, int y, int z)
-	{
-		FastBlockTicker.addFastTick(d, x, y, z);
-	}
-	
-	public void tickMeFast(World w, int d, int x, int y, int z)
-	{
-		((PoweredComponent)this).powerBump(w, d, x, y, z); 
 	}
 
 	// The below methods were copied from DangerZone in accordance with the DangerZone license,
