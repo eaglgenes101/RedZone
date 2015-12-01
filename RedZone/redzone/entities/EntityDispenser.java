@@ -3,6 +3,8 @@ package redzone.entities;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.lwjgl.input.Mouse;
+
 import redzone.blocks.Dispenser;
 import redzone.blocks.RedZoneBlocks;
 import redzone.mechanics.Orienter;
@@ -180,6 +182,7 @@ public class EntityDispenser extends Entity
 
 		if (ic.count > 0)
 		{
+			System.out.println("Have item!");
 			Item it = ic.getItem();
 			if (it != null)
 			{

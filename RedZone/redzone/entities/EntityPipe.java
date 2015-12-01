@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.lwjgl.input.Mouse;
+
 import redzone.blocks.Dispenser;
 import redzone.blocks.RedZoneBlocks;
 import redzone.mechanics.Orienter;
@@ -76,7 +78,7 @@ public class EntityPipe extends EntityItemSupplier
 
 		int[] sepArray = {xsep, ysep, zsep};
 
-		if (!(Arrays.equals(sepArray, rounded)))
+		if (!(Arrays.equals(sepArray, backRounded)))
 			return new InventoryContainer();
 
 		List<Entity> nearby_list = null;
@@ -100,7 +102,7 @@ public class EntityPipe extends EntityItemSupplier
 						int ydiff = (int) posy - (int) e.posy;
 						int zdiff = (int) posz - (int) e.posz;
 						int[] checkArray = {xdiff, ydiff, zdiff};
-						if (Arrays.equals(checkArray, backRounded))
+						if (Arrays.equals(checkArray, rounded))
 						{
 							ec = (EntityChest) e;
 							break;
@@ -113,7 +115,7 @@ public class EntityPipe extends EntityItemSupplier
 						int ydiff = (int) posy - (int) e.posy;
 						int zdiff = (int) posz - (int) e.posz;
 						int[] checkArray = {xdiff, ydiff, zdiff};
-						if (Arrays.equals(checkArray, backRounded))
+						if (Arrays.equals(checkArray, rounded))
 						{
 							eis = (EntityItemSupplier) e;
 							break;
@@ -162,6 +164,8 @@ public class EntityPipe extends EntityItemSupplier
 	@Override
 	public boolean hasItem(Entity other, int power)
 	{
+		//Mouse.setGrabbed(false);
+		
 		if (power <= 0)
 			return false;
 
@@ -176,7 +180,7 @@ public class EntityPipe extends EntityItemSupplier
 		int zsep = (int) posz - (int) other.posz;
 
 		int[] sepArray = {xsep, ysep, zsep};
-		if (!(Arrays.equals(sepArray, rounded)))
+		if (!(Arrays.equals(sepArray, backRounded)))
 			return false;
 
 		List<Entity> nearby_list = null;
@@ -200,7 +204,7 @@ public class EntityPipe extends EntityItemSupplier
 						int ydiff = (int) posy - (int) e.posy;
 						int zdiff = (int) posz - (int) e.posz;
 						int[] checkArray = {xdiff, ydiff, zdiff};
-						if (Arrays.equals(checkArray, backRounded))
+						if (Arrays.equals(checkArray, rounded))
 						{
 							ec = (EntityChest) e;
 							break;
@@ -212,7 +216,7 @@ public class EntityPipe extends EntityItemSupplier
 						int ydiff = (int) posy - (int) e.posy;
 						int zdiff = (int) posz - (int) e.posz;
 						int[] checkArray = {xdiff, ydiff, zdiff};
-						if (Arrays.equals(checkArray, backRounded))
+						if (Arrays.equals(checkArray, rounded))
 						{
 							eis = (EntityItemSupplier) e;
 							break;
