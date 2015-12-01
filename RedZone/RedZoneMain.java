@@ -1,6 +1,7 @@
 import redzone.blocks.RedZoneBlocks;
 import redzone.entities.EntityDispenser;
 import redzone.entities.EntityPipe;
+import redzone.entities.EntityPusherPipe;
 import redzone.items.RedZoneItems;
 import dangerzone.BaseMod;
 import dangerzone.Crafting;
@@ -61,12 +62,14 @@ public class RedZoneMain extends BaseMod
 		Blocks.registerBlock(RedZoneBlocks.PRESS_SWITCH_ACTIVE);
 		Blocks.registerBlock(RedZoneBlocks.DETECTOR_SWITCH);
 		Blocks.registerBlock(RedZoneBlocks.PIPE);
+		Blocks.registerBlock(RedZoneBlocks.PUSHER_PIPE);
 		Items.registerItem(RedZoneItems.STRAIGHT_WIRE_ITEM);
 		Items.registerItem(RedZoneItems.BENT_WIRE_ITEM);
 		Items.registerItem(RedZoneItems.JUNCTION_WIRE_ITEM);
 		Items.registerItem(RedZoneItems.PRESS_SWITCH_ITEM);
 		Entities.registerEntity(EntityDispenser.class, "RedZone:EntityDispenser", null);
 		Entities.registerEntity(EntityPipe.class, "RedZone:EntityPipe", null);
+		Entities.registerEntity(EntityPusherPipe.class, "RedZone:EntityPusherPipe", null);
 		
 		Crafting.registerCraftingRecipe(Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, 
 				null, null, null, null, null, null, RedZoneItems.STRAIGHT_WIRE_ITEM, 6, true);

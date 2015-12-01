@@ -39,39 +39,24 @@ public class Pipe extends Block
 {
 
 	Texture ttop = null;
-
 	Texture tbottom = null;
-
 	Texture tleft = null;
-
 	Texture tright = null;
-
 	Texture tfront = null;
-
 	Texture tback = null;
 
 	String topname;
-
 	String bottomname;
-
 	String leftname;
-
 	String rightname;
-
 	String frontname;
-
 	String backname;
 
 	StitchedTexture sttop = new StitchedTexture();
-
 	StitchedTexture stbottom = new StitchedTexture();
-
 	StitchedTexture stleft = new StitchedTexture();
-
 	StitchedTexture stright = new StitchedTexture();
-
 	StitchedTexture stfront = new StitchedTexture();
-
 	StitchedTexture stback = new StitchedTexture();
 
 	public Pipe(String n)

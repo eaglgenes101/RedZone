@@ -4,23 +4,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 
-import org.lwjgl.input.Mouse;
-
-import redzone.blocks.Dispenser;
 import redzone.blocks.RedZoneBlocks;
 import redzone.mechanics.Orienter;
 import dangerzone.ChestInventoryPacket;
 import dangerzone.DangerZone;
 import dangerzone.InventoryContainer;
 import dangerzone.World;
-import dangerzone.blocks.Block;
-import dangerzone.blocks.Blocks;
 import dangerzone.entities.Entity;
 import dangerzone.entities.EntityChest;
-import dangerzone.items.Item;
-import dangerzone.items.ItemSpawnEgg;
-import dangerzone.items.Items;
-import dangerzone.threads.FastBlockTicker;
 
 /*/
  * Copyright 2015 Eugene "eaglgenes101" Wang
@@ -54,7 +45,6 @@ public class EntityPipe extends EntityItemSupplier
 		ignoreCollisions = true;
 		width = 0.01f;
 		height = 0.01f;
-		setVarInt(21, 0);
 		if (cip == null)
 			cip = new ChestInventoryPacket();
 	}
