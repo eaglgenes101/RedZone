@@ -70,7 +70,7 @@ public class EntityPusherPipe extends EntityPipe
 								int ydiff = (int) posy - (int) e.posy;
 								int zdiff = (int) posz - (int) e.posz;
 								int[] checkArray = {xdiff, ydiff, zdiff};
-								if (Arrays.equals(checkArray, rounded))
+								if (Arrays.equals(checkArray, backRounded))
 								{
 									ec = (EntityChest)e;
 									break;
@@ -87,16 +87,14 @@ public class EntityPusherPipe extends EntityPipe
 					//If we have an item to give
 					if (ic.count > 0)
 					{
-						System.out.println("Found an item");
 						int toInventoryIndex = -1;
 						for (int i = 0; i < ec.inventory.length; i++)
 						{
 							//Check if filled container
 							if (ec.inventory[i] != null && ec.inventory[i].count > 0)
 							{
-								// Check if same block/item
 								if (ec.inventory[i].bid == ic.bid && ec.inventory[i].iid == ic.iid 
-										&& ec.inventory[i].currentuses == ic.currentuses)
+										&& ec.inventory[i].currentuses >= ic.currentuses)
 								{
 									if (ic.bid != 0)
 									{
@@ -117,6 +115,11 @@ public class EntityPusherPipe extends EntityPipe
 										}
 									}
 								}
+								else if (ec.inventory[i].bid == 0 && ec.inventory[i].iid == 0)
+								{
+									ec.inventory[i] = null;
+									toInventoryIndex = i;
+								}
 							}
 							// If not available, fill an empty container
 							else if (ec.inventory[i] == null || ec.inventory[i].count <= 0)
@@ -124,6 +127,8 @@ public class EntityPusherPipe extends EntityPipe
 								toInventoryIndex = i;
 							}
 						}
+						if (toInventoryIndex >= 0 && ec.inventory[toInventoryIndex] == null)
+							ec.inventory[toInventoryIndex] = new InventoryContainer(ic.bid, ic.iid, 0, 0);
 						
 						//If we have a valid container
 						if (toInventoryIndex >= 0)
