@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.lwjgl.input.Mouse;
+
 import redzone.blocks.Dispenser;
 import redzone.blocks.PusherPipe;
 import redzone.blocks.RedZoneBlocks;
@@ -44,14 +46,14 @@ public class EntityPusherPipe extends EntityPipe
 		{
 			if (FastBlockTicker.cycle % 2 != getVarInt(21))
 			{
-				double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR, world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
+				double[] getRelativeForward = Orienter.getDirection(Orienter.UP_VECTOR, world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
 				int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]), (int) Math.round(getRelativeForward[2])};
 				int[] backRounded = {-rounded[0], -rounded[1], -rounded[2]};
 				
 				EntityChest ec = null;
 				
 				List<Entity> nearby_list = null;
-				nearby_list = DangerZone.entityManager.findEntitiesInRange(3, dimension, (int) posx, (int) posy, (int) posz);
+				nearby_list = DangerZone.entityManager.findEntitiesInRange(4, dimension, (int) posx, (int) posy, (int) posz);
 				if (nearby_list != null)
 				{
 					if (!nearby_list.isEmpty())
@@ -68,13 +70,10 @@ public class EntityPusherPipe extends EntityPipe
 								int ydiff = (int) posy - (int) e.posy;
 								int zdiff = (int) posz - (int) e.posz;
 								int[] checkArray = {xdiff, ydiff, zdiff};
-								if (Arrays.equals(checkArray, backRounded));
+								if (Arrays.equals(checkArray, rounded))
 								{
-									if (e instanceof EntityChest)
-									{
-										ec = (EntityChest)e;
-										break;
-									}
+									ec = (EntityChest)e;
+									break;
 								}
 							}
 						}
@@ -83,11 +82,12 @@ public class EntityPusherPipe extends EntityPipe
 				
 				if (ec != null)
 				{
-					InventoryContainer ic = this.get(ec, 7);
+					InventoryContainer ic = get(ec, 7);
 					
 					//If we have an item to give
 					if (ic.count > 0)
 					{
+						System.out.println("Found an item");
 						int toInventoryIndex = -1;
 						for (int i = 0; i < ec.inventory.length; i++)
 						{

@@ -154,8 +154,6 @@ public class EntityPipe extends EntityItemSupplier
 	@Override
 	public boolean hasItem(Entity other, int power)
 	{
-		//Mouse.setGrabbed(false);
-		
 		if (power <= 0)
 			return false;
 
@@ -172,7 +170,6 @@ public class EntityPipe extends EntityItemSupplier
 		int[] sepArray = {xsep, ysep, zsep};
 		if (!(Arrays.equals(sepArray, backRounded)))
 			return false;
-
 		List<Entity> nearby_list = null;
 		EntityChest ec = null;
 		EntityItemSupplier eis = null;

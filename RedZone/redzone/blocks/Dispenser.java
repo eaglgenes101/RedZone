@@ -130,7 +130,7 @@ public class Dispenser extends Block implements PoweredComponent
 		
 		if (ed == null)
 		{ // where did our entity go???
-			if (w.isServer)
+			if (!w.isServer)
 			{
 				// System.out.printf("spawning new chest entity\n");
 				Entity eb = w.createEntityByName("RedZone:EntityDispenser", d, 
@@ -176,7 +176,7 @@ public class Dispenser extends Block implements PoweredComponent
 
 	public void onBlockPlaced(World w, int dimension, int x, int y, int z)
 	{
-		if (w.isServer)
+		if (!w.isServer)
 		{
 			// System.out.printf("onBlockPlaced spawning new dispenser entity\n");
 			Entity eb = w.createEntityByName("RedZone:EntityDispenser", dimension, (float) (x) + 0.5f,

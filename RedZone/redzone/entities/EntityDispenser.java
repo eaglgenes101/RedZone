@@ -1,5 +1,6 @@
 package redzone.entities;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -162,6 +163,7 @@ public class EntityDispenser extends Entity
 						int ydiff = (int) posy - (int) e.posy;
 						int zdiff = (int) posz - (int) e.posz;
 						int[] checkArray = {xdiff, ydiff, zdiff};
+						System.out.println(Arrays.toString(checkArray));
 						if (Orienter.getSideForm(checkArray) >= 0)
 						{
 							if (((EntityItemSupplier) e).hasItem(this, 7))
@@ -182,7 +184,6 @@ public class EntityDispenser extends Entity
 
 		if (ic.count > 0)
 		{
-			System.out.println("Have item!");
 			Item it = ic.getItem();
 			if (it != null)
 			{
