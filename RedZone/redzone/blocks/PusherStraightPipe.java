@@ -8,7 +8,7 @@ import dangerzone.World;
 import dangerzone.entities.Entity;
 import dangerzone.threads.FastBlockTicker;
 import redzone.entities.EntityStraightPipe;
-import redzone.entities.EntityPusherPipe;
+import redzone.entities.EntityPusherStraightPipe;
 import redzone.mechanics.PoweredComponent;
 
 /*/
@@ -49,7 +49,7 @@ public class PusherStraightPipe extends StraightPipe implements PoweredComponent
 	{
 		FastBlockTicker.addFastTick(d, x, y, z);
 		List<Entity> nearby_list = null;
-		EntityPusherPipe ed = null;
+		EntityPusherStraightPipe ed = null;
 
 		nearby_list = DangerZone.entityManager.findEntitiesInRange(2, d, x, y, z);
 		if (nearby_list != null)
@@ -62,11 +62,11 @@ public class PusherStraightPipe extends StraightPipe implements PoweredComponent
 				while (li.hasNext())
 				{
 					e = (Entity) li.next();
-					if (e instanceof EntityPusherPipe)
+					if (e instanceof EntityPusherStraightPipe)
 					{
 						if ((int) e.posx == x && (int) e.posy == y && (int) e.posz == z)
 						{
-							ed = (EntityPusherPipe) e;
+							ed = (EntityPusherStraightPipe) e;
 							break;
 						}
 						ed = null;
@@ -80,7 +80,7 @@ public class PusherStraightPipe extends StraightPipe implements PoweredComponent
 			if (w.isServer)
 			{
 				// System.out.printf("spawning new chest entity\n");
-				Entity eb = w.createEntityByName("RedZone:EntityPusherPipe", d, 
+				Entity eb = w.createEntityByName("RedZone:EntityPusherStraightPipe", d, 
 						(float) (x) + 0.5f,
 						(float) (y) + 0.5f, 
 						(float) (z) + 0.5f);
@@ -145,7 +145,7 @@ public class PusherStraightPipe extends StraightPipe implements PoweredComponent
 		if (w.isServer)
 		{
 			// System.out.printf("onBlockPlaced spawning new dispenser entity\n");
-			Entity eb = w.createEntityByName("RedZone:EntityPusherPipe", dimension, (float) (x) + 0.5f,
+			Entity eb = w.createEntityByName("RedZone:EntityPusherStraightPipe", dimension, (float) (x) + 0.5f,
 					(float) (y) + 0.5f, (float) (z) + 0.5f);
 			if (eb != null)
 			{

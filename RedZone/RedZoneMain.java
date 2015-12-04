@@ -1,8 +1,9 @@
 import redzone.blocks.RedZoneBlocks;
 import redzone.entities.EntityCornerPipe;
 import redzone.entities.EntityDispenser;
+import redzone.entities.EntityPusherCornerPipe;
 import redzone.entities.EntityStraightPipe;
-import redzone.entities.EntityPusherPipe;
+import redzone.entities.EntityPusherStraightPipe;
 import redzone.items.RedZoneItems;
 import dangerzone.BaseMod;
 import dangerzone.Crafting;
@@ -38,7 +39,7 @@ public class RedZoneMain extends BaseMod
 	@Override
 	public String getModName()
 	{
-		return "RedZone v0.2.0";
+		return "RedZone v0.2.1";
 	}
 	
 	@Override
@@ -65,14 +66,18 @@ public class RedZoneMain extends BaseMod
 		Blocks.registerBlock(RedZoneBlocks.STRAIGHT_PIPE);
 		Blocks.registerBlock(RedZoneBlocks.PUSHER_STRAIGHT_PIPE);
 		Blocks.registerBlock(RedZoneBlocks.CORNER_PIPE);
+		Blocks.registerBlock(RedZoneBlocks.PUSHER_CORNER_PIPE);
+		
 		Items.registerItem(RedZoneItems.STRAIGHT_WIRE_ITEM);
 		Items.registerItem(RedZoneItems.BENT_WIRE_ITEM);
 		Items.registerItem(RedZoneItems.JUNCTION_WIRE_ITEM);
 		Items.registerItem(RedZoneItems.PRESS_SWITCH_ITEM);
+		
 		Entities.registerEntity(EntityDispenser.class, "RedZone:EntityDispenser", null);
 		Entities.registerEntity(EntityStraightPipe.class, "RedZone:EntityStraightPipe", null);
-		Entities.registerEntity(EntityPusherPipe.class, "RedZone:EntityPusherPipe", null);
+		Entities.registerEntity(EntityPusherStraightPipe.class, "RedZone:EntityPusherStraightPipe", null);
 		Entities.registerEntity(EntityCornerPipe.class, "RedZone:EntityCornerPipe", null);
+		Entities.registerEntity(EntityPusherCornerPipe.class, "RedZone:EntityPusherCornerPipe", null);
 		
 		Crafting.registerCraftingRecipe(Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, 
 				null, null, null, null, null, null, RedZoneItems.STRAIGHT_WIRE_ITEM, 6, true);
@@ -136,10 +141,10 @@ public class RedZoneMain extends BaseMod
 		
 		Crafting.registerCraftingRecipe(Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, 
 				null, null, null, 
-				Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, RedZoneBlocks.STRAIGHT_PIPE, 1, true);
+				Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, RedZoneBlocks.STRAIGHT_PIPE, 3, true);
 		Crafting.registerCraftingRecipe(Items.lumpcopper, null, Items.lumpcopper, 
 				Items.lumpcopper, null, Items.lumpcopper, 
-				Items.lumpcopper, null, Items.lumpcopper, RedZoneBlocks.STRAIGHT_PIPE, 1, true);
+				Items.lumpcopper, null, Items.lumpcopper, RedZoneBlocks.STRAIGHT_PIPE, 3, true);
 		
 		Crafting.registerCraftingRecipe(null, Items.lumpcopper, null, 
 				Items.lumptin, RedZoneBlocks.STRAIGHT_PIPE, Items.lumptin, 
@@ -156,10 +161,17 @@ public class RedZoneMain extends BaseMod
 				Items.lumpcopper, null, Items.lumpcopper, RedZoneBlocks.CORNER_PIPE, 1, true);
 		Crafting.registerCraftingRecipe(Items.lumpcopper, null, Items.lumpcopper, 
 				null, null, Items.lumpcopper, 
-				Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, RedZoneBlocks.CORNER_PIPE, 1, true);
+				Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, RedZoneBlocks.CORNER_PIPE, 3, true);
 		Crafting.registerCraftingRecipe(Items.lumpcopper, null, Items.lumpcopper, 
 				Items.lumpcopper, null, null, 
-				Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, RedZoneBlocks.CORNER_PIPE, 1, true);
+				Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, RedZoneBlocks.CORNER_PIPE, 3, true);
+		
+		Crafting.registerCraftingRecipe(null, Items.lumpcopper, null, 
+				Items.lumptin, RedZoneBlocks.CORNER_PIPE, Items.lumptin, 
+				null, Items.lumpcopper, null, RedZoneBlocks.PUSHER_CORNER_PIPE, 1, true);
+		Crafting.registerCraftingRecipe(null, Items.lumptin, null, 
+				Items.lumpcopper, RedZoneBlocks.CORNER_PIPE, Items.lumpcopper, 
+				null, Items.lumptin, null, RedZoneBlocks.PUSHER_CORNER_PIPE, 1, true);
 		
 	}
 	

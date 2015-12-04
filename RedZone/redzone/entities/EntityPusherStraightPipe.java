@@ -40,13 +40,13 @@ import dangerzone.threads.FastBlockTicker;
  * 
 /*/
 
-public class EntityPusherPipe extends EntityStraightPipe
+public class EntityPusherStraightPipe extends EntityStraightPipe
 {
 
-	public EntityPusherPipe(World w)
+	public EntityPusherStraightPipe(World w)
 	{
 		super(w);
-		uniquename = "RedZone:EntityPusherPipe";
+		uniquename = "RedZone:EntityPusherStraightPipe";
 		setVarInt(21, 0);
 	}
 	

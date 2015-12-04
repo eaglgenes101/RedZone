@@ -1,15 +1,7 @@
 package redzone.entities;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.ListIterator;
-
 import redzone.blocks.RedZoneBlocks;
 import redzone.mechanics.Orienter;
-import dangerzone.DangerZone;
 import dangerzone.World;
-import dangerzone.entities.Entity;
-import dangerzone.entities.EntityChest;
 
 /*/
  * Copyright 2015 Eugene "eaglgenes101" Wang
