@@ -64,6 +64,7 @@ public class RedZoneMain extends BaseMod
 		Blocks.registerBlock(RedZoneBlocks.DETECTOR_SWITCH);
 		Blocks.registerBlock(RedZoneBlocks.STRAIGHT_PIPE);
 		Blocks.registerBlock(RedZoneBlocks.PUSHER_STRAIGHT_PIPE);
+		Blocks.registerBlock(RedZoneBlocks.CORNER_PIPE);
 		Items.registerItem(RedZoneItems.STRAIGHT_WIRE_ITEM);
 		Items.registerItem(RedZoneItems.BENT_WIRE_ITEM);
 		Items.registerItem(RedZoneItems.JUNCTION_WIRE_ITEM);
