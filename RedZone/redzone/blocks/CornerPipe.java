@@ -3,7 +3,7 @@ package redzone.blocks;
 import java.util.List;
 import java.util.ListIterator;
 
-import redzone.entities.EntityStraightPipe;
+import redzone.entities.EntityCornerPipe;
 import dangerzone.DangerZone;
 import dangerzone.World;
 import dangerzone.entities.Entity;
@@ -36,17 +36,17 @@ public class CornerPipe extends Pipe
 		super(n);
 		topname = "RedZone_res/res/blocks/transparent.png";
 		bottomname = "RedZone_res/res/blocks/pipe_edge.png";
-		leftname = "RedZone_res/res/blocks/pipe_left_edge.png";
-		rightname = "RedZone_res/res/blocks/pipe_right_edge.png";
-		frontname = "RedZone_res/res/blocks/pipe_edge.png";
-		backname = "RedZone_res/res/blocks/transparent.png";
+		leftname = "RedZone_res/res/blocks/pipe_edge.png";
+		rightname = "RedZone_res/res/blocks/transparent.png";
+		frontname = "RedZone_res/res/blocks/pipe_left_edge.png";
+		backname = "RedZone_res/res/blocks/pipe_right_edge.png";
 	}
 	
 	public void tickMeFast(World w, int d, int x, int y, int z)
 	{
 		FastBlockTicker.addFastTick(d, x, y, z);
 		List<Entity> nearby_list = null;
-		EntityStraightPipe ed = null;
+		EntityCornerPipe ed = null;
 
 		nearby_list = DangerZone.entityManager.findEntitiesInRange(2, d, x, y, z);
 		if (nearby_list != null)
@@ -59,11 +59,11 @@ public class CornerPipe extends Pipe
 				while (li.hasNext())
 				{
 					e = (Entity) li.next();
-					if (e instanceof EntityStraightPipe)
+					if (e instanceof EntityCornerPipe)
 					{
 						if ((int) e.posx == x && (int) e.posy == y && (int) e.posz == z)
 						{
-							ed = (EntityStraightPipe) e;
+							ed = (EntityCornerPipe) e;
 							break;
 						}
 						ed = null;

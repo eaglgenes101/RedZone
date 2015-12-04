@@ -36,9 +36,9 @@ public abstract class EntityPipe extends EntityItemSupplier
 	
 	protected ChestInventoryPacket cip = null;
 	
-	protected double[] recipientVector;
+	protected double[] inVector;
 	
-	protected double[] senderVector;
+	protected double[] outVector;
 
 	public EntityPipe(World w)
 	{
@@ -57,23 +57,23 @@ public abstract class EntityPipe extends EntityItemSupplier
 		if (power <= 0)
 			return new InventoryContainer();
 
-		double[] sendTo = Orienter.getDirection(recipientVector,
+		double[] from = Orienter.getDirection(inVector,
 				world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
-		int[] roundedSendTo = {(int) Math.round(sendTo[0]), (int) Math.round(sendTo[1]),
-				(int) Math.round(sendTo[2])};
+		int[] roundedFrom = {(int) Math.round(from[0]), (int) Math.round(from[1]),
+				(int) Math.round(from[2])};
 		
-		double[] receiveFrom = Orienter.getDirection(senderVector, 
+		double[] to = Orienter.getDirection(outVector, 
 				world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
-		int[] roundedReceiveFrom = {(int) Math.round(receiveFrom[0]), (int) Math.round(receiveFrom[1]),
-				(int) Math.round(receiveFrom[2])};
+		int[] roundedTo = {(int) Math.round(to[0]), (int) Math.round(to[1]),
+				(int) Math.round(to[2])};
 
-		int xsep = (int) posx - (int) other.posx;
-		int ysep = (int) posy - (int) other.posy;
-		int zsep = (int) posz - (int) other.posz;
+		int xsep = (int) other.posx - (int) posx;
+		int ysep = (int) other.posy - (int) posy;
+		int zsep = (int) other.posz - (int) posz;
 
 		int[] sepArray = {xsep, ysep, zsep};
 
-		if (!(Arrays.equals(sepArray, roundedReceiveFrom)))
+		if (!(Arrays.equals(sepArray, roundedTo)))
 			return new InventoryContainer();
 
 		List<Entity> nearby_list = null;
@@ -97,7 +97,7 @@ public abstract class EntityPipe extends EntityItemSupplier
 						int ydiff = (int) posy - (int) e.posy;
 						int zdiff = (int) posz - (int) e.posz;
 						int[] checkArray = {xdiff, ydiff, zdiff};
-						if (Arrays.equals(checkArray, roundedSendTo))
+						if (Arrays.equals(checkArray, roundedFrom))
 						{
 							ec = (EntityChest) e;
 							break;
@@ -110,7 +110,7 @@ public abstract class EntityPipe extends EntityItemSupplier
 						int ydiff = (int) posy - (int) e.posy;
 						int zdiff = (int) posz - (int) e.posz;
 						int[] checkArray = {xdiff, ydiff, zdiff};
-						if (Arrays.equals(checkArray, roundedSendTo))
+						if (Arrays.equals(checkArray, roundedFrom))
 						{
 							eis = (EntityItemSupplier) e;
 							break;
@@ -162,22 +162,22 @@ public abstract class EntityPipe extends EntityItemSupplier
 		if (power <= 0)
 			return false;
 
-		double[] sendTo = Orienter.getDirection(recipientVector,
+		double[] from = Orienter.getDirection(inVector,
 				world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
-		int[] roundedSendTo = {(int) Math.round(sendTo[0]), (int) Math.round(sendTo[1]),
-				(int) Math.round(sendTo[2])};
+		int[] roundedFrom = {(int) Math.round(from[0]), (int) Math.round(from[1]),
+				(int) Math.round(from[2])};
 		
-		double[] receiveFrom = Orienter.getDirection(senderVector, 
+		double[] to = Orienter.getDirection(outVector, 
 				world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
-		int[] roundedReceiveFrom = {(int) Math.round(receiveFrom[0]), (int) Math.round(receiveFrom[1]),
-				(int) Math.round(receiveFrom[2])};
+		int[] roundedTo = {(int) Math.round(to[0]), (int) Math.round(to[1]),
+				(int) Math.round(to[2])};
 
-		int xsep = (int) posx - (int) other.posx;
-		int ysep = (int) posy - (int) other.posy;
-		int zsep = (int) posz - (int) other.posz;
+		int xsep = (int) other.posx - (int) posx;
+		int ysep = (int) other.posy - (int) posy;
+		int zsep = (int) other.posz - (int) posz;
 
 		int[] sepArray = {xsep, ysep, zsep};
-		if (!(Arrays.equals(sepArray, roundedReceiveFrom)))
+		if (!(Arrays.equals(sepArray, roundedTo)))
 			return false;
 		List<Entity> nearby_list = null;
 		EntityChest ec = null;
@@ -200,7 +200,7 @@ public abstract class EntityPipe extends EntityItemSupplier
 						int ydiff = (int) posy - (int) e.posy;
 						int zdiff = (int) posz - (int) e.posz;
 						int[] checkArray = {xdiff, ydiff, zdiff};
-						if (Arrays.equals(checkArray, roundedSendTo))
+						if (Arrays.equals(checkArray, roundedFrom))
 						{
 							ec = (EntityChest) e;
 							break;
@@ -212,7 +212,7 @@ public abstract class EntityPipe extends EntityItemSupplier
 						int ydiff = (int) posy - (int) e.posy;
 						int zdiff = (int) posz - (int) e.posz;
 						int[] checkArray = {xdiff, ydiff, zdiff};
-						if (Arrays.equals(checkArray, roundedSendTo))
+						if (Arrays.equals(checkArray, roundedFrom))
 						{
 							eis = (EntityItemSupplier) e;
 							break;

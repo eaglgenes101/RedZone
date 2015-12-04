@@ -1,7 +1,15 @@
 package redzone.entities;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.ListIterator;
+
 import redzone.blocks.RedZoneBlocks;
+import redzone.mechanics.Orienter;
+import dangerzone.DangerZone;
 import dangerzone.World;
+import dangerzone.entities.Entity;
+import dangerzone.entities.EntityChest;
 
 /*/
  * Copyright 2015 Eugene "eaglgenes101" Wang
@@ -30,10 +38,10 @@ public class EntityCornerPipe extends EntityPipe
 	{
 		super(w);
 		uniquename = "RedZone:EntityCornerPipe";
-		double[] rvec = {0, 1, 0};
-		double[] svec = {0, 0, -1};
-		recipientVector = rvec;
-		senderVector = svec;
+		double[] rvec = Orienter.EAST_VECTOR;
+		double[] svec = Orienter.UP_VECTOR;
+		inVector = rvec;
+		outVector = svec;
 	}
 
 	// The below methods were copied from DangerZone in accordance with the

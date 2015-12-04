@@ -65,7 +65,7 @@ public class EntityPusherPipe extends EntityStraightPipe
 		{
 			if (FastBlockTicker.cycle % 2 != getVarInt(21))
 			{
-				double[] receiveFrom = Orienter.getDirection(senderVector, 
+				double[] receiveFrom = Orienter.getDirection(outVector, 
 						world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
 				int[] roundedReceiveFrom = {(int) Math.round(receiveFrom[0]), (int) Math.round(receiveFrom[1]),
 						(int) Math.round(receiveFrom[2])};

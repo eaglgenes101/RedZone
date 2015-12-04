@@ -147,6 +147,20 @@ public class RedZoneMain extends BaseMod
 		Crafting.registerCraftingRecipe(null, Items.lumptin, null, 
 				Items.lumpcopper, RedZoneBlocks.STRAIGHT_PIPE, Items.lumpcopper, 
 				null, Items.lumptin, null, RedZoneBlocks.PUSHER_STRAIGHT_PIPE, 1, true);
+		
+		Crafting.registerCraftingRecipe(Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, 
+				Items.lumpcopper, null, null, 
+				Items.lumpcopper, null, Items.lumpcopper, RedZoneBlocks.CORNER_PIPE, 1, true);
+		Crafting.registerCraftingRecipe(Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, 
+				null, null, Items.lumpcopper, 
+				Items.lumpcopper, null, Items.lumpcopper, RedZoneBlocks.CORNER_PIPE, 1, true);
+		Crafting.registerCraftingRecipe(Items.lumpcopper, null, Items.lumpcopper, 
+				null, null, Items.lumpcopper, 
+				Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, RedZoneBlocks.CORNER_PIPE, 1, true);
+		Crafting.registerCraftingRecipe(Items.lumpcopper, null, Items.lumpcopper, 
+				Items.lumpcopper, null, null, 
+				Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, RedZoneBlocks.CORNER_PIPE, 1, true);
+		
 	}
 	
 	

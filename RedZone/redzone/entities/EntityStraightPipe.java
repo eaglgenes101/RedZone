@@ -1,6 +1,7 @@
 package redzone.entities;
 
 import redzone.blocks.RedZoneBlocks;
+import redzone.mechanics.Orienter;
 import dangerzone.World;
 
 /*/
@@ -30,10 +31,10 @@ public class EntityStraightPipe extends EntityPipe
 	{
 		super(w);
 		uniquename = "RedZone:EntityStraightPipe";
-		double[] rvec = {0, 1, 0};
-		double[] svec = {0, -1, 0};
-		recipientVector = rvec;
-		senderVector = svec;
+		double[] rvec = Orienter.DOWN_VECTOR;
+		double[] svec = Orienter.UP_VECTOR;
+		inVector = rvec;
+		outVector = svec;
 	}
 
 	// The below methods were copied from DangerZone in accordance with the
