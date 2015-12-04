@@ -1,19 +1,10 @@
 package redzone.blocks;
 
-import java.util.List;
-import java.util.ListIterator;
-
 import org.newdawn.slick.opengl.Texture;
 
-import redzone.entities.EntityDispenser;
-import redzone.entities.EntityPipe;
-import redzone.mechanics.PoweredComponent;
-import dangerzone.DangerZone;
 import dangerzone.StitchedTexture;
-import dangerzone.Utils;
 import dangerzone.World;
 import dangerzone.blocks.Block;
-import dangerzone.entities.Entity;
 import dangerzone.threads.FastBlockTicker;
 
 /*/
@@ -31,43 +22,36 @@ import dangerzone.threads.FastBlockTicker;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
- * Item Pipe.  
+ * Base pipe class. 
  * 
 /*/
 
 public class Pipe extends Block
 {
+	protected Texture ttop = null;
+	protected Texture tbottom = null;
+	protected Texture tleft = null;
+	protected Texture tright = null;
+	protected Texture tfront = null;
+	protected Texture tback = null;
 
-	Texture ttop = null;
-	Texture tbottom = null;
-	Texture tleft = null;
-	Texture tright = null;
-	Texture tfront = null;
-	Texture tback = null;
+	protected String topname;
+	protected String bottomname;
+	protected String leftname;
+	protected String rightname;
+	protected String frontname;
+	protected String backname;
 
-	String topname;
-	String bottomname;
-	String leftname;
-	String rightname;
-	String frontname;
-	String backname;
-
-	StitchedTexture sttop = new StitchedTexture();
-	StitchedTexture stbottom = new StitchedTexture();
-	StitchedTexture stleft = new StitchedTexture();
-	StitchedTexture stright = new StitchedTexture();
-	StitchedTexture stfront = new StitchedTexture();
-	StitchedTexture stback = new StitchedTexture();
+	protected StitchedTexture sttop = new StitchedTexture();
+	protected StitchedTexture stbottom = new StitchedTexture();
+	protected StitchedTexture stleft = new StitchedTexture();
+	protected StitchedTexture stright = new StitchedTexture();
+	protected StitchedTexture stfront = new StitchedTexture();
+	protected StitchedTexture stback = new StitchedTexture();
 
 	public Pipe(String n)
 	{
 		super(n, "");
-		topname = "RedZone_res/res/blocks/transparent.png";
-		bottomname = "RedZone_res/res/blocks/transparent.png";
-		leftname = "RedZone_res/res/blocks/pipe_edge.png";
-		rightname = "RedZone_res/res/blocks/pipe_edge.png";
-		frontname = "RedZone_res/res/blocks/pipe_edge.png";
-		backname = "RedZone_res/res/blocks/pipe_edge.png";
 
 		mindamage = 5;
 		maxdamage = 80;
@@ -78,60 +62,13 @@ public class Pipe extends Block
 		renderSmaller = true;
 		renderAllSides = true;
 	}
-	
+
 	@Override
 	public void tickMe(World w, int d, int x, int y, int z)
 	{
 		FastBlockTicker.addFastTick(d, x, y, z);
 	}
 	
-	public void tickMeFast(World w, int d, int x, int y, int z)
-	{
-		FastBlockTicker.addFastTick(d, x, y, z);
-		List<Entity> nearby_list = null;
-		EntityPipe ed = null;
-
-		nearby_list = DangerZone.entityManager.findEntitiesInRange(2, d, x, y, z);
-		if (nearby_list != null)
-		{
-			if (!nearby_list.isEmpty())
-			{
-				Entity e = null;
-				ListIterator<Entity> li;
-				li = nearby_list.listIterator();
-				while (li.hasNext())
-				{
-					e = (Entity) li.next();
-					if (e instanceof EntityPipe)
-					{
-						if ((int) e.posx == x && (int) e.posy == y && (int) e.posz == z)
-						{
-							ed = (EntityPipe) e;
-							break;
-						}
-						ed = null;
-					}
-				}
-			}
-		}
-		
-		if (ed == null)
-		{ // where did our entity go???
-			if (!w.isServer)
-			{
-				// System.out.printf("spawning new chest entity\n");
-				Entity eb = w.createEntityByName("RedZone:EntityPipe", d, 
-						(float) (x) + 0.5f,
-						(float) (y) + 0.5f, 
-						(float) (z) + 0.5f);
-				if (eb != null)
-				{
-					eb.init();
-					w.spawnEntityInWorld(eb);
-				}
-			}
-		}
-	}
 
 	// The below methods were copied from DangerZone in accordance with the DangerZone license,
 	// reproduced down below for your convenience. Please do follow it.
@@ -159,21 +96,6 @@ public class Pipe extends Block
 	 * hacked it. DO NOT KEEP VALUABLE INFORMATION ON INTERNET-CONNECTED
 	 * COMPUTERS. Or your phone...
 	 */
-	
-	public void onBlockPlaced(World w, int dimension, int x, int y, int z)
-	{
-		if (!w.isServer)
-		{
-			// System.out.printf("onBlockPlaced spawning new dispenser entity\n");
-			Entity eb = w.createEntityByName("RedZone:EntityPipe", dimension, (float) (x) + 0.5f,
-					(float) (y) + 0.5f, (float) (z) + 0.5f);
-			if (eb != null)
-			{
-				eb.init();
-				w.spawnEntityInWorld(eb);
-			}
-		}
-	}
 
 	// side 0 = top
 	// side 1 = front

@@ -7,7 +7,7 @@ import java.util.ListIterator;
 import org.lwjgl.input.Mouse;
 
 import redzone.blocks.Dispenser;
-import redzone.blocks.PusherPipe;
+import redzone.blocks.PusherStraightPipe;
 import redzone.blocks.RedZoneBlocks;
 import redzone.mechanics.Orienter;
 import dangerzone.DangerZone;
@@ -21,7 +21,26 @@ import dangerzone.items.Item;
 import dangerzone.items.Items;
 import dangerzone.threads.FastBlockTicker;
 
-public class EntityPusherPipe extends EntityPipe
+/*/
+ * Copyright 2015 Eugene "eaglgenes101" Wang
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ * Pushing straight pipe entity. 
+ * 
+/*/
+
+public class EntityPusherPipe extends EntityStraightPipe
 {
 
 	public EntityPusherPipe(World w)
@@ -36,19 +55,20 @@ public class EntityPusherPipe extends EntityPipe
 		int myBlockID = world.getblock(dimension, (int) posx, (int) posy, (int) posz);
 		Block myBlock = Blocks.getBlock(myBlockID);
 		
-		if (myBlockID != RedZoneBlocks.PUSHER_PIPE.blockID)
+		if (myBlockID != RedZoneBlocks.PUSHER_STRAIGHT_PIPE.blockID)
 		{
 			this.deadflag = true;
 			return;
 		}
 		
-		else if ( ((PusherPipe) myBlock).getStatus(world, dimension, (int) posx, (int) posy, (int) posz))
+		else if ( ((PusherStraightPipe) myBlock).getStatus(world, dimension, (int) posx, (int) posy, (int) posz))
 		{
 			if (FastBlockTicker.cycle % 2 != getVarInt(21))
 			{
-				double[] getRelativeForward = Orienter.getDirection(Orienter.UP_VECTOR, world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
-				int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]), (int) Math.round(getRelativeForward[2])};
-				int[] backRounded = {-rounded[0], -rounded[1], -rounded[2]};
+				double[] receiveFrom = Orienter.getDirection(senderVector, 
+						world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
+				int[] roundedReceiveFrom = {(int) Math.round(receiveFrom[0]), (int) Math.round(receiveFrom[1]),
+						(int) Math.round(receiveFrom[2])};
 				
 				EntityChest ec = null;
 				
@@ -70,7 +90,7 @@ public class EntityPusherPipe extends EntityPipe
 								int ydiff = (int) posy - (int) e.posy;
 								int zdiff = (int) posz - (int) e.posz;
 								int[] checkArray = {xdiff, ydiff, zdiff};
-								if (Arrays.equals(checkArray, backRounded))
+								if (Arrays.equals(checkArray, roundedReceiveFrom))
 								{
 									ec = (EntityChest)e;
 									break;

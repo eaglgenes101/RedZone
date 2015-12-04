@@ -17,6 +17,6 @@ public class RedZoneBlocks
 	public static Block PRESS_SWITCH = new PressSwitch("RedZone:Press Switch Block");
 	public static Block PRESS_SWITCH_ACTIVE = new PressSwitchActive("RedZone:Press Switch Active Block");
 	public static Block DETECTOR_SWITCH = new DetectorSwitch("RedZone:Detector Switch Block");
-	public static Block PIPE = new Pipe("RedZone:Pipe");
-	public static Block PUSHER_PIPE = new PusherPipe("RedZone:PusherPipe");
+	public static Block STRAIGHT_PIPE = new StraightPipe("RedZone:StraightPipe");
+	public static Block PUSHER_STRAIGHT_PIPE = new PusherStraightPipe("RedZone:PusherStraightPipe");
 }

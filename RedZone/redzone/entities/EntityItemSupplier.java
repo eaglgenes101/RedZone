@@ -20,7 +20,7 @@ import dangerzone.entities.Entity;
  * limitations under the License.
  * 
  * 
- * Base class for item supplier entities. See EntityPipe for an example. 
+ * Base class for item supplier entities. See EntityStraightPipe for an example. 
  * 
  /*/
 

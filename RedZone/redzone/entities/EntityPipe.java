@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 
-import redzone.blocks.RedZoneBlocks;
 import redzone.mechanics.Orienter;
 import dangerzone.ChestInventoryPacket;
 import dangerzone.DangerZone;
@@ -28,27 +27,29 @@ import dangerzone.entities.EntityChest;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
- * 
- * Pipe Entity. 
+ * Base pipe entity. 
  * 
 /*/
 
-public class EntityPipe extends EntityItemSupplier
+public abstract class EntityPipe extends EntityItemSupplier
 {
-
-	ChestInventoryPacket cip = null;
+	
+	protected ChestInventoryPacket cip = null;
+	
+	protected double[] recipientVector;
+	
+	protected double[] senderVector;
 
 	public EntityPipe(World w)
 	{
 		super(w);
-		uniquename = "RedZone:EntityPipe";
 		ignoreCollisions = true;
 		width = 0.01f;
 		height = 0.01f;
 		if (cip == null)
 			cip = new ChestInventoryPacket();
 	}
-
+	
 	@Override
 	public InventoryContainer get(Entity other, int power)
 	{
@@ -56,11 +57,15 @@ public class EntityPipe extends EntityItemSupplier
 		if (power <= 0)
 			return new InventoryContainer();
 
-		double[] getRelativeForward = Orienter.getDirection(Orienter.UP_VECTOR,
+		double[] sendTo = Orienter.getDirection(recipientVector,
 				world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
-		int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]),
-				(int) Math.round(getRelativeForward[2])};
-		int[] backRounded = {-rounded[0], -rounded[1], -rounded[2]};
+		int[] roundedSendTo = {(int) Math.round(sendTo[0]), (int) Math.round(sendTo[1]),
+				(int) Math.round(sendTo[2])};
+		
+		double[] receiveFrom = Orienter.getDirection(senderVector, 
+				world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
+		int[] roundedReceiveFrom = {(int) Math.round(receiveFrom[0]), (int) Math.round(receiveFrom[1]),
+				(int) Math.round(receiveFrom[2])};
 
 		int xsep = (int) posx - (int) other.posx;
 		int ysep = (int) posy - (int) other.posy;
@@ -68,7 +73,7 @@ public class EntityPipe extends EntityItemSupplier
 
 		int[] sepArray = {xsep, ysep, zsep};
 
-		if (!(Arrays.equals(sepArray, backRounded)))
+		if (!(Arrays.equals(sepArray, roundedReceiveFrom)))
 			return new InventoryContainer();
 
 		List<Entity> nearby_list = null;
@@ -92,7 +97,7 @@ public class EntityPipe extends EntityItemSupplier
 						int ydiff = (int) posy - (int) e.posy;
 						int zdiff = (int) posz - (int) e.posz;
 						int[] checkArray = {xdiff, ydiff, zdiff};
-						if (Arrays.equals(checkArray, rounded))
+						if (Arrays.equals(checkArray, roundedSendTo))
 						{
 							ec = (EntityChest) e;
 							break;
@@ -105,7 +110,7 @@ public class EntityPipe extends EntityItemSupplier
 						int ydiff = (int) posy - (int) e.posy;
 						int zdiff = (int) posz - (int) e.posz;
 						int[] checkArray = {xdiff, ydiff, zdiff};
-						if (Arrays.equals(checkArray, rounded))
+						if (Arrays.equals(checkArray, roundedSendTo))
 						{
 							eis = (EntityItemSupplier) e;
 							break;
@@ -157,18 +162,22 @@ public class EntityPipe extends EntityItemSupplier
 		if (power <= 0)
 			return false;
 
-		double[] getRelativeForward = Orienter.getDirection(Orienter.UP_VECTOR,
+		double[] sendTo = Orienter.getDirection(recipientVector,
 				world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
-		int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]),
-				(int) Math.round(getRelativeForward[2])};
-		int[] backRounded = {-rounded[0], -rounded[1], -rounded[2]};
+		int[] roundedSendTo = {(int) Math.round(sendTo[0]), (int) Math.round(sendTo[1]),
+				(int) Math.round(sendTo[2])};
+		
+		double[] receiveFrom = Orienter.getDirection(senderVector, 
+				world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
+		int[] roundedReceiveFrom = {(int) Math.round(receiveFrom[0]), (int) Math.round(receiveFrom[1]),
+				(int) Math.round(receiveFrom[2])};
 
 		int xsep = (int) posx - (int) other.posx;
 		int ysep = (int) posy - (int) other.posy;
 		int zsep = (int) posz - (int) other.posz;
 
 		int[] sepArray = {xsep, ysep, zsep};
-		if (!(Arrays.equals(sepArray, backRounded)))
+		if (!(Arrays.equals(sepArray, roundedReceiveFrom)))
 			return false;
 		List<Entity> nearby_list = null;
 		EntityChest ec = null;
@@ -191,7 +200,7 @@ public class EntityPipe extends EntityItemSupplier
 						int ydiff = (int) posy - (int) e.posy;
 						int zdiff = (int) posz - (int) e.posz;
 						int[] checkArray = {xdiff, ydiff, zdiff};
-						if (Arrays.equals(checkArray, rounded))
+						if (Arrays.equals(checkArray, roundedSendTo))
 						{
 							ec = (EntityChest) e;
 							break;
@@ -203,7 +212,7 @@ public class EntityPipe extends EntityItemSupplier
 						int ydiff = (int) posy - (int) e.posy;
 						int zdiff = (int) posz - (int) e.posz;
 						int[] checkArray = {xdiff, ydiff, zdiff};
-						if (Arrays.equals(checkArray, rounded))
+						if (Arrays.equals(checkArray, roundedSendTo))
 						{
 							eis = (EntityItemSupplier) e;
 							break;
@@ -228,45 +237,6 @@ public class EntityPipe extends EntityItemSupplier
 			return eis.hasItem(this, power-1);
 		}
 		return false;
-	}
-
-	// The below methods were copied from DangerZone in accordance with the
-	// DangerZone license,
-	// reproduced down below for your convenience. Please do follow it.
-
-	/*
-	 * This code is copyright Richard H. Clark, TheyCallMeDanger, OreSpawn,
-	 * 2015-2020. You may use this code for reference for modding the DangerZone
-	 * game program, and are perfectly welcome to cut'n'paste portions for your
-	 * mod as well. DO NOT USE THIS CODE FOR ANY PURPOSE OTHER THAN MODDING FOR
-	 * THE DANGERZONE GAME. DO NOT REDISTRIBUTE THIS CODE.
-	 * 
-	 * This copyright remains in effect until January 1st, 2021. At that time,
-	 * this code becomes public domain.
-	 * 
-	 * WARNING: There are bugs. Big bugs. Little bugs. Every size in-between
-	 * bugs. This code is NOT suitable for use in anything other than this
-	 * particular game. NO GUARANTEES of any sort are given, either express or
-	 * implied, and Richard H. Clark, TheyCallMeDanger, OreSpawn are not
-	 * responsible for any damages, direct, indirect, or otherwise. You should
-	 * have made backups. It's your own fault for not making them.
-	 * 
-	 * NO ATTEMPT AT SECURITY IS MADE. This code is USE AT YOUR OWN RISK.
-	 * Regardless of what you may think, the reality is, that the moment you
-	 * connected your computer to the Internet, Uncle Sam, among many others,
-	 * hacked it. DO NOT KEEP VALUABLE INFORMATION ON INTERNET-CONNECTED
-	 * COMPUTERS. Or your phone...
-	 */
-
-	public void update(float deltaT)
-	{
-		int myBlockID = world.getblock(dimension, (int) posx, (int) posy, (int) posz);
-		if (myBlockID != RedZoneBlocks.PIPE.blockID)
-		{
-			this.deadflag = true;
-			return;
-		}
-		super.update(deltaT);
 	}
 
 }
