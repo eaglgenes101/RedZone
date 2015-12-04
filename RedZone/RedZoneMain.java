@@ -1,4 +1,5 @@
 import redzone.blocks.RedZoneBlocks;
+import redzone.entities.EntityCornerPipe;
 import redzone.entities.EntityDispenser;
 import redzone.entities.EntityStraightPipe;
 import redzone.entities.EntityPusherPipe;
@@ -70,6 +71,7 @@ public class RedZoneMain extends BaseMod
 		Entities.registerEntity(EntityDispenser.class, "RedZone:EntityDispenser", null);
 		Entities.registerEntity(EntityStraightPipe.class, "RedZone:EntityStraightPipe", null);
 		Entities.registerEntity(EntityPusherPipe.class, "RedZone:EntityPusherPipe", null);
+		Entities.registerEntity(EntityCornerPipe.class, "RedZone:EntityCornerPipe", null);
 		
 		Crafting.registerCraftingRecipe(Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, 
 				null, null, null, null, null, null, RedZoneItems.STRAIGHT_WIRE_ITEM, 6, true);
@@ -128,10 +130,22 @@ public class RedZoneMain extends BaseMod
 				null, null, null, null, Blocks.stone, Blocks.stone, RedZoneItems.PRESS_SWITCH_ITEM, 2, true);
 		
 		Crafting.registerCraftingRecipe(Items.lumptin, RedZoneItems.PRESS_SWITCH_ITEM, Items.lumptin, 
-				RedZoneItems.PRESS_SWITCH_ITEM, null, RedZoneItems.PRESS_SWITCH_ITEM, Items.lumptin, RedZoneItems.PRESS_SWITCH_ITEM, Items.lumptin, RedZoneBlocks.DETECTOR_SWITCH, 1, true);
+				RedZoneItems.PRESS_SWITCH_ITEM, null, RedZoneItems.PRESS_SWITCH_ITEM, 
+				Items.lumptin, RedZoneItems.PRESS_SWITCH_ITEM, Items.lumptin, RedZoneBlocks.DETECTOR_SWITCH, 1, true);
 		
 		Crafting.registerCraftingRecipe(Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, 
-				null, null, null, Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, RedZoneBlocks.STRAIGHT_PIPE, 1, true);
+				null, null, null, 
+				Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, RedZoneBlocks.STRAIGHT_PIPE, 1, true);
+		Crafting.registerCraftingRecipe(Items.lumpcopper, null, Items.lumpcopper, 
+				Items.lumpcopper, null, Items.lumpcopper, 
+				Items.lumpcopper, null, Items.lumpcopper, RedZoneBlocks.STRAIGHT_PIPE, 1, true);
+		
+		Crafting.registerCraftingRecipe(null, Items.lumpcopper, null, 
+				Items.lumptin, RedZoneBlocks.STRAIGHT_PIPE, Items.lumptin, 
+				null, Items.lumpcopper, null, RedZoneBlocks.PUSHER_STRAIGHT_PIPE, 1, true);
+		Crafting.registerCraftingRecipe(null, Items.lumptin, null, 
+				Items.lumpcopper, RedZoneBlocks.STRAIGHT_PIPE, Items.lumpcopper, 
+				null, Items.lumptin, null, RedZoneBlocks.PUSHER_STRAIGHT_PIPE, 1, true);
 	}
 	
 	

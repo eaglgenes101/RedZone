@@ -18,20 +18,20 @@ import dangerzone.World;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
- * Straight pipe entity. 
+ * Corner pipe entity. 
  * 
 /*/
 
-public class EntityStraightPipe extends EntityPipe
+public class EntityCornerPipe extends EntityPipe
 {
 
 
-	public EntityStraightPipe(World w)
+	public EntityCornerPipe(World w)
 	{
 		super(w);
-		uniquename = "RedZone:EntityStraightPipe";
+		uniquename = "RedZone:EntityCornerPipe";
 		double[] rvec = {0, 1, 0};
-		double[] svec = {0, -1, 0};
+		double[] svec = {0, 0, -1};
 		recipientVector = rvec;
 		senderVector = svec;
 	}
@@ -67,7 +67,7 @@ public class EntityStraightPipe extends EntityPipe
 	public void update(float deltaT)
 	{
 		int myBlockID = world.getblock(dimension, (int) posx, (int) posy, (int) posz);
-		if (myBlockID != RedZoneBlocks.STRAIGHT_PIPE.blockID)
+		if (myBlockID != RedZoneBlocks.CORNER_PIPE.blockID)
 		{
 			this.deadflag = true;
 			return;

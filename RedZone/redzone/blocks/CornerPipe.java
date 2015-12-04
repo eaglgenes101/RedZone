@@ -24,22 +24,22 @@ import dangerzone.threads.FastBlockTicker;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
- * Straight pipe. 
+ * Corner pipe. 
  * 
 /*/
 
-public class StraightPipe extends Pipe
+public class CornerPipe extends Pipe
 {
 
-	public StraightPipe(String n)
+	public CornerPipe(String n)
 	{
 		super(n);
 		topname = "RedZone_res/res/blocks/transparent.png";
-		bottomname = "RedZone_res/res/blocks/transparent.png";
-		leftname = "RedZone_res/res/blocks/pipe_edge.png";
-		rightname = "RedZone_res/res/blocks/pipe_edge.png";
+		bottomname = "RedZone_res/res/blocks/pipe_edge.png";
+		leftname = "RedZone_res/res/blocks/pipe_left_edge.png";
+		rightname = "RedZone_res/res/blocks/pipe_right_edge.png";
 		frontname = "RedZone_res/res/blocks/pipe_edge.png";
-		backname = "RedZone_res/res/blocks/pipe_edge.png";
+		backname = "RedZone_res/res/blocks/transparent.png";
 	}
 	
 	public void tickMeFast(World w, int d, int x, int y, int z)
@@ -77,7 +77,7 @@ public class StraightPipe extends Pipe
 			if (!w.isServer)
 			{
 				// System.out.printf("spawning new chest entity\n");
-				Entity eb = w.createEntityByName("RedZone:EntityStraightPipe", d, 
+				Entity eb = w.createEntityByName("RedZone:EntityCornerPipe", d, 
 						(float) (x) + 0.5f,
 						(float) (y) + 0.5f, 
 						(float) (z) + 0.5f);
@@ -122,7 +122,7 @@ public class StraightPipe extends Pipe
 		if (!w.isServer)
 		{
 			// System.out.printf("onBlockPlaced spawning new dispenser entity\n");
-			Entity eb = w.createEntityByName("RedZone:EntityStraightPipe", dimension, (float) (x) + 0.5f,
+			Entity eb = w.createEntityByName("RedZone:EntityCornerPipe", dimension, (float) (x) + 0.5f,
 					(float) (y) + 0.5f, (float) (z) + 0.5f);
 			if (eb != null)
 			{
