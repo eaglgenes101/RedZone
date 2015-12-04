@@ -7,6 +7,7 @@ import dangerzone.DangerZone;
 import dangerzone.World;
 import dangerzone.entities.Entity;
 import dangerzone.threads.FastBlockTicker;
+import redzone.entities.EntityPusherCornerPipe;
 import redzone.entities.EntityStraightPipe;
 import redzone.entities.EntityPusherStraightPipe;
 import redzone.mechanics.PoweredComponent;
@@ -49,7 +50,7 @@ public class PusherCornerPipe extends StraightPipe implements PoweredComponent
 	{
 		FastBlockTicker.addFastTick(d, x, y, z);
 		List<Entity> nearby_list = null;
-		EntityPusherStraightPipe ed = null;
+		EntityPusherCornerPipe ed = null;
 
 		nearby_list = DangerZone.entityManager.findEntitiesInRange(2, d, x, y, z);
 		if (nearby_list != null)
@@ -62,11 +63,11 @@ public class PusherCornerPipe extends StraightPipe implements PoweredComponent
 				while (li.hasNext())
 				{
 					e = (Entity) li.next();
-					if (e instanceof EntityPusherStraightPipe)
+					if (e instanceof EntityPusherCornerPipe)
 					{
 						if ((int) e.posx == x && (int) e.posy == y && (int) e.posz == z)
 						{
-							ed = (EntityPusherStraightPipe) e;
+							ed = (EntityPusherCornerPipe) e;
 							break;
 						}
 						ed = null;

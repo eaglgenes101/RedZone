@@ -4,10 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 
-import org.lwjgl.input.Mouse;
-
-import redzone.blocks.Dispenser;
-import redzone.blocks.PusherStraightPipe;
+import redzone.blocks.PusherCornerPipe;
 import redzone.blocks.RedZoneBlocks;
 import redzone.mechanics.Orienter;
 import dangerzone.DangerZone;
@@ -40,7 +37,7 @@ import dangerzone.threads.FastBlockTicker;
  * 
 /*/
 
-public class EntityPusherCornerPipe extends EntityStraightPipe
+public class EntityPusherCornerPipe extends EntityCornerPipe
 {
 
 	public EntityPusherCornerPipe(World w)
@@ -61,7 +58,7 @@ public class EntityPusherCornerPipe extends EntityStraightPipe
 			return;
 		}
 		
-		else if ( ((PusherStraightPipe) myBlock).getStatus(world, dimension, (int) posx, (int) posy, (int) posz))
+		else if ( ((PusherCornerPipe) myBlock).getStatus(world, dimension, (int) posx, (int) posy, (int) posz))
 		{
 			if (FastBlockTicker.cycle % 2 != getVarInt(21))
 			{
@@ -86,9 +83,9 @@ public class EntityPusherCornerPipe extends EntityStraightPipe
 							e = (Entity) li.next();
 							if (e instanceof EntityChest)
 							{
-								int xdiff = (int) posx - (int) e.posx;
-								int ydiff = (int) posy - (int) e.posy;
-								int zdiff = (int) posz - (int) e.posz;
+								int xdiff = (int) e.posx - (int) posx;
+								int ydiff = (int) e.posy - (int) posy;
+								int zdiff = (int) e.posz - (int) posz;
 								int[] checkArray = {xdiff, ydiff, zdiff};
 								if (Arrays.equals(checkArray, roundedReceiveFrom))
 								{

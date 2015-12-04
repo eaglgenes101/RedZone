@@ -86,9 +86,9 @@ public class EntityPusherStraightPipe extends EntityStraightPipe
 							e = (Entity) li.next();
 							if (e instanceof EntityChest)
 							{
-								int xdiff = (int) posx - (int) e.posx;
-								int ydiff = (int) posy - (int) e.posy;
-								int zdiff = (int) posz - (int) e.posz;
+								int xdiff = (int) e.posx - (int) posx;
+								int ydiff = (int) e.posy - (int) posy;
+								int zdiff = (int) e.posz - (int) posz;
 								int[] checkArray = {xdiff, ydiff, zdiff};
 								if (Arrays.equals(checkArray, roundedReceiveFrom))
 								{
