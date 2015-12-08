@@ -26,7 +26,7 @@ import redzone.mechanics.PoweredComponent;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
- * Pushing straight pipe.   
+ * Pushing five-way pipe.   
  * 
 /*/
 

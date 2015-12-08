@@ -3,12 +3,15 @@ package redzone.blocks;
 import java.util.List;
 import java.util.ListIterator;
 
-import redzone.entities.EntityFiveWayPipe;
-import redzone.entities.EntityStraightPipe;
 import dangerzone.DangerZone;
 import dangerzone.World;
 import dangerzone.entities.Entity;
 import dangerzone.threads.FastBlockTicker;
+import redzone.entities.EntityPusherCornerPipe;
+import redzone.entities.EntityPusherFiveWayPipe;
+import redzone.entities.EntityStraightPipe;
+import redzone.entities.EntityPusherStraightPipe;
+import redzone.mechanics.PoweredComponent;
 
 /*/
  * Copyright 2015 Eugene "eaglgenes101" Wang
@@ -25,29 +28,30 @@ import dangerzone.threads.FastBlockTicker;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
- * Five-way branching pipe. 
+ * Pushing corner pipe.   
  * 
 /*/
 
-public class FiveWayPipe extends Pipe
+public class PusherFiveWayPipe extends FiveWayPipe implements PoweredComponent
 {
-
-	public FiveWayPipe(String n)
+	
+	public PusherFiveWayPipe(String n)
 	{
 		super(n);
+
 		topname = "RedZone_res/res/blocks/transparent.png";
-		bottomname = "RedZone_res/res/blocks/pipe_in.png";
-		leftname = "RedZone_res/res/blocks/pipe_in.png";
-		rightname = "RedZone_res/res/blocks/pipe_in.png";
-		frontname = "RedZone_res/res/blocks/pipe_in.png";
-		backname = "RedZone_res/res/blocks/pipe_in.png";
+		bottomname = "RedZone_res/res/blocks/pusher_pipe_in.png";
+		leftname = "RedZone_res/res/blocks/pusher_pipe_in.png";
+		rightname = "RedZone_res/res/blocks/pusher_pipe_in.png";
+		frontname = "RedZone_res/res/blocks/pusher_pipe_in.png";
+		backname = "RedZone_res/res/blocks/pusher_pipe_in.png";
 	}
-	
+
 	public void tickMeFast(World w, int d, int x, int y, int z)
 	{
 		FastBlockTicker.addFastTick(d, x, y, z);
 		List<Entity> nearby_list = null;
-		EntityFiveWayPipe ed = null;
+		EntityPusherFiveWayPipe ed = null;
 
 		nearby_list = DangerZone.entityManager.findEntitiesInRange(2, d, x, y, z);
 		if (nearby_list != null)
@@ -60,11 +64,11 @@ public class FiveWayPipe extends Pipe
 				while (li.hasNext())
 				{
 					e = (Entity) li.next();
-					if (e instanceof EntityFiveWayPipe)
+					if (e instanceof EntityPusherFiveWayPipe)
 					{
 						if ((int) e.posx == x && (int) e.posy == y && (int) e.posz == z)
 						{
-							ed = (EntityFiveWayPipe) e;
+							ed = (EntityPusherFiveWayPipe) e;
 							break;
 						}
 						ed = null;
@@ -75,10 +79,10 @@ public class FiveWayPipe extends Pipe
 		
 		if (ed == null)
 		{ // where did our entity go???
-			if (!w.isServer)
+			if (w.isServer)
 			{
 				// System.out.printf("spawning new chest entity\n");
-				Entity eb = w.createEntityByName("RedZone:EntityFiveWayPipe", d, 
+				Entity eb = w.createEntityByName("RedZone:EntityPusherFiveWayPipe", d, 
 						(float) (x) + 0.5f,
 						(float) (y) + 0.5f, 
 						(float) (z) + 0.5f);
@@ -89,9 +93,29 @@ public class FiveWayPipe extends Pipe
 				}
 			}
 		}
+		((PoweredComponent)this).powerBump(w, d, x, y, z); 
 	}
 
-	// The below methods were copied from DangerZone in accordance with the DangerZone license,
+	@Override
+	public int basePowerLevel(World w, int d, int x, int y, int z)
+	{
+		return 0;
+	}
+
+	@Override
+	public boolean canConnect(int dx, int dy, int dz, int meta)
+	{
+		return true;
+	}
+
+	@Override
+	public void finishStep(World w, int d, int x, int y, int z)
+	{
+		return;
+	}
+	
+
+	// The below method was copied from DangerZone in accordance with the DangerZone license,
 	// reproduced down below for your convenience. Please do follow it.
 
 	/*
@@ -120,10 +144,10 @@ public class FiveWayPipe extends Pipe
 	
 	public void onBlockPlaced(World w, int dimension, int x, int y, int z)
 	{
-		if (!w.isServer)
+		if (w.isServer)
 		{
 			// System.out.printf("onBlockPlaced spawning new dispenser entity\n");
-			Entity eb = w.createEntityByName("RedZone:EntityFiveWayPipe", dimension, (float) (x) + 0.5f,
+			Entity eb = w.createEntityByName("RedZone:EntityPusherFiveWayPipe", dimension, (float) (x) + 0.5f,
 					(float) (y) + 0.5f, (float) (z) + 0.5f);
 			if (eb != null)
 			{
@@ -132,6 +156,5 @@ public class FiveWayPipe extends Pipe
 			}
 		}
 	}
-
 
 }

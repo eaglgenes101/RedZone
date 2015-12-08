@@ -31,7 +31,7 @@ import redzone.mechanics.PoweredComponent;
  * 
 /*/
 
-public class PusherCornerPipe extends StraightPipe implements PoweredComponent
+public class PusherCornerPipe extends CornerPipe implements PoweredComponent
 {
 	
 	public PusherCornerPipe(String n)
