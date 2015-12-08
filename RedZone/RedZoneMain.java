@@ -1,6 +1,7 @@
 import redzone.blocks.RedZoneBlocks;
 import redzone.entities.EntityCornerPipe;
 import redzone.entities.EntityDispenser;
+import redzone.entities.EntityFiveWayPipe;
 import redzone.entities.EntityPusherCornerPipe;
 import redzone.entities.EntityStraightPipe;
 import redzone.entities.EntityPusherStraightPipe;
@@ -67,6 +68,7 @@ public class RedZoneMain extends BaseMod
 		Blocks.registerBlock(RedZoneBlocks.PUSHER_STRAIGHT_PIPE);
 		Blocks.registerBlock(RedZoneBlocks.CORNER_PIPE);
 		Blocks.registerBlock(RedZoneBlocks.PUSHER_CORNER_PIPE);
+		Blocks.registerBlock(RedZoneBlocks.FIVE_WAY_PIPE);
 		
 		Items.registerItem(RedZoneItems.STRAIGHT_WIRE_ITEM);
 		Items.registerItem(RedZoneItems.BENT_WIRE_ITEM);
@@ -78,6 +80,7 @@ public class RedZoneMain extends BaseMod
 		Entities.registerEntity(EntityPusherStraightPipe.class, "RedZone:EntityPusherStraightPipe", null);
 		Entities.registerEntity(EntityCornerPipe.class, "RedZone:EntityCornerPipe", null);
 		Entities.registerEntity(EntityPusherCornerPipe.class, "RedZone:EntityPusherCornerPipe", null);
+		Entities.registerEntity(EntityFiveWayPipe.class, "RedZone:EntityFiveWayPipe", null);
 		
 		Crafting.registerCraftingRecipe(Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, 
 				null, null, null, null, null, null, RedZoneItems.STRAIGHT_WIRE_ITEM, 6, true);

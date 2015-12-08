@@ -31,10 +31,8 @@ public class EntityStraightPipe extends EntityPipe
 	{
 		super(w);
 		uniquename = "RedZone:EntityStraightPipe";
-		double[] rvec = Orienter.DOWN_VECTOR;
-		double[] svec = Orienter.UP_VECTOR;
-		inVector = rvec;
-		outVector = svec;
+		inVector = Orienter.DOWN_VECTOR;
+		outVector = Orienter.UP_VECTOR;
 	}
 
 	// The below methods were copied from DangerZone in accordance with the

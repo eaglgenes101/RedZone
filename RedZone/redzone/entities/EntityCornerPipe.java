@@ -30,10 +30,8 @@ public class EntityCornerPipe extends EntityPipe
 	{
 		super(w);
 		uniquename = "RedZone:EntityCornerPipe";
-		double[] rvec = Orienter.EAST_VECTOR;
-		double[] svec = Orienter.UP_VECTOR;
-		inVector = rvec;
-		outVector = svec;
+		inVector = Orienter.EAST_VECTOR;
+		outVector = Orienter.UP_VECTOR;
 	}
 
 	// The below methods were copied from DangerZone in accordance with the

@@ -40,4 +40,5 @@ public class RedZoneBlocks
 	public static Block CORNER_PIPE = new CornerPipe("RedZone:CornerPipe");
 	public static Block PUSHER_STRAIGHT_PIPE = new PusherStraightPipe("RedZone:PusherStraightPipe");
 	public static Block PUSHER_CORNER_PIPE = new PusherCornerPipe("RedZone:PusherCornerPipe");
+	public static Block FIVE_WAY_PIPE = new FiveWayPipe("RedZone:FiveWayPipe");
 }
