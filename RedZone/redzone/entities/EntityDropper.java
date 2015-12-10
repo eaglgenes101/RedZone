@@ -3,7 +3,7 @@ package redzone.entities;
 import java.util.List;
 import java.util.ListIterator;
 
-import redzone.blocks.Dispenser;
+import redzone.blocks.Dropper;
 import redzone.blocks.RedZoneBlocks;
 import redzone.mechanics.Orienter;
 import dangerzone.DangerZone;
@@ -12,9 +12,7 @@ import dangerzone.World;
 import dangerzone.blocks.Block;
 import dangerzone.blocks.Blocks;
 import dangerzone.entities.Entity;
-import dangerzone.items.Item;
-import dangerzone.items.ItemSpawnEgg;
-import dangerzone.items.Items;
+import dangerzone.entities.ThrownBlockItem;
 import dangerzone.threads.FastBlockTicker;
 
 /*/
@@ -32,17 +30,17 @@ import dangerzone.threads.FastBlockTicker;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
- * Dispenser Entity. 
+ * Dropper Entity. 
  * 
 /*/
 
-public class EntityDispenser extends Entity
+public class EntityDropper extends Entity
 {
 
-	public EntityDispenser(World w)
+	public EntityDropper(World w)
 	{
 		super(w);
-		uniquename = "RedZone:EntityDispenser";
+		uniquename = "RedZone:EntityDropper";
 		ignoreCollisions = true;
 		width = 0.01f;
 		height = 0.01f;
@@ -81,12 +79,12 @@ public class EntityDispenser extends Entity
 	{
 		int myBlockID = world.getblock(dimension, (int) posx, (int) posy, (int) posz);
 		Block myBlock = Blocks.getBlock(myBlockID);
-		if (myBlockID != RedZoneBlocks.DISPENSER.blockID)
+		if (myBlockID != RedZoneBlocks.DROPPER.blockID)
 		{
 			this.deadflag = true;
 			return;
 		}
-		else if (((Dispenser) myBlock).getStatus(world, dimension, (int) posx, (int) posy, (int) posz))
+		else if (((Dropper) myBlock).getStatus(world, dimension, (int) posx, (int) posy, (int) posz))
 		{
 			if (FastBlockTicker.cycle % 2 != getVarInt(21))
 			{
@@ -136,9 +134,6 @@ public class EntityDispenser extends Entity
 	// Do right-clicks by a phantom "player"
 	public void rightclick(World world, int side)
 	{
-		double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR, world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
-		int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]), (int) Math.round(getRelativeForward[2])};
-
 		List<Entity> nearby_list = null;
 		InventoryContainer ic = null;
 
@@ -179,55 +174,26 @@ public class EntityDispenser extends Entity
 
 		if (ic.count > 0)
 		{
-			Item it = ic.getItem();
-			if (it != null)
-			{
-				it.onRightClick(this, null, ic);
-				if (it instanceof ItemSpawnEgg)
+			//Make a throwable item entity!
+			if(world.isServer){
+				ThrownBlockItem e = (ThrownBlockItem)world.createEntityByName("DangerZone:ThrownBlockItem", 
+						dimension, posx, posy, posz);
+				if(e != null)
 				{
-					ItemSpawnEgg ise = (ItemSpawnEgg) it;
-					Entity e = world.createEntityByName(ise.critter, dimension, 1, 1, 1);
-					if (e != null)
-					{
-						e.init();
-						e.posx = posx + rounded[0] * e.width - e.width / 2;
-						e.posy = posy + rounded[1] * e.height - e.height / 2;
-						e.posz = posz + rounded[2] * e.width - e.width / 2;
-						world.spawnEntityInWorld(e);
-					}
+					e.init();
+					e.setBID(ic.bid);
+					e.setIID(ic.iid);
+					e.thrower = this;
+					e.setDirectionAndVelocity(
+							(float)Math.sin(Math.toRadians(rotation_yaw_head))*(float)Math.cos(Math.toRadians(rotation_pitch_head)), 
+							-(float)Math.sin(Math.toRadians(rotation_pitch_head)),
+							(float)Math.cos(Math.toRadians(rotation_yaw_head))*(float)Math.cos(Math.toRadians(rotation_pitch_head)),
+							1f, 0.01f);
+					
+					world.spawnEntityInWorld(e);
 				}
-			}
-			Block bl = ic.getBlock();
-			if (bl != null)
-				bl.onRightClick(this, null, ic);
-		}
-
-		int bid = 0;
-		int iid = 0;
-		if (ic != null)
-		{
-			if (ic.count >= 1)
-			{
-				bid = ic.bid;
-				iid = ic.iid;
-			}
-		}
-
-		int fbid = world.getblock(dimension, (int) posx, (int) posy, (int) posz);
-		boolean cont = Blocks.rightClickOnBlock(fbid, null, dimension, (int) posx, (int) posy, (int) posz);
-		if (cont)
-		{
-			if (bid != 0)
-			{
-				if (world.getblock(dimension, (int) posx + rounded[0], (int) posy + rounded[1], (int) posz + rounded[2]) == 0)
-				{
-					Blocks.doPlaceBlock(bid, fbid, null, world, dimension, (int) posx, (int) posy, (int) posz, side);
-				}
-			}
-			else if (iid != 0)
-			{
-				Items.rightClickOnBlock(iid, null, dimension, (int) posx, (int) posy, (int) posz, side);
-				world.playSound(Blocks.getHitSound(fbid), dimension, (int) posx, (int) posy, (int) posz, 0.35f, 1.0f);
+				world.playSound("DangerZone:bow", dimension, posx, posy, posz, 0.5f, 0.5f+((world.rand.nextFloat()*0.2f
+						-world.rand.nextFloat())*0.3f));
 			}
 		}
 

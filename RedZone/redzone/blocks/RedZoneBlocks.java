@@ -38,6 +38,7 @@ public class RedZoneBlocks
 	public static Block PRESS_SWITCH = new PressSwitch("RedZone:Press Switch Block");
 	public static Block PRESS_SWITCH_ACTIVE = new PressSwitchActive("RedZone:Press Switch Active Block");
 	public static Block DETECTOR_SWITCH = new DetectorSwitch("RedZone:Detector Switch Block");
+	public static Block DROPPER = new Dropper("RedZone:Dropper");
 	
 	public static Block STRAIGHT_PIPE = new StraightPipe("RedZone:StraightPipe");
 	public static Block CORNER_PIPE = new CornerPipe("RedZone:CornerPipe");
