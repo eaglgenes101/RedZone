@@ -175,9 +175,14 @@ public class EntityDropper extends Entity
 		if (ic.count > 0)
 		{
 			//Make a throwable item entity!
-			if(world.isServer){
+			if(world.isServer)
+			{
+				double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR, 
+						world.getblockmeta(dimension, (int)posx, (int)posy, (int)posz));
+				
 				ThrownBlockItem e = (ThrownBlockItem)world.createEntityByName("DangerZone:ThrownBlockItem", 
-						dimension, posx, posy, posz);
+						dimension, posx+(float)getRelativeForward[0]/2, 
+						posy+(float)getRelativeForward[1]/2, posz+(float)getRelativeForward[2]/2);
 				if(e != null)
 				{
 					e.init();

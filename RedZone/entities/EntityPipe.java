@@ -106,9 +106,9 @@ public abstract class EntityPipe extends EntityItemSupplier
 					else if (e instanceof EntityItemSupplier)
 					{
 
-						int xdiff = (int) posx - (int) e.posx;
-						int ydiff = (int) posy - (int) e.posy;
-						int zdiff = (int) posz - (int) e.posz;
+						int xdiff = (int) e.posx - (int) posx;
+						int ydiff = (int) e.posy - (int) posy;
+						int zdiff = (int) e.posz - (int) posz;
 						int[] checkArray = {xdiff, ydiff, zdiff};
 						if (Arrays.equals(checkArray, roundedFrom))
 						{
@@ -177,6 +177,7 @@ public abstract class EntityPipe extends EntityItemSupplier
 		int zsep = (int) other.posz - (int) posz;
 
 		int[] sepArray = {xsep, ysep, zsep};
+		
 		if (!(Arrays.equals(sepArray, roundedTo)))
 			return false;
 		List<Entity> nearby_list = null;
@@ -196,9 +197,9 @@ public abstract class EntityPipe extends EntityItemSupplier
 					e = (Entity) li.next();
 					if (e instanceof EntityChest)
 					{
-						int xdiff = (int) posx - (int) e.posx;
-						int ydiff = (int) posy - (int) e.posy;
-						int zdiff = (int) posz - (int) e.posz;
+						int xdiff = (int) e.posx - (int) posx;
+						int ydiff = (int) e.posy - (int) posy;
+						int zdiff = (int) e.posz - (int) posz;
 						int[] checkArray = {xdiff, ydiff, zdiff};
 						if (Arrays.equals(checkArray, roundedFrom))
 						{

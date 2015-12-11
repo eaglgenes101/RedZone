@@ -36,7 +36,8 @@ import entities.EntityStraightPipe;
 
 public class RedZoneMain extends BaseMod
 {
-	public RedZoneMain (){
+	public RedZoneMain ()
+	{
 		super();
 	}
 	
