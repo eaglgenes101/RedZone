@@ -131,7 +131,7 @@ public class EntityDropper extends Entity
 		}
 	}
 
-	// Do right-clicks by a phantom "player"
+	// Generate those block/item entities!
 	public void rightclick(World world, int side)
 	{
 		List<Entity> nearby_list = null;

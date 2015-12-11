@@ -134,8 +134,7 @@ public class ParticleStreamer extends Block implements PoweredComponent
 		
 		if (ed == null)
 		{ // where did our entity go???
-			System.out.println(w.isServer);
-			if (true)
+			if (!w.isServer)
 			{
 				// System.out.printf("spawning new chest entity\n");
 				Entity eb = w.createEntityByName("RedZone:EntityParticleStreamer", d, 
