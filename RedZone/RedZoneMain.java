@@ -57,9 +57,11 @@ public class RedZoneMain extends BaseMod
 		Blocks.registerBlock(RedZoneBlocks.STRAIGHT_WIRE);
 		Blocks.registerBlock(RedZoneBlocks.BENT_WIRE);
 		Blocks.registerBlock(RedZoneBlocks.JUNCTION_WIRE);
+		Blocks.registerBlock(RedZoneBlocks.END_WIRE);
 		Blocks.registerBlock(RedZoneBlocks.STRAIGHT_WIRE_ACTIVE);
 		Blocks.registerBlock(RedZoneBlocks.BENT_WIRE_ACTIVE);
 		Blocks.registerBlock(RedZoneBlocks.JUNCTION_WIRE_ACTIVE);
+		Blocks.registerBlock(RedZoneBlocks.END_WIRE_ACTIVE);
 		
 		Blocks.registerBlock(RedZoneBlocks.POWER_STICK);
 		Blocks.registerBlock(RedZoneBlocks.POWER_STICK_INACTIVE);
@@ -81,6 +83,7 @@ public class RedZoneMain extends BaseMod
 		Items.registerItem(RedZoneItems.STRAIGHT_WIRE_ITEM);
 		Items.registerItem(RedZoneItems.BENT_WIRE_ITEM);
 		Items.registerItem(RedZoneItems.JUNCTION_WIRE_ITEM);
+		Items.registerItem(RedZoneItems.END_WIRE_ITEM);
 		Items.registerItem(RedZoneItems.PRESS_SWITCH_ITEM);
 		
 		Entities.registerEntity(EntityDispenser.class, "RedZone:EntityDispenser", null);
@@ -117,6 +120,44 @@ public class RedZoneMain extends BaseMod
 		Crafting.registerCraftingRecipe(null, Items.lumpcopper, null, 
 				Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, 
 				null, Items.lumpcopper, null, RedZoneItems.JUNCTION_WIRE_ITEM, 10, true);
+		
+		Crafting.registerCraftingRecipe(Items.lumpcopper, null, null, 
+				Items.lumpcopper, null, null, 
+				null, null, null, RedZoneItems.END_WIRE_ITEM, 4, true);
+		Crafting.registerCraftingRecipe(null, Items.lumpcopper, null, 
+				null, Items.lumpcopper, null, 
+				null, null, null, RedZoneItems.END_WIRE_ITEM, 4, true);
+		Crafting.registerCraftingRecipe(null, null, Items.lumpcopper,
+				null, null, Items.lumpcopper, 
+				null, null, null, RedZoneItems.END_WIRE_ITEM, 4, true);
+		Crafting.registerCraftingRecipe(null, null, null, 
+				Items.lumpcopper, null, null, 
+				Items.lumpcopper, null, null, RedZoneItems.END_WIRE_ITEM, 4, true);
+		Crafting.registerCraftingRecipe(null, null, null, 
+				null, Items.lumpcopper, null, 
+				null, Items.lumpcopper, null, RedZoneItems.END_WIRE_ITEM, 4, true);
+		Crafting.registerCraftingRecipe(null, null, null,
+				null, null, Items.lumpcopper, 
+				null, null, Items.lumpcopper, RedZoneItems.END_WIRE_ITEM, 4, true);
+		
+		Crafting.registerCraftingRecipe(Items.lumpcopper, Items.lumpcopper, null, 
+				null, null, null, 
+				null, null, null, RedZoneItems.END_WIRE_ITEM, 4, true);
+		Crafting.registerCraftingRecipe(null, null, null, 
+				Items.lumpcopper, Items.lumpcopper, null, 
+				null, null, null, RedZoneItems.END_WIRE_ITEM, 4, true);
+		Crafting.registerCraftingRecipe(null, null, null, 
+				null, null, null, 
+				Items.lumpcopper, Items.lumpcopper, null, RedZoneItems.END_WIRE_ITEM, 4, true);
+		Crafting.registerCraftingRecipe(null, Items.lumpcopper, Items.lumpcopper, 
+				null, null, null, 
+				null, null, null, RedZoneItems.END_WIRE_ITEM, 4, true);
+		Crafting.registerCraftingRecipe(null, null, null, 
+				null, Items.lumpcopper, Items.lumpcopper, 
+				null, null, null, RedZoneItems.END_WIRE_ITEM, 4, true);
+		Crafting.registerCraftingRecipe(null, null, null, 
+				null, null, null, 
+				null, Items.lumpcopper, Items.lumpcopper, RedZoneItems.END_WIRE_ITEM, 4, true);
 		
 		Crafting.registerCraftingRecipe(Items.lumpcopper, null, null, 
 				Items.stick, null, null, null, null, null, RedZoneBlocks.POWER_STICK, 4, true);
@@ -158,7 +199,6 @@ public class RedZoneMain extends BaseMod
 		Crafting.registerCraftingRecipe(Items.lumpcopper, null, Items.lumpcopper, 
 				Items.lumpcopper, null, Items.lumpcopper, 
 				Items.lumpcopper, null, Items.lumpcopper, RedZoneBlocks.STRAIGHT_PIPE, 3, true);
-		
 		Crafting.registerCraftingRecipe(null, Items.lumpcopper, null, 
 				Items.lumptin, RedZoneBlocks.STRAIGHT_PIPE, Items.lumptin, 
 				null, Items.lumpcopper, null, RedZoneBlocks.PUSHER_STRAIGHT_PIPE, 1, true);

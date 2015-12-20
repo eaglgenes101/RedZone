@@ -26,9 +26,11 @@ public class RedZoneBlocks
 	public static Block STRAIGHT_WIRE = new StraightWire("RedZone:Straight Wire Block");
 	public static Block BENT_WIRE = new BentWire("RedZone:Bent Wire Block");
 	public static Block JUNCTION_WIRE = new JunctionWire("RedZone:Junction Wire Block");
+	public static Block END_WIRE = new EndWire("RedZone:End Wire Block");
 	public static Block STRAIGHT_WIRE_ACTIVE = new StraightWireActive("RedZone:Straight Wire Active Block");
 	public static Block BENT_WIRE_ACTIVE = new BentWireActive("RedZone:Bent Wire Active Block");
 	public static Block JUNCTION_WIRE_ACTIVE = new JunctionWireActive("RedZone:Junction Wire Active Block");
+	public static Block END_WIRE_ACTIVE = new EndWireActive("RedZone:End Wire Active Block");
 
 	public static Block POWER_STICK = new PowerStick("RedZone:Power Stick", "RedZone_res/res/blocks/power_stick_active.png");
 	public static Block POWER_STICK_INACTIVE = new PowerStickInactive("RedZone:Power Stick Inactive", "RedZone_res/res/blocks/power_stick_inactive.png");
