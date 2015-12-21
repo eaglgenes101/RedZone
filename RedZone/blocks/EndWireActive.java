@@ -20,7 +20,7 @@ package blocks;
  * 
 /*/
 
-public class EndWireActive extends BentWire
+public class EndWireActive extends EndWire
 {
 	public EndWireActive(String n)
 	{
