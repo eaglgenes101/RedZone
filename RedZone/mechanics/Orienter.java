@@ -128,7 +128,7 @@ public class Orienter
 
 		while((meta&BlockRotation.X_MASK) > 0)
 		{
-			start = rotate(start, X_QUARTER_TURN);
+			start = rotate(start, X_REVERSE_QUARTER_TURN);
 			meta -= BlockRotation.X_ROT_90;
 		}
 		return start;

@@ -3,6 +3,8 @@ package blocks;
 import mechanics.Orienter;
 import mechanics.PoweredComponent;
 
+import java.util.Arrays;
+
 import org.newdawn.slick.opengl.Texture;
 
 import dangerzone.DangerZone;
@@ -125,6 +127,7 @@ public class Wire extends Block implements PoweredComponent
 		// Avoided a giant mess of conditionals by using rotation systems :)
 		double[] vec = Orienter.getDirection(Orienter.DOWN_VECTOR, meta);
 		int[] thisway = {(int) Math.round(vec[0]), (int) Math.round(vec[1]), (int) Math.round(vec[2])};
+		System.out.println(Integer.toHexString(w.getblockmeta(d, x, y, z)));
 		bid = w.getblock(d, x+thisway[0], y+thisway[1], z+thisway[2]);
 		
 		if(!Blocks.isSolid(bid))
