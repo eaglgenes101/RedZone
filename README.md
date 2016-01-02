@@ -4,11 +4,14 @@ This project is to make a Redstone-like wiring system for DangerZone, at dangerz
 Currently implemented:
 * An extensible powered component system
 * Dispensers
+* Push pipes
 * Pipes
 * Power sticks
 
 Coming up: 
-* Push pipes
 * Collectors
+* Logic gates
+* More switches
+* More ways to maipulate the world
 * And more!
 
