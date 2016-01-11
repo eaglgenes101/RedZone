@@ -19,7 +19,9 @@ imitations under the License.
     	<delete dir="${basedir}/mods/RedZone.jar"/>
         <jar destfile="${basedir}/mods/RedZone.jar" level="9">
         	<fileset dir="${basedir}/bin"/>
-        	<fileset dir="${basedir}/RedZone_res"/>
+        	<fileset dir="${basedir}/RedZone_res">
+        		<exclude name="dangerzone"/>
+        	</fileset>
         </jar>
     </target>
 </project>
