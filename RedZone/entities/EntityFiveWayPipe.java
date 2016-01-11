@@ -27,6 +27,7 @@ import dangerzone.entities.EntityChest;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
+ * 
  * Five-way pipe entity. 
  * 
 /*/
@@ -83,7 +84,7 @@ public class EntityFiveWayPipe extends EntityPipe
 	}
 	
 	@Override
-	public InventoryContainer get(Entity other, int power)
+	public InventoryContainer getItem(Entity other, int power)
 	{
 		
 		if (power <= 0)
@@ -178,7 +179,7 @@ public class EntityFiveWayPipe extends EntityPipe
 		for (EntityItemSupplier eis : itemSuppliers)
 		{
 			if(eis.hasItem(this, power-1))
-				return eis.get(this, power-1);
+				return eis.getItem(this, power-1);
 		}
 		return new InventoryContainer();
 	}

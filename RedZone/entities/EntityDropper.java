@@ -30,6 +30,7 @@ import dangerzone.threads.FastBlockTicker;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
+ * 
  * Dropper Entity. 
  * 
 /*/
@@ -158,7 +159,7 @@ public class EntityDropper extends Entity
 						{
 							if (((EntityItemSupplier) e).hasItem(this, 7))
 							{
-								ic = ((EntityItemSupplier) e).get(this, 7);
+								ic = ((EntityItemSupplier) e).getItem(this, 7);
 								break;
 							}
 						}

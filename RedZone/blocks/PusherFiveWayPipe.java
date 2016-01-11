@@ -28,7 +28,8 @@ import entities.EntityStraightPipe;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
- * Pushing corner pipe.   
+ * 
+ * Pushing five-way pipe.   
  * 
 /*/
 

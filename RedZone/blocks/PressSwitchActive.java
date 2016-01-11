@@ -21,7 +21,7 @@ import dangerzone.items.Items;
  * limitations under the License.
  * 
  * 
- * Active form press switch.  
+ * Active form of press switch.  
  * 
 /*/
 

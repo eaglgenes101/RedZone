@@ -31,7 +31,8 @@ import entities.EntityDispenser;
  * limitations under the License.
  * 
  * 
- * Dispenser block.
+ * Dispenser block. 
+ * Shoots items when supplied with a signal. 
  * 
 /*/
 

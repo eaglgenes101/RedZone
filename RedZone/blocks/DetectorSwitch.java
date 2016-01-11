@@ -26,6 +26,7 @@ import dangerzone.entities.EntityLiving;
  * 
  * 
  * Detector Switch. 
+ * Activates when a mob is standing in it. 
  * 
 /*/
 
@@ -38,7 +39,7 @@ public class DetectorSwitch extends Wire
 
 		isStone = true;
 		mindamage = 5;
-		maxdamage = 20;
+		maxdamage = 50;
 		showInInventory = true;
 
 		topname = "RedZone_res/res/blocks/detector.png";

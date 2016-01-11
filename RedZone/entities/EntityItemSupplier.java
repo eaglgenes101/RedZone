@@ -20,7 +20,8 @@ import dangerzone.entities.Entity;
  * limitations under the License.
  * 
  * 
- * Base class for item supplier entities. See EntityStraightPipe for an example. 
+ * Base class for item supplier entities. 
+ * See EntityPipe for an example. 
  * 
  /*/
 
@@ -44,7 +45,7 @@ public abstract class EntityItemSupplier extends Entity
 	 * @param power The amount of carrying power left
 	 * @return A new InventoryContainer holding the item
 	 **/
-	public abstract InventoryContainer get(Entity other, int power);
+	public abstract InventoryContainer getItem(Entity other, int power);
 	
 	/**
 	 * Tests whether a filled InventoryContainer can be retrieved from the Item

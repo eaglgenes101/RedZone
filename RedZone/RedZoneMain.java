@@ -29,6 +29,7 @@ import entities.EntityStraightPipe;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
+ * 
  * Mod starter class. 
  * 
 /*/
@@ -71,6 +72,7 @@ public class RedZoneMain extends BaseMod
 		Blocks.registerBlock(RedZoneBlocks.PRESS_SWITCH);
 		Blocks.registerBlock(RedZoneBlocks.PRESS_SWITCH_ACTIVE);
 		Blocks.registerBlock(RedZoneBlocks.DETECTOR_SWITCH);
+		Blocks.registerBlock(RedZoneBlocks.PROXIMITY_DETECTOR);
 		Blocks.registerBlock(RedZoneBlocks.DROPPER);
 		
 		Blocks.registerBlock(RedZoneBlocks.STRAIGHT_PIPE);
@@ -191,7 +193,7 @@ public class RedZoneMain extends BaseMod
 		
 		Crafting.registerCraftingRecipe(Items.lumptin, RedZoneItems.PRESS_SWITCH_ITEM, Items.lumptin, 
 				RedZoneItems.PRESS_SWITCH_ITEM, null, RedZoneItems.PRESS_SWITCH_ITEM, 
-				Items.lumptin, RedZoneItems.PRESS_SWITCH_ITEM, Items.lumptin, RedZoneBlocks.DETECTOR_SWITCH, 1, true);
+				Items.lumptin, RedZoneItems.PRESS_SWITCH_ITEM, Items.lumptin, RedZoneBlocks.DETECTOR_SWITCH, 4, true);
 		
 		Crafting.registerCraftingRecipe(Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, 
 				null, null, null, 

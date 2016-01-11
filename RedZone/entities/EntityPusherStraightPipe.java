@@ -37,6 +37,7 @@ import dangerzone.threads.FastBlockTicker;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
+ * 
  * Pushing straight pipe entity. 
  * 
 /*/
@@ -103,7 +104,7 @@ public class EntityPusherStraightPipe extends EntityStraightPipe
 				
 				if (ec != null)
 				{
-					InventoryContainer ic = get(ec, 7);
+					InventoryContainer ic = getItem(ec, 7);
 					
 					//If we have an item to give
 					if (ic.count > 0)

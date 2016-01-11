@@ -28,7 +28,8 @@ import dangerzone.threads.FastBlockTicker;
  * limitations under the License.
  * 
  * 
- * Power stick. Emits light and sends a signal to its front if powered, otherwise does nothing. 
+ * Power stick. 
+ * Emits light and sends a signal to its front if powered, otherwise does nothing. 
  * Front direction determines which blocks it considers its front.
  * 
 /*/

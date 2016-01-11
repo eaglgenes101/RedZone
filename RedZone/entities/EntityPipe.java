@@ -27,6 +27,7 @@ import dangerzone.entities.EntityChest;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
+ * 
  * Base pipe entity. 
  * 
 /*/
@@ -51,7 +52,7 @@ public abstract class EntityPipe extends EntityItemSupplier
 	}
 	
 	@Override
-	public InventoryContainer get(Entity other, int power)
+	public InventoryContainer getItem(Entity other, int power)
 	{
 		
 		if (power <= 0)
@@ -151,7 +152,7 @@ public abstract class EntityPipe extends EntityItemSupplier
 		}
 		else if (eis != null)
 		{
-			return eis.get(this, power-1);
+			return eis.getItem(this, power-1);
 		}
 		return new InventoryContainer();
 	}

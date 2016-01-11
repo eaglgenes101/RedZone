@@ -31,7 +31,9 @@ import entities.EntityDropper;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
+ * 
  * Dropper block. 
+ * Drops items and blocks when supplied with a signal. 
  * 
 /*/
 

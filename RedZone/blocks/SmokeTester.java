@@ -22,7 +22,8 @@ import dangerzone.threads.FastBlockTicker;
  * limitations under the License.
  * 
  * 
- * Smoke tester. Generates fire particles if powered. 
+ * Smoke tester. 
+ * Generates fire particles if powered. 
  * 
 /*/
 

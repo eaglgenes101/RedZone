@@ -3,14 +3,14 @@ package blocks;
 import java.util.List;
 import java.util.ListIterator;
 
-import mechanics.PoweredComponent;
 import dangerzone.DangerZone;
+import dangerzone.Utils;
 import dangerzone.World;
+import dangerzone.blocks.Block;
 import dangerzone.entities.Entity;
+import dangerzone.entities.EntityLiving;
 import dangerzone.threads.FastBlockTicker;
-import entities.EntityPusherCornerPipe;
-import entities.EntityPusherStraightPipe;
-import entities.EntityStraightPipe;
+import mechanics.PoweredComponent;
 
 /*/
  * Copyright 2015 Eugene "eaglgenes101" Wang
@@ -28,78 +28,25 @@ import entities.EntityStraightPipe;
  * limitations under the License.
  * 
  * 
- * Pushing corner pipe.   
+ * Proximity detector. Detects mobs from up to 16 blocks away, with a circular pickup pattern. 
+ * Outputs a signal that is inversely proportional to mob distance. 
  * 
 /*/
 
-public class PusherCornerPipe extends CornerPipe implements PoweredComponent
+public class ProximityDetector extends Block implements PoweredComponent
 {
-	
-	public PusherCornerPipe(String n)
+
+	public ProximityDetector(String n, String txt)
 	{
-		super(n);
-
-		topname = "RedZone_res/res/blocks/transparent.png";
-		bottomname = "RedZone_res/res/blocks/pusher_pipe_bottom.png";
-		leftname = "RedZone_res/res/blocks/pusher_pipe_edge.png";
-		rightname = "RedZone_res/res/blocks/transparent.png";
-		frontname = "RedZone_res/res/blocks/pusher_pipe_left_edge.png";
-		backname = "RedZone_res/res/blocks/pusher_pipe_right_edge.png";
-	}
-
-	public void tickMeFast(World w, int d, int x, int y, int z)
-	{
-		FastBlockTicker.addFastTick(d, x, y, z);
-		List<Entity> nearby_list = null;
-		EntityPusherCornerPipe ed = null;
-
-		nearby_list = DangerZone.entityManager.findEntitiesInRange(2, d, x, y, z);
-		if (nearby_list != null)
-		{
-			if (!nearby_list.isEmpty())
-			{
-				Entity e = null;
-				ListIterator<Entity> li;
-				li = nearby_list.listIterator();
-				while (li.hasNext())
-				{
-					e = (Entity) li.next();
-					if (e instanceof EntityPusherCornerPipe)
-					{
-						if ((int) e.posx == x && (int) e.posy == y && (int) e.posz == z)
-						{
-							ed = (EntityPusherCornerPipe) e;
-							break;
-						}
-						ed = null;
-					}
-				}
-			}
-		}
-		
-		if (ed == null)
-		{ // where did our entity go???
-			if (w.isServer)
-			{
-				// System.out.printf("spawning new chest entity\n");
-				Entity eb = w.createEntityByName("RedZone:EntityPusherCornerPipe", d, 
-						(float) (x) + 0.5f,
-						(float) (y) + 0.5f, 
-						(float) (z) + 0.5f);
-				if (eb != null)
-				{
-					eb.init();
-					w.spawnEntityInWorld(eb);
-				}
-			}
-		}
-		((PoweredComponent)this).powerBump(w, d, x, y, z); 
+		super(n, txt);
+		alwaystick = true;
 	}
 
 	@Override
 	public int basePowerLevel(World w, int d, int x, int y, int z)
 	{
-		return 0;
+		return (signalStrength(w, d, x, y, z) >= 15.999)
+				?63:(int)(signalStrength(w, d, x, y, z)*4);
 	}
 
 	@Override
@@ -111,11 +58,20 @@ public class PusherCornerPipe extends CornerPipe implements PoweredComponent
 	@Override
 	public void finishStep(World w, int d, int x, int y, int z)
 	{
-		return;
 	}
 	
+	@Override
+	public void tickMe(World w, int d, int x, int y, int z)
+	{
+		FastBlockTicker.addFastTick(d, x, y, z);
+	}
+	
+	public void tickMeFast(World w, int d, int x, int y, int z)
+	{
+		((PoweredComponent)this).powerBump(w, d, x, y, z); 
+	}
 
-	// The below method was copied from DangerZone in accordance with the DangerZone license,
+	// The below methods were copied from DangerZone in accordance with the DangerZone license,
 	// reproduced down below for your convenience. Please do follow it.
 
 	/*
@@ -141,20 +97,44 @@ public class PusherCornerPipe extends CornerPipe implements PoweredComponent
 	 * hacked it. DO NOT KEEP VALUABLE INFORMATION ON INTERNET-CONNECTED
 	 * COMPUTERS. Or your phone...
 	 */
-	
-	public void onBlockPlaced(World w, int dimension, int x, int y, int z)
+
+	protected double signalStrength(World w, int d, int x, int y, int z)
 	{
+		double rawOutput = 0;
+		List<Entity> nearby_list = null;
+		ListIterator<Entity> li;
+
+		//Get a list of entities within reach of largest mob expected because we may hit their hitbox!
 		if (w.isServer)
 		{
-			// System.out.printf("onBlockPlaced spawning new dispenser entity\n");
-			Entity eb = w.createEntityByName("RedZone:EntityPusherCornerPipe", dimension, (float) (x) + 0.5f,
-					(float) (y) + 0.5f, (float) (z) + 0.5f);
-			if (eb != null)
+			nearby_list = DangerZone.server.entityManager.findEntitiesInRange(16.0f, d, x, y, z);
+		}
+		else
+		{
+			nearby_list = DangerZone.entityManager.findEntitiesInRange(16.0f, d, x, y, z);
+		}
+		if (nearby_list != null)
+		{
+			li = nearby_list.listIterator();
+			Entity e;
+			while (li.hasNext())
 			{
-				eb.init();
-				w.spawnEntityInWorld(eb);
+				e = (Entity) li.next();
+				if (!(e.canthitme) && !e.ignoreCollisions)
+				{
+					if (e instanceof EntityLiving)
+					{
+						EntityLiving el = (EntityLiving) e;
+						float dx = el.posx - ((float) x + 0.5f);
+						float dy = el.posy - ((float) y + 0.5f);
+						float dz = el.posz - ((float) z + 0.5f);
+						rawOutput += 1/Math.sqrt(dx*dx + dy*dy + dz*dz);
+					}
+				}
 			}
 		}
+
+		return rawOutput;
 	}
 
 }
