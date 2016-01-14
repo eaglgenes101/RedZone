@@ -16,25 +16,35 @@ import dangerzone.World;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
- * 
- * Inactive form of Power Stick. 
- * 
 /*/
+
+/**
+ * Inactive power sticks are the active form of power sticks.
+ * 
+ * A power stick becomes inactive when supplied with at least 1 power. As soon
+ * as power is exhausted, a power stick will become active again. Unlike for
+ * wires, the active power stick's glow effect supplies illumination.
+ * <p>
+ * Inactive power sticks, as technical blocks, are not obtainable in-game
+ * through any means.
+ * 
+ * @author eaglgenes101
+ * @see BentWire
+ */
 
 public class PowerStickInactive extends PowerStick
 {
-	public PowerStickInactive(String n, String txt) 
+	public PowerStickInactive(String n, String txt)
 	{
 		super(n, txt);
 		brightness = 0.0f; //No light
 		showInInventory = false;
 	}
-	
+
 	@Override
-	public int basePowerLevel(World w, int d, int x, int y, int z) 
+	public int basePowerLevel(World w, int d, int x, int y, int z)
 	{
 		return 0;
 	}
-	
+
 }

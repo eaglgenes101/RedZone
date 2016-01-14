@@ -25,6 +25,20 @@ import dangerzone.items.Items;
  * 
 /*/
 
+/**
+ * Active press switches are the active form of press switches.
+ * 
+ * After being clicked, press switches turn on. To turn them back off, left
+ * click them. To turn them on again, left click them again. To break them, use
+ * a pickaxe.
+ * <p>
+ * Active press switches, as technical blocks, are not obtainable in-game
+ * through any means.
+ * 
+ * @author eaglgenes101
+ * @see PressSwitch
+ */
+
 public class PressSwitchActive extends PressSwitch
 {
 
@@ -45,18 +59,15 @@ public class PressSwitchActive extends PressSwitch
 	{
 		return 63;
 	}
-	
+
 	@Override
 	public boolean leftClickOnBlock(Player p, int dimension, int x, int y, int z)
 	{
-		if (Items.getItem(p.getHotbar(p.gethotbarindex()).iid) instanceof ItemPickAxe )
+		if (Items.getItem(p.getHotbar(p.gethotbarindex()).iid) instanceof ItemPickAxe)
 			return true;
-		p.world.setblockandmetanonotify(dimension, x, y, z,
-				RedZoneBlocks.PRESS_SWITCH.blockID, 
-				p.world.getblockmeta(dimension, x, y, z) );
+		p.world.setblockandmetanonotify(dimension, x, y, z, RedZoneBlocks.PRESS_SWITCH.blockID,
+				p.world.getblockmeta(dimension, x, y, z));
 		return false;
 	}
-	
-	
 
 }

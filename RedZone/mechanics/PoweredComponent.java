@@ -19,117 +19,231 @@ import dangerzone.threads.FastBlockTicker;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
- * 
- * All powered components in RedZone implement this interface!
- * 
 /*/
 
-public interface PoweredComponent 
+/**
+ * Signals in RedZone follow a set of simple rules, as detailed by the
+ * PoweredComponent interface.
+ * 
+ * In RedZone, there are 64 levels of power. 0 is the lowest, and 63 is the
+ * highest. Powered components may generate any level of power, and will send a
+ * signal equal to that level of power minus one to all components that they
+ * connect to. This, in turn, will cause updated components to send a signal
+ * similarly, and so on until the system is at equilibrium.
+ * <p>
+ * If you wish to implement this interface, be aware of these details:
+ * <ul>
+ * <li>Remember to set alwaystick to true, register the block with the fast
+ * block ticker, and call powerBump each fast tick. I tried, but I can't
+ * override class methods with an interface, so you'll have to do it yourself.
+ * <li>All sixteen metadata bits are reserved in RedZone components. The first 8
+ * are reserved by DangerZone, the 9th is reserved for maintaining power status,
+ * the 10th is reserved for maintaining cycle updates, and the last 6 hold the
+ * current power level.
+ * <li>Metadata should not be manipulated directly. RedZone assumes that only it
+ * will be modifying the last eight bits of metadata, and violating this
+ * assumption causes undefined behavior.
+ * <li>Leave all the default methods alone unless you really know what you're
+ * doing.
+ * <li>Signals can only be sent to neighboring blocks. Trying to directly
+ * interface with components farther away is undefined behavior, and will cause
+ * component behavior to be at the mercy of game quirks.
+ * </ul>
+ * 
+ * @author eaglgenes101
+ * @see Wire
+ * @see PowerStick
+ * @see Dispenser
+ * @see Dropper
+ * @see SmokeTester
+ * @see DetectorSwitch
+ * @see PressSwitch
+ * @see ProximityDetector
+ */
+
+public interface PoweredComponent
 {
 	public static final int POWER_MASK = 0x003F;
 	public static final int NOT_POWER_MASK = 0xFFC0;
-	
+
 	public static final int CYCLE_MASK = 0x0040;
 	public static final int NOT_CYCLE_MASK = 0xFFBF;
-	
+
 	public static final int STATUS_MASK = 0x0080;
 	public static final int NOT_STATUS_MASK = 0xFF7F;
-	
-	
+
 	/**
-	 * How much power does the component start with each tick?
-	 * Call neighborBlock.getpowerlevel(w, d, x, y, z, w.getblockmeta(d, x, y, z)) to read a block's power level 
-	 * @param w The world
-	 * @param d The dimension
-	 * @param x The x-coordinate
-	 * @param y The y-coordinate
-	 * @param z The z-coordinate
-	 * @return The power level of the block at the start of the tick (with default notifyNeighborChanged)
-	**/
-	public int basePowerLevel (World w, int d, int x, int y, int z);
-	
+	 * Returns a component's current power level.
+	 * 
+	 * This method should be called directly to determine how much power a
+	 * powered component has.
+	 * 
+	 * @param w
+	 *            The world
+	 * @param d
+	 *            The dimension
+	 * @param x
+	 *            The x-coordinate
+	 * @param y
+	 *            The y-coordinate
+	 * @param z
+	 *            The z-coordinate
+	 * @return The current power level of the block
+	 **/
+	public default int getPowerLevel(World w, int d, int x, int y, int z)
+	{
+		return w.getblockmeta(d, x, y, z) & POWER_MASK;
+	}
+
 	/**
-	 * Can this block send a signal to a block with a given displacement?
-	 * Used to establish connections between active powered components
-	 * It can be assumed that dx, dy, and dz are all between -1 and 1 (Good idea to check, though)
-	 * @param dx The x-displacement of the target to this block
-	 * @param dy The y-displacement of the target to this block
-	 * @param dz The z-displacement of the target to this block
-	 * @param meta The metadata of this block
+	 * Determines how much power this component starts with each tick.
+	 * 
+	 * This method is called by initStep to start each powered component off
+	 * with a base level of power. Go ahead and use it for yourself.
+	 * 
+	 * @param w
+	 *            The world
+	 * @param d
+	 *            The dimension
+	 * @param x
+	 *            The x-coordinate
+	 * @param y
+	 *            The y-coordinate
+	 * @param z
+	 *            The z-coordinate
+	 * @return The power level of the block at the start of the tick (with
+	 *         default notifyNeighborChanged)
+	 **/
+	public int basePowerLevel(World w, int d, int x, int y, int z);
+
+	/**
+	 * Determines whether this block can send a signal to a block with the given
+	 * displacement.
+	 * 
+	 * This method is used to establish connections between active powered
+	 * components. It can be assumed that dx, dy, and dz are all between -1 and
+	 * 1, bit it's a good idea to check nevertheless.
+	 * 
+	 * @param dx
+	 *            The x-displacement of the target to this block
+	 * @param dy
+	 *            The y-displacement of the target to this block
+	 * @param dz
+	 *            The z-displacement of the target to this block
+	 * @param meta
+	 *            The metadata of this block
 	 * @return Whether this block can send power to the given block
-	**/
-	public boolean canConnect (int dx, int dy, int dz, int meta);
-	
+	 **/
+	public boolean canConnect(int dx, int dy, int dz, int meta);
+
 	/**
 	 * Set the cycle status of this block.
-	 * @param w The world
-	 * @param d The dimension
-	 * @param x The x-coordinate
-	 * @param y The y-coordinate
-	 * @param z The z-coordinate
-	 * @param shouldMatch Whether the set cycle should match the clock cycle
-	**/
+	 * 
+	 * This method should not be called directly.
+	 * 
+	 * @param w
+	 *            The world
+	 * @param d
+	 *            The dimension
+	 * @param x
+	 *            The x-coordinate
+	 * @param y
+	 *            The y-coordinate
+	 * @param z
+	 *            The z-coordinate
+	 * @param shouldMatch
+	 *            Whether the set cycle should match the clock cycle
+	 **/
 	public default void setCycle(World w, int d, int x, int y, int z, boolean shouldMatch)
 	{
-		boolean whichMatch = (shouldMatch == (FastBlockTicker.cycle%2 == 0));
-		w.setblockandmetanonotify(d, x, y, z, w.getblock(d, x, y, z), (w.getblockmeta(d, x, y, z)&NOT_CYCLE_MASK) | 
-				(whichMatch? 0 : CYCLE_MASK));
+		boolean whichMatch = (shouldMatch == (FastBlockTicker.cycle % 2 == 0));
+		w.setblockandmetanonotify(d, x, y, z, w.getblock(d, x, y, z),
+				(w.getblockmeta(d, x, y, z) & NOT_CYCLE_MASK) | (whichMatch ? 0 : CYCLE_MASK));
 	}
-	
+
 	/**
-	 * What is this block's cycle match status? 
-	 * @param w The world
-	 * @param d The dimension
-	 * @param x The x-coordinate
-	 * @param y The y-coordinate
-	 * @param z The z-coordinate
+	 * Returns the block's cycle match status.
+	 * 
+	 * This method should not be called directly.
+	 * 
+	 * @param w
+	 *            The world
+	 * @param d
+	 *            The dimension
+	 * @param x
+	 *            The x-coordinate
+	 * @param y
+	 *            The y-coordinate
+	 * @param z
+	 *            The z-coordinate
 	 * @return This block's cycle match status
-	**/
+	 **/
 	public default boolean getCycle(World w, int d, int x, int y, int z)
 	{
-		return (w.getblockmeta(d, x, y, z)&CYCLE_MASK) == ((FastBlockTicker.cycle%2)*CYCLE_MASK);
+		return (w.getblockmeta(d, x, y, z) & CYCLE_MASK) == ((FastBlockTicker.cycle % 2) * CYCLE_MASK);
 	}
-	
+
 	/**
-	 * Set the status of this block. 
-	 * @param w The world
-	 * @param d The dimension
-	 * @param x The x-coordinate
-	 * @param y The y-coordinate
-	 * @param z The z-coordinate
-	**/
+	 * Sets a metadata bit indicating whether this component was powered last
+	 * tick.
+	 * 
+	 * This method should not be called directly.
+	 * 
+	 * @param w
+	 *            The world
+	 * @param d
+	 *            The dimension
+	 * @param x
+	 *            The x-coordinate
+	 * @param y
+	 *            The y-coordinate
+	 * @param z
+	 *            The z-coordinate
+	 **/
 	public default void setStatus(World w, int d, int x, int y, int z)
 	{
-		w.setblockandmetanonotify(d, x, y, z, w.getblock(d, x, y, z), 
-				(w.getblockmeta(d, x, y, z)&NOT_STATUS_MASK) | 
-				(((w.getblockmeta(d, x, y, z)&POWER_MASK)>0)?STATUS_MASK:0)
-		);
+		w.setblockandmetanonotify(d, x, y, z, w.getblock(d, x, y, z), (w.getblockmeta(d, x, y, z) & NOT_STATUS_MASK)
+				| ((getPowerLevel(w, d, x, y, z) > 0) ? STATUS_MASK : 0));
 	}
-	
+
 	/**
-	 * What was the status of this block?
-	 * @param w The world
-	 * @param d The dimension
-	 * @param x The x-coordinate
-	 * @param y The y-coordinate
-	 * @param z The z-coordinate
-	 * @return The status of this block 
-	**/
+	 * Returns whether the block was powered last tick.
+	 * 
+	 * @param w
+	 *            The world
+	 * @param d
+	 *            The dimension
+	 * @param x
+	 *            The x-coordinate
+	 * @param y
+	 *            The y-coordinate
+	 * @param z
+	 *            The z-coordinate
+	 * @return The status of this block
+	 **/
 	public default boolean getStatus(World w, int d, int x, int y, int z)
 	{
-		return (w.getblockmeta(d, x, y, z)&STATUS_MASK) == STATUS_MASK;
+		return (w.getblockmeta(d, x, y, z) & STATUS_MASK) == STATUS_MASK;
 	}
-	
+
 	/**
-	 * A method that sets all block's base power levels before the power levels get updated
-	 * @param w The world
-	 * @param d The dimension
-	 * @param x The x-coordinate
-	 * @param y The y-coordinate
-	 * @param z The z-coordinate
-	**/
-	public default void initStep (World w, int d, int x, int y, int z)
+	 * Sets the metadata bits of all powered components contiguous to this
+	 * component.
+	 * 
+	 * This method should not be called directly.
+	 * 
+	 * @param w
+	 *            The world
+	 * @param d
+	 *            The dimension
+	 * @param x
+	 *            The x-coordinate
+	 * @param y
+	 *            The y-coordinate
+	 * @param z
+	 *            The z-coordinate
+	 **/
+	public default void initStep(World w, int d, int x, int y, int z)
 	{
 		if (!this.getCycle(w, d, x, y, z)) //If they don't match
 		{
@@ -140,73 +254,89 @@ public interface PoweredComponent
 				for (int dy = -1; dy < 2; dy++)
 					for (int dz = -1; dz < 2; dz++)
 					{
-						Block input = Blocks.getBlock(w.getblock(d, x+dx, y+dy, z+dz));
-						if (input instanceof PoweredComponent && 
-								(
-										(canConnect(dx, dy, dz, w.getblockmeta(d, x, y, z))) || 
-										(canConnect(-dx, -dy, -dz, w.getblockmeta(d, x+dx, y+dy, z+dz))))
-								)
-							((PoweredComponent) input).initStep(w, d, x+dx, y+dy, z+dz); // Update! 
+						Block input = Blocks.getBlock(w.getblock(d, x + dx, y + dy, z + dz));
+						if (input instanceof PoweredComponent && ((canConnect(dx, dy, dz, w.getblockmeta(d, x, y, z)))
+								|| (canConnect(-dx, -dy, -dz, w.getblockmeta(d, x + dx, y + dy, z + dz)))))
+							((PoweredComponent) input).initStep(w, d, x + dx, y + dy, z + dz); // Update! 
 					}
-			w.setblockandmetanonotify(d, x, y, z, w.getblock(d, x, y, z), (w.getblockmeta(d, x, y, z)&NOT_POWER_MASK) | 
-					(this.basePowerLevel(w, d, x, y, z)&POWER_MASK));
+			w.setblockandmetanonotify(d, x, y, z, w.getblock(d, x, y, z),
+					(w.getblockmeta(d, x, y, z) & NOT_POWER_MASK) | (this.basePowerLevel(w, d, x, y, z) & POWER_MASK));
 		}
 	}
-	
+
 	/**
-	 * A method that sets the actual power levels
-	 * @param w The world
-	 * @param d The dimension
-	 * @param x The x-coordinate
-	 * @param y The y-coordinate
-	 * @param z The z-coordinate
-	**/
-	public default void powerStep (World w, int d, int x, int y, int z)
+	 * Recursively updates the power levels of all components contiguous to this
+	 * component.
+	 * 
+	 * This method should not be called directly.
+	 * 
+	 * @param w
+	 *            The world
+	 * @param d
+	 *            The dimension
+	 * @param x
+	 *            The x-coordinate
+	 * @param y
+	 *            The y-coordinate
+	 * @param z
+	 *            The z-coordinate
+	 **/
+	public default void powerStep(World w, int d, int x, int y, int z)
 	{
 		if (this.getCycle(w, d, x, y, z))
 		{
-			int maxpower = w.getblockmeta(d, x, y, z)&POWER_MASK; //Current power level
+			int maxpower = getPowerLevel(w, d, x, y, z); //Current power level
 			boolean increased = false;
 			for (int dx = -1; dx < 2; dx++)
 				for (int dy = -1; dy < 2; dy++)
 					for (int dz = -1; dz < 2; dz++)
 					{
-						Block input = Blocks.getBlock(w.getblock(d, x+dx, y+dy, z+dz));
+						Block input = Blocks.getBlock(w.getblock(d, x + dx, y + dy, z + dz));
 						if (input instanceof PoweredComponent)
-							if (((PoweredComponent) input).canConnect(-dx, -dy, -dz, w.getblockmeta(d, x+dx, y+dy, z+dz)))
-								if( !( dx==0 && dy==0 && dz==0 ) )
-									if ((w.getblockmeta(d, x+dx, y+dy, z+dz)&POWER_MASK) - 1 > maxpower)
+							if (((PoweredComponent) input).canConnect(-dx, -dy, -dz,
+									w.getblockmeta(d, x + dx, y + dy, z + dz)))
+								if (!(dx == 0 && dy == 0 && dz == 0))
+									if ((w.getblockmeta(d, x + dx, y + dy, z + dz) & POWER_MASK) - 1 > maxpower)
 									{
-										maxpower = (w.getblockmeta(d, x+dx, y+dy, z+dz)&POWER_MASK) - 1;
+										maxpower = (w.getblockmeta(d, x + dx, y + dy, z + dz) & POWER_MASK) - 1;
 										increased = true;
 									}
 					}
-			w.setblockandmetanonotify(d, x, y, z, w.getblock(d, x, y, z), (w.getblockmeta(d, x, y, z)&NOT_POWER_MASK)|(maxpower&POWER_MASK));
+			w.setblockandmetanonotify(d, x, y, z, w.getblock(d, x, y, z),
+					(w.getblockmeta(d, x, y, z) & NOT_POWER_MASK) | (maxpower & POWER_MASK));
 			setCycle(w, d, x, y, z, false); //Let's not confuse any other blocks. We've updated now. 
-			for(int dx = -1; dx < 2; dx++)
+			for (int dx = -1; dx < 2; dx++)
 				for (int dy = -1; dy < 2; dy++)
 					for (int dz = -1; dz < 2; dz++)
 					{
-						Block input = Blocks.getBlock(w.getblock(d, x+dx, y+dy, z+dz));
+						Block input = Blocks.getBlock(w.getblock(d, x + dx, y + dy, z + dz));
 						if (input instanceof PoweredComponent)
 							if (canConnect(dx, dy, dz, w.getblockmeta(d, x, y, z)))
-								if ( !(dx==0 && dy==0 && dz==0))
-									if (((PoweredComponent)input).getCycle(w, d, x+dx, y+dy, z+dz) || increased)
+								if (!(dx == 0 && dy == 0 && dz == 0))
+									if (((PoweredComponent) input).getCycle(w, d, x + dx, y + dy, z + dz) || increased)
 										//Either its status is new or we increased power. Either way, bump it!
-										((PoweredComponent) input).powerStep(w, d, x+dx, y+dy, z+dz);
+										((PoweredComponent) input).powerStep(w, d, x + dx, y + dy, z + dz);
 					}
 		}
 	}
-	
+
 	/**
-	 * A method that finishes off the block
-	 * @param w The world
-	 * @param d The dimension
-	 * @param x The x-coordinate
-	 * @param y The y-coordinate
-	 * @param z The z-coordinate
-	**/
-	public default void closingStep (World w, int d, int x, int y, int z)
+	 * Calls finishStep on all powered components contiguous to this component.
+	 * 
+	 * This method should not be called directly.
+	 * 
+	 * @param w
+	 *            The world
+	 * @param d
+	 *            The dimension
+	 * @param x
+	 *            The x-coordinate
+	 * @param y
+	 *            The y-coordinate
+	 * @param z
+	 *            The z-coordinate
+	 **/
+	public default void closingStep(World w, int d, int x, int y, int z)
 	{
 		if (!this.getCycle(w, d, x, y, z))
 		{
@@ -216,37 +346,50 @@ public interface PoweredComponent
 				for (int dy = -1; dy < 2; dy++)
 					for (int dz = -1; dz < 2; dz++)
 					{
-						Block input = Blocks.getBlock(w.getblock(d, x+dx, y+dy, z+dz));
-						if (input instanceof PoweredComponent && 
-								(
-										(canConnect(dx, dy, dz, w.getblockmeta(d, x, y, z))) || 
-										(canConnect(-dx, -dy, -dz, w.getblockmeta(d, x+dx, y+dy, z+dz)))
-								)
-								&& (!((PoweredComponent)input).getCycle(w, d, x+dx, y+dy, z+dz)))
-							if( !( dx==0 && dy==0 && dz==0 ) )
-								((PoweredComponent) input).closingStep(w, d, x+dx, y+dy, z+dz);
+						Block input = Blocks.getBlock(w.getblock(d, x + dx, y + dy, z + dz));
+						if (input instanceof PoweredComponent
+								&& ((canConnect(dx, dy, dz, w.getblockmeta(d, x, y, z)))
+										|| (canConnect(-dx, -dy, -dz, w.getblockmeta(d, x + dx, y + dy, z + dz))))
+								&& (!((PoweredComponent) input).getCycle(w, d, x + dx, y + dy, z + dz)))
+							if (!(dx == 0 && dy == 0 && dz == 0))
+								((PoweredComponent) input).closingStep(w, d, x + dx, y + dy, z + dz);
 					}
 		}
 	}
-	
+
 	/**
 	 * What happens after everything happens? You decide!
-	 * @param w The world
-	 * @param d The dimension
-	 * @param x The x-coordinate
-	 * @param y The y-coordinate
-	 * @param z The z-coordinate
-	**/
-	public void finishStep (World w, int d, int x, int y, int z);
-	
+	 * 
+	 * @param w
+	 *            The world
+	 * @param d
+	 *            The dimension
+	 * @param x
+	 *            The x-coordinate
+	 * @param y
+	 *            The y-coordinate
+	 * @param z
+	 *            The z-coordinate
+	 **/
+	public void finishStep(World w, int d, int x, int y, int z);
+
 	/**
-	 * A power updating function (because the block notification system is buffered in a less-than-useful way)
-	 * @param w The world
-	 * @param d The dimension
-	 * @param x The x-coordinate
-	 * @param y The y-coordinate
-	 * @param z The z-coordinate
-	**/
+	 * Causes a full power cycle to be initiated in all powered components that
+	 * contiguous to it.
+	 * 
+	 * This method should be called every fast tick.
+	 * 
+	 * @param w
+	 *            The world
+	 * @param d
+	 *            The dimension
+	 * @param x
+	 *            The x-coordinate
+	 * @param y
+	 *            The y-coordinate
+	 * @param z
+	 *            The z-coordinate
+	 **/
 	public default void powerBump(World w, int d, int x, int y, int z)
 	{
 		this.initStep(w, d, x, y, z);

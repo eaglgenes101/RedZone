@@ -14,11 +14,21 @@ package blocks;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
- * 
- * Active form of Bent Wire. 
- * 
 /*/
+
+/**
+ * Active bent wires are the active form of bent wires.
+ * 
+ * A bent wire becomes active when supplied with at least 1 power. As soon as
+ * power is exhausted, a bent wire will become inactive again. This glow effect
+ * is entirely aesthetic, and supplies no illumination.
+ * <p>
+ * Active bent wires, as technical blocks, are not obtainable in-game through
+ * any means.
+ * 
+ * @author eaglgenes101
+ * @see BentWire
+ */
 
 public class BentWireActive extends BentWire
 {

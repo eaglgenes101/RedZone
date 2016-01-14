@@ -23,11 +23,20 @@ import entities.EntityCornerPipe;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
- * 
- * Corner pipe. 
- * 
 /*/
+
+/**
+ * Corner pipes are one of three basic kinds of pipes, which supply blocks and
+ * items to powered devices they are attached to.
+ * 
+ * Like other pipes, corner pipes are placed with their output end facing up.
+ * They are solid, and cannot be broken without a pickaxe. Corner pipes are bent
+ * such that their input end is positioned forward upon placement.
+ * 
+ * @author eaglgenes101
+ * @see Pipe
+ * @see PusherCornerPipe
+ */
 
 public class CornerPipe extends Pipe
 {
@@ -42,7 +51,7 @@ public class CornerPipe extends Pipe
 		frontname = "RedZone_res/res/blocks/pipe_left_edge.png";
 		backname = "RedZone_res/res/blocks/pipe_right_edge.png";
 	}
-	
+
 	public void tickMeFast(World w, int d, int x, int y, int z)
 	{
 		FastBlockTicker.addFastTick(d, x, y, z);
@@ -72,15 +81,13 @@ public class CornerPipe extends Pipe
 				}
 			}
 		}
-		
+
 		if (ed == null)
 		{ // where did our entity go???
 			if (!w.isServer)
 			{
 				// System.out.printf("spawning new chest entity\n");
-				Entity eb = w.createEntityByName("RedZone:EntityCornerPipe", d, 
-						(float) (x) + 0.5f,
-						(float) (y) + 0.5f, 
+				Entity eb = w.createEntityByName("RedZone:EntityCornerPipe", d, (float) (x) + 0.5f, (float) (y) + 0.5f,
 						(float) (z) + 0.5f);
 				if (eb != null)
 				{
@@ -117,7 +124,7 @@ public class CornerPipe extends Pipe
 	 * hacked it. DO NOT KEEP VALUABLE INFORMATION ON INTERNET-CONNECTED
 	 * COMPUTERS. Or your phone...
 	 */
-	
+
 	public void onBlockPlaced(World w, int dimension, int x, int y, int z)
 	{
 		if (!w.isServer)
@@ -132,6 +139,5 @@ public class CornerPipe extends Pipe
 			}
 		}
 	}
-
 
 }

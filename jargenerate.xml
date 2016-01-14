@@ -22,11 +22,7 @@ imitations under the License.
         		<include name="RedZone_res/**"/>
         	</fileset>
         	<fileset dir="${basedir}/bin">
-        		<include name="blocks/**"/>
-        		<include name="entities/**"/>
-        		<include name="items/**"/>
-        		<include name="mechanics/**"/>
-        		<include name="RedZoneMain.class"/>
+        		<exclude name="dangerzone/**"/>
         	</fileset>
         </jar>
     </target>

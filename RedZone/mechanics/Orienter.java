@@ -22,6 +22,12 @@ import dangerzone.blocks.BlockRotation;
  * 
 /*/
 
+/**
+ * 
+ * @author eaglgenes101
+ *
+ */
+
 public class Orienter 
 {
 	public static final double[] X_QUARTER_TURN = {Math.sqrt(2)/2.0, Math.sqrt(2)/2.0, 0, 0};

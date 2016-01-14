@@ -26,21 +26,34 @@ import dangerzone.threads.FastBlockTicker;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
- * 
- * Power stick. 
- * Emits light and sends a signal to its front if powered, otherwise does nothing. 
- * Front direction determines which blocks it considers its front.
- * 
 /*/
+
+/**
+ * Power sticks are special components that will supply power if and only if
+ * they are not powered themselves.
+ * 
+ * Power sticks are placed like light sticks, which are dependent on the
+ * orientation of surface they are placed on. They are attached to a surface,
+ * and will drop if the block they are attached to is not solid during a block
+ * update.
+ * <p>
+ * A power stick's active area is determined by its orientation. At the tip of a
+ * power stick, there is a 3 by 3 active area centered on the outside face.
+ * <p>
+ * When delivering power, power sticks glow and illuminate the area.
+ * 
+ * @author eaglgenes101
+ * @see Wire
+ * @see BentWireActive
+ */
 
 public class PowerStick extends LightStick implements PoweredComponent
 {
 	float blockrenderwidth = 16;
 	int myrenderid = 0;
 	boolean compiled = false;
-	
-	public PowerStick(String n, String txt) 
+
+	public PowerStick(String n, String txt)
 	{
 		super(n, txt);
 		brightness = 0.4f; //Some light
@@ -48,23 +61,24 @@ public class PowerStick extends LightStick implements PoweredComponent
 	}
 
 	@Override
-	public int basePowerLevel(World w, int d, int x, int y, int z) 
+	public int basePowerLevel(World w, int d, int x, int y, int z)
 	{
 		return 63;
 	}
-	
+
 	public int getBlockDrop(Player p, World w, int dimension, int x, int y, int z)
 	{
 		return RedZoneBlocks.POWER_STICK.blockID;
 	}
-	
+
 	@Override
 	public void tickMe(World w, int d, int x, int y, int z)
 	{
 		FastBlockTicker.addFastTick(d, x, y, z);
-		Utils.spawnParticlesFromServer(w, "DangerZone:ParticleFire", (w.getblockmeta(d, x, y, z)&POWER_MASK)/16, d, x+0.5f, y+0.5f, z+0.5f);
+		Utils.spawnParticlesFromServer(w, "DangerZone:ParticleFire", getPowerLevel(w, d, x, y, z) / 16, d,
+				x + 0.5f, y + 0.5f, z + 0.5f);
 	}
-	
+
 	public void finishStep(World w, int d, int x, int y, int z)
 	{
 		boolean wasPowered = false;
@@ -72,13 +86,14 @@ public class PowerStick extends LightStick implements PoweredComponent
 			for (int dy = -1; dy < 2; dy++)
 				for (int dz = -1; dz < 2; dz++)
 				{
-					Block input = Blocks.getBlock(w.getblock(d, x+dx, y+dy, z+dz));
+					Block input = Blocks.getBlock(w.getblock(d, x + dx, y + dy, z + dz));
 					if (input instanceof PoweredComponent)
-						if (((PoweredComponent) input).canConnect(-dx, -dy, -dz, w.getblockmeta(d, x+dx, y+dy, z+dz)))
+						if (((PoweredComponent) input).canConnect(-dx, -dy, -dz,
+								w.getblockmeta(d, x + dx, y + dy, z + dz)))
 						{
-							if( !( dx==0 && dy==0 && dz==0 ) )
+							if (!(dx == 0 && dy == 0 && dz == 0))
 							{
-								if (((PoweredComponent)input).getStatus(w, d, x+dx, y+dy, z+dz))
+								if (((PoweredComponent) input).getStatus(w, d, x + dx, y + dy, z + dz))
 								{
 									wasPowered = true;
 								}
@@ -89,50 +104,50 @@ public class PowerStick extends LightStick implements PoweredComponent
 		w.setblockandmetanonotify(d, x, y, z, toBlockID, w.getblockmeta(d, x, y, z));
 		return;
 	}
-	
+
 	@Override
 	public void tickMeFast(World w, int dimension, int x, int y, int z)
 	{
-		((PoweredComponent)this).powerBump(w, dimension, x, y, z); 
+		((PoweredComponent) this).powerBump(w, dimension, x, y, z);
 	}
 
 	@Override
-	public boolean canConnect(int dx, int dy, int dz, int meta) 
+	public boolean canConnect(int dx, int dy, int dz, int meta)
 	{
 		double[] itsvec;
-		switch(meta>>8)
+		switch (meta >> 8)
 		{
 			case 0:
 				itsvec = Orienter.UP_VECTOR;
 				break;
-			case 1: 
+			case 1:
 				itsvec = Orienter.NORTH_VECTOR;
 				break;
-			case 2: 
+			case 2:
 				itsvec = Orienter.SOUTH_VECTOR;
 				break;
-			case 3: 
+			case 3:
 				itsvec = Orienter.EAST_VECTOR;
 				break;
-			case 4: 
+			case 4:
 				itsvec = Orienter.WEST_VECTOR;
 				break;
-			case 5: 
+			case 5:
 				itsvec = Orienter.DOWN_VECTOR;
 				break;
 			default:
 				itsvec = Orienter.UP_VECTOR;
 				break;
 		}
-		int[] rounded = { (int)Math.round(itsvec[0]), (int)Math.round(itsvec[1]), (int)Math.round(itsvec[2]) };
+		int[] rounded = {(int) Math.round(itsvec[0]), (int) Math.round(itsvec[1]), (int) Math.round(itsvec[2])};
 		if (Orienter.getSideForm(rounded) < 0)
 		{
 			System.out.println(Arrays.toString(itsvec));
 		}
-		boolean facingSideX = (rounded[0]==dx) && (dx != 0) && (dy == 0 || dz == 0);
-		boolean facingSideY = (rounded[1]==dy) && (dy != 0) && (dx == 0 || dz == 0);
-		boolean facingSideZ = (rounded[2]==dz) && (dz != 0) && (dx == 0 || dy == 0);
+		boolean facingSideX = (rounded[0] == dx) && (dx != 0) && (dy == 0 || dz == 0);
+		boolean facingSideY = (rounded[1] == dy) && (dy != 0) && (dx == 0 || dz == 0);
+		boolean facingSideZ = (rounded[2] == dz) && (dz != 0) && (dx == 0 || dy == 0);
 		return facingSideX || facingSideY || facingSideZ;
 	}
-	
+
 }

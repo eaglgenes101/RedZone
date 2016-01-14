@@ -21,12 +21,26 @@ import dangerzone.threads.FastBlockTicker;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
- * 
- * Base pipe class. 
- * Used by ItemEntitySuppliers to get items. 
- * 
 /*/
+
+/**
+ * Pipes are devices that will draw items from components and deliver them to
+ * components that use them.
+ * 
+ * All pipes have at least one input face and one output face. They are solid,
+ * and cannot be broken without a pickaxe. If a component calls for an item, any
+ * pipes outputting to it will call nearby chests and item suppliers and try to
+ * draw an item or block from them, then send that item to its output.
+ * <p>
+ * Currently, all pipes will carry items and blocks a maximum of 8 blocks away.
+ * If this limit is exceeded, then the item or block will be left where it was,
+ * and will not be sent to the component drawing it.
+ * 
+ * @author eaglgenes101
+ * @see CornerPipe
+ * @see FiveWayPipe
+ * @see StraightPipe
+ */
 
 public class Pipe extends Block
 {
@@ -70,7 +84,6 @@ public class Pipe extends Block
 	{
 		FastBlockTicker.addFastTick(d, x, y, z);
 	}
-	
 
 	// The below methods were copied from DangerZone in accordance with the DangerZone license,
 	// reproduced down below for your convenience. Please do follow it.

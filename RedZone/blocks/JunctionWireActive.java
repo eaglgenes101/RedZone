@@ -14,11 +14,21 @@ package blocks;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
- * 
- * Active form of Junction Wire.  
- * 
 /*/
+
+/**
+ * Active junction wires are the active form of end wires.
+ * 
+ * A junction wire becomes active when supplied with at least 1 power. As soon
+ * as power is exhausted, a junction wire will become inactive again. This glow
+ * effect is entirely aesthetic, and supplies no illumination.
+ * <p>
+ * Active junction wires, as technical blocks, are not obtainable in-game
+ * through any means.
+ * 
+ * @author eaglgenes101
+ * @see JunctionWire
+ */
 
 public class JunctionWireActive extends JunctionWire
 {

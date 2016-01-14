@@ -26,12 +26,20 @@ import mechanics.PoweredComponent;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
- * 
- * Proximity detector. Detects mobs from up to 16 blocks away, with a circular pickup pattern. 
- * Outputs a signal that is inversely proportional to mob distance. 
- * 
 /*/
+
+/**
+ * Proximity detectors activate whenever mobs are near them.
+ * 
+ * Proximity detectors are designed for situations where a wide space needs to
+ * be monitored for mobs. The signal they emit is inversely proportional to the
+ * distance between the mob and the block (up to 16 blocks away; mobs further
+ * away can't be detected), and directly proportional to the number of mobs,
+ * giving the minimal signal of one for one mob 16 blocks away.
+ * 
+ * @author eaglgenes101
+ * @see PoweredComponent
+ */
 
 public class ProximityDetector extends Block implements PoweredComponent
 {
@@ -45,8 +53,7 @@ public class ProximityDetector extends Block implements PoweredComponent
 	@Override
 	public int basePowerLevel(World w, int d, int x, int y, int z)
 	{
-		return (signalStrength(w, d, x, y, z) >= 15.999)
-				?63:(int)(signalStrength(w, d, x, y, z)*4);
+		return (signalStrength(w, d, x, y, z) >= 15.999) ? 63 : (int) (signalStrength(w, d, x, y, z) * 4);
 	}
 
 	@Override
@@ -59,16 +66,16 @@ public class ProximityDetector extends Block implements PoweredComponent
 	public void finishStep(World w, int d, int x, int y, int z)
 	{
 	}
-	
+
 	@Override
 	public void tickMe(World w, int d, int x, int y, int z)
 	{
 		FastBlockTicker.addFastTick(d, x, y, z);
 	}
-	
+
 	public void tickMeFast(World w, int d, int x, int y, int z)
 	{
-		((PoweredComponent)this).powerBump(w, d, x, y, z); 
+		((PoweredComponent) this).powerBump(w, d, x, y, z);
 	}
 
 	// The below methods were copied from DangerZone in accordance with the DangerZone license,
@@ -128,7 +135,7 @@ public class ProximityDetector extends Block implements PoweredComponent
 						float dx = el.posx - ((float) x + 0.5f);
 						float dy = el.posy - ((float) y + 0.5f);
 						float dz = el.posz - ((float) z + 0.5f);
-						rawOutput += 1/Math.sqrt(dx*dx + dy*dy + dz*dz);
+						rawOutput += 1 / Math.sqrt(dx * dx + dy * dy + dz * dz);
 					}
 				}
 			}

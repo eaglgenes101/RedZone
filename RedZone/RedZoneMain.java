@@ -28,10 +28,6 @@ import entities.EntityStraightPipe;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
- * 
- * Mod starter class. 
- * 
 /*/
 
 /**
@@ -44,23 +40,25 @@ import entities.EntityStraightPipe;
  * Development of RedZone happens in the open, and bleeding-edge code can be
  * found in <a href="https://github.com/eaglgenes101/RedZone">RedZone's github
  * repository</a>. I encourage you to try unstable builds, file bug and
- * suggestion reports, and contribute changes.
+ * suggestion reports, and contribute changes. Thanks!
  * <p>
  * To build:
  * <ul>
  * <li>Set up your build enviorment in Eclipse as detailed in the two videos in
  * the <a href="http://www.dangerzonegame.net/modders-paradise.html">Modder's
  * Paradise</a>.
- * <li>Clone the contents of the github repository into your project directory. If
- * you did this right, you should see RedZone and RedZone_res as second-level
- * directories. 
- * <li>Set the RedZone folder to be a source folder. 
- * <li>Build. 
- * <li>Look in the mods folder. If you see a jar file there, you did it. 
+ * <li>Clone the contents of the github repository into your project directory.
+ * If you did this right, you should see RedZone and RedZone_res as second-level
+ * directories.
+ * <li>Set the RedZone folder to be a source folder.
+ * <li>Build.
+ * <li>Look in the mods folder. If you see a jar file there, you did it.
+ * <li>If that didn't work, try running it manually. Right click
+ * jargenerate.xml, and run it as an ant buildfile. If you still need help,
+ * please file a bug report.
  * </ul>
  * 
  * @author Eugene "eaglgenes101" Wang
- *
  */
 
 public class RedZoneMain extends BaseMod

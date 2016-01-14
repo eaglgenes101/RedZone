@@ -20,16 +20,22 @@ import dangerzone.threads.FastBlockTicker;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
- * 
- * Smoke tester. 
- * Generates fire particles if powered. 
- * 
 /*/
+
+/**
+ * Smoke testers generate smoke particles when supplied with a signal.
+ * 
+ * Unlike most components, smoke testers cannot themselves connect to other
+ * powered components. This makes them useful for testing new components and
+ * contraptions without causing side effects, like other components would.
+ * 
+ * @author eaglgenes101
+ * @see PoweredComponent
+ */
 
 public class SmokeTester extends Block implements PoweredComponent
 {
-	
+
 	public SmokeTester(String n, String txt)
 	{
 		super(n, txt);
@@ -47,23 +53,23 @@ public class SmokeTester extends Block implements PoweredComponent
 	{
 		return false;
 	}
-	
+
 	@Override
 	public void finishStep(World w, int d, int x, int y, int z)
 	{
-		if ((w.getblockmeta(d, x, y, z)&POWER_MASK) > 0)
-			Utils.spawnParticlesFromServer(w, "DangerZone:ParticleFire", 1, d, x+0.5f, y+0.5f, z+0.5f);
+		if (getPowerLevel(w, d, x, y, z) > 0)
+			Utils.spawnParticlesFromServer(w, "DangerZone:ParticleFire", 1, d, x + 0.5f, y + 0.5f, z + 0.5f);
 	}
-	
+
 	@Override
 	public void tickMe(World w, int d, int x, int y, int z)
 	{
 		FastBlockTicker.addFastTick(d, x, y, z);
 	}
-	
+
 	public void tickMeFast(World w, int d, int x, int y, int z)
 	{
-		((PoweredComponent)this).powerBump(w, d, x, y, z); 
+		((PoweredComponent) this).powerBump(w, d, x, y, z);
 	}
 
 }

@@ -29,15 +29,25 @@ import entities.EntityDispenser;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
- * 
- * Dispenser block. 
- * Shoots items when supplied with a signal. 
- * 
 /*/
 
+/**
+ * Dispensers shoot items and blocks and spawn mobs when supplied with a signal.
+ * 
+ * When supplied with a signal, dispensers will try to draw a block or item from
+ * any item supplier that outputs into them. One they have one, they will use
+ * the right-click action on the block/item, using the coordinates of itself and
+ * the front face of the dispenser if the right click action is dependent on
+ * such parameters. The used block or item will be destroyed if it would
+ * otherwise remain in the user's inventory after use, regardless of whether or
+ * not the right click action succeeded or failed.
+ * 
+ * @author eaglgenes101
+ * @see Pipe
+ */
+
 public class Dispenser extends Block implements PoweredComponent
-{	
+{
 	Texture ttop = null;
 	Texture tbottom = null;
 	Texture tleft = null;
@@ -76,16 +86,16 @@ public class Dispenser extends Block implements PoweredComponent
 		hasFront = true;
 		isSolidForRendering = false;
 	}
-	
+
 	@Override
 	public void tickMe(World w, int dimension, int x, int y, int z)
 	{
 		FastBlockTicker.addFastTick(dimension, x, y, z);
 	}
-	
+
 	public void tickMeFast(World w, int dimension, int x, int y, int z)
 	{
-		((PoweredComponent)this).powerBump(w, dimension, x, y, z);
+		((PoweredComponent) this).powerBump(w, dimension, x, y, z);
 	}
 
 	@Override
@@ -104,7 +114,6 @@ public class Dispenser extends Block implements PoweredComponent
 	public void finishStep(World w, int d, int x, int y, int z)
 	{
 		List<Entity> nearby_list = null;
-		EntityDispenser ed = null;
 
 		nearby_list = DangerZone.entityManager.findEntitiesInRange(2, d, x, y, z);
 		if (nearby_list != null)
@@ -121,32 +130,26 @@ public class Dispenser extends Block implements PoweredComponent
 					{
 						if ((int) e.posx == x && (int) e.posy == y && (int) e.posz == z)
 						{
-							ed = (EntityDispenser) e;
-							break;
+							return;
 						}
-						ed = null;
 					}
 				}
 			}
 		}
-		
-		if (ed == null)
-		{ // where did our entity go???
-			if (!w.isServer)
+		// Now we know we don't have an EntityDispenser...
+
+		if (!w.isServer)
+		{
+			// System.out.printf("spawning new chest entity\n");
+			Entity eb = w.createEntityByName("RedZone:EntityDispenser", d, (float) (x) + 0.5f, (float) (y) + 0.5f,
+					(float) (z) + 0.5f);
+			if (eb != null)
 			{
-				// System.out.printf("spawning new chest entity\n");
-				Entity eb = w.createEntityByName("RedZone:EntityDispenser", d, 
-						(float) (x) + 0.5f,
-						(float) (y) + 0.5f, 
-						(float) (z) + 0.5f);
-				if (eb != null)
-				{
-					eb.init();
-					w.spawnEntityInWorld(eb);
-				}
+				eb.init();
+				w.spawnEntityInWorld(eb);
 			}
 		}
-		
+
 	}
 
 	// The below methods were copied from DangerZone in accordance with the DangerZone license,

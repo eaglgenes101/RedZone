@@ -27,15 +27,25 @@ import entities.EntityStraightPipe;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
- * 
- * Pushing five-way pipe.   
- * 
 /*/
+
+/**
+ * Pusher five-way pipes are five-way pipes that can be used to put blocks and
+ * items into chests.
+ * 
+ * Pusher five-way pipes act like regular five-way pipes when items are drawn
+ * from them. When supplied with a signal, they will themselves draw an item or
+ * block from one of their input faces and push it to a chest on the output
+ * face. The block or item will be destroyed if this transfer fails.
+ * 
+ * @author eaglgenes101
+ * @see Pipe
+ * @see FiveWayPipe
+ */
 
 public class PusherFiveWayPipe extends FiveWayPipe implements PoweredComponent
 {
-	
+
 	public PusherFiveWayPipe(String n)
 	{
 		super(n);
@@ -77,16 +87,14 @@ public class PusherFiveWayPipe extends FiveWayPipe implements PoweredComponent
 				}
 			}
 		}
-		
+
 		if (ed == null)
 		{ // where did our entity go???
 			if (w.isServer)
 			{
 				// System.out.printf("spawning new chest entity\n");
-				Entity eb = w.createEntityByName("RedZone:EntityPusherFiveWayPipe", d, 
-						(float) (x) + 0.5f,
-						(float) (y) + 0.5f, 
-						(float) (z) + 0.5f);
+				Entity eb = w.createEntityByName("RedZone:EntityPusherFiveWayPipe", d, (float) (x) + 0.5f,
+						(float) (y) + 0.5f, (float) (z) + 0.5f);
 				if (eb != null)
 				{
 					eb.init();
@@ -94,7 +102,7 @@ public class PusherFiveWayPipe extends FiveWayPipe implements PoweredComponent
 				}
 			}
 		}
-		((PoweredComponent)this).powerBump(w, d, x, y, z); 
+		((PoweredComponent) this).powerBump(w, d, x, y, z);
 	}
 
 	@Override
@@ -114,7 +122,6 @@ public class PusherFiveWayPipe extends FiveWayPipe implements PoweredComponent
 	{
 		return;
 	}
-	
 
 	// The below method was copied from DangerZone in accordance with the DangerZone license,
 	// reproduced down below for your convenience. Please do follow it.
@@ -142,7 +149,7 @@ public class PusherFiveWayPipe extends FiveWayPipe implements PoweredComponent
 	 * hacked it. DO NOT KEEP VALUABLE INFORMATION ON INTERNET-CONNECTED
 	 * COMPUTERS. Or your phone...
 	 */
-	
+
 	public void onBlockPlaced(World w, int dimension, int x, int y, int z)
 	{
 		if (w.isServer)

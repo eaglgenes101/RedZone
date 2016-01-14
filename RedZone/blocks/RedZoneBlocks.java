@@ -16,10 +16,6 @@ import dangerzone.blocks.Block;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
- * 
- * All RedZone blocks, listed in one place for convenience. 
- * 
 /*/
 
 public class RedZoneBlocks
@@ -40,7 +36,7 @@ public class RedZoneBlocks
 	public static Block DISPENSER = new Dispenser("RedZone:Dispenser");
 	public static Block PRESS_SWITCH = new PressSwitch("RedZone:Press Switch Block");
 	public static Block PRESS_SWITCH_ACTIVE = new PressSwitchActive("RedZone:Press Switch Active Block");
-	public static Block DETECTOR_SWITCH = new DetectorSwitch("RedZone:Detector Switch Block");
+	public static Block DETECTOR_SWITCH = new DetectorSwitch("RedZone:Detector Switch Block", "RedZone_res/res/blocks/detector.png");
 	public static Block PROXIMITY_DETECTOR = new ProximityDetector("RedZone:Proximity Detector", "RedZone_res/res/blocks/smoketester.png");
 	public static Block DROPPER = new Dropper("RedZone:Dropper");
 	

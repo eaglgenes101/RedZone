@@ -30,12 +30,19 @@ import entities.EntityDropper;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
- * 
- * Dropper block. 
- * Drops items and blocks when supplied with a signal. 
- * 
 /*/
+
+/**
+ * Droppers drop items and blocks when supplied with a signal.
+ * 
+ * When supplied with a signal, droppers will try to draw a block or item from
+ * any item supplier that outputs into them. One they have one, they will
+ * generate the corresponding item/block entity right in front of it, and
+ * destroy the inventory copy.
+ * 
+ * @author eaglgenes101
+ * @see Pipe
+ */
 
 public class Dropper extends Block implements PoweredComponent
 {
@@ -78,16 +85,16 @@ public class Dropper extends Block implements PoweredComponent
 		hasFront = true;
 		isSolidForRendering = false;
 	}
-	
+
 	@Override
 	public void tickMe(World w, int dimension, int x, int y, int z)
 	{
 		FastBlockTicker.addFastTick(dimension, x, y, z);
 	}
-	
+
 	public void tickMeFast(World w, int dimension, int x, int y, int z)
 	{
-		((PoweredComponent)this).powerBump(w, dimension, x, y, z);
+		((PoweredComponent) this).powerBump(w, dimension, x, y, z);
 	}
 
 	@Override
@@ -131,15 +138,13 @@ public class Dropper extends Block implements PoweredComponent
 				}
 			}
 		}
-		
+
 		if (ed == null)
 		{ // where did our entity go???
 			if (!w.isServer)
 			{
 				// System.out.printf("spawning new chest entity\n");
-				Entity eb = w.createEntityByName("RedZone:EntityDropper", d, 
-						(float) (x) + 0.5f,
-						(float) (y) + 0.5f, 
+				Entity eb = w.createEntityByName("RedZone:EntityDropper", d, (float) (x) + 0.5f, (float) (y) + 0.5f,
 						(float) (z) + 0.5f);
 				if (eb != null)
 				{
@@ -148,7 +153,7 @@ public class Dropper extends Block implements PoweredComponent
 				}
 			}
 		}
-		
+
 	}
 
 	// The below methods were copied from DangerZone in accordance with the DangerZone license,
@@ -183,8 +188,8 @@ public class Dropper extends Block implements PoweredComponent
 		if (!w.isServer)
 		{
 			// System.out.printf("onBlockPlaced spawning new dispenser entity\n");
-			Entity eb = w.createEntityByName("RedZone:EntityDropper", dimension, (float) (x) + 0.5f,
-					(float) (y) + 0.5f, (float) (z) + 0.5f);
+			Entity eb = w.createEntityByName("RedZone:EntityDropper", dimension, (float) (x) + 0.5f, (float) (y) + 0.5f,
+					(float) (z) + 0.5f);
 			if (eb != null)
 			{
 				eb.init();

@@ -48,34 +48,6 @@ public class EntityDropper extends Entity
 		setVarInt(21, 0);
 	}
 
-	// The below methods were copied from DangerZone in accordance with the
-	// DangerZone license,
-	// reproduced down below for your convenience. Please do follow it.
-
-	/*
-	 * This code is copyright Richard H. Clark, TheyCallMeDanger, OreSpawn,
-	 * 2015-2020. You may use this code for reference for modding the DangerZone
-	 * game program, and are perfectly welcome to cut'n'paste portions for your
-	 * mod as well. DO NOT USE THIS CODE FOR ANY PURPOSE OTHER THAN MODDING FOR
-	 * THE DANGERZONE GAME. DO NOT REDISTRIBUTE THIS CODE.
-	 * 
-	 * This copyright remains in effect until January 1st, 2021. At that time,
-	 * this code becomes public domain.
-	 * 
-	 * WARNING: There are bugs. Big bugs. Little bugs. Every size in-between
-	 * bugs. This code is NOT suitable for use in anything other than this
-	 * particular game. NO GUARANTEES of any sort are given, either express or
-	 * implied, and Richard H. Clark, TheyCallMeDanger, OreSpawn are not
-	 * responsible for any damages, direct, indirect, or otherwise. You should
-	 * have made backups. It's your own fault for not making them.
-	 * 
-	 * NO ATTEMPT AT SECURITY IS MADE. This code is USE AT YOUR OWN RISK.
-	 * Regardless of what you may think, the reality is, that the moment you
-	 * connected your computer to the Internet, Uncle Sam, among many others,
-	 * hacked it. DO NOT KEEP VALUABLE INFORMATION ON INTERNET-CONNECTED
-	 * COMPUTERS. Or your phone...
-	 */
-
 	public void update(float deltaT)
 	{
 		int myBlockID = world.getblock(dimension, (int) posx, (int) posy, (int) posz);
@@ -89,8 +61,10 @@ public class EntityDropper extends Entity
 		{
 			if (FastBlockTicker.cycle % 2 != getVarInt(21))
 			{
-				double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR, world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
-				int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]), (int) Math.round(getRelativeForward[2])};
+				double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR,
+						world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
+				int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]),
+						(int) Math.round(getRelativeForward[2])};
 				positionSelf(world, dimension, (int) posx, (int) posy, (int) posz);
 				rightclick(this.world, Orienter.getSideForm(rounded));
 				setVarInt(21, FastBlockTicker.cycle % 2);
@@ -102,7 +76,8 @@ public class EntityDropper extends Entity
 	private void positionSelf(World w, int d, int x, int y, int z)
 	{
 		double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR, w.getblockmeta(d, x, y, z));
-		int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]), (int) Math.round(getRelativeForward[2])};
+		int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]),
+				(int) Math.round(getRelativeForward[2])};
 		switch (Orienter.getSideForm(rounded))
 		{
 			case 0: // Top
@@ -131,6 +106,34 @@ public class EntityDropper extends Entity
 				break;
 		}
 	}
+
+	// The below methods were copied from DangerZone in accordance with the
+	// DangerZone license,
+	// reproduced down below for your convenience. Please do follow it.
+
+	/*
+	 * This code is copyright Richard H. Clark, TheyCallMeDanger, OreSpawn,
+	 * 2015-2020. You may use this code for reference for modding the DangerZone
+	 * game program, and are perfectly welcome to cut'n'paste portions for your
+	 * mod as well. DO NOT USE THIS CODE FOR ANY PURPOSE OTHER THAN MODDING FOR
+	 * THE DANGERZONE GAME. DO NOT REDISTRIBUTE THIS CODE.
+	 * 
+	 * This copyright remains in effect until January 1st, 2021. At that time,
+	 * this code becomes public domain.
+	 * 
+	 * WARNING: There are bugs. Big bugs. Little bugs. Every size in-between
+	 * bugs. This code is NOT suitable for use in anything other than this
+	 * particular game. NO GUARANTEES of any sort are given, either express or
+	 * implied, and Richard H. Clark, TheyCallMeDanger, OreSpawn are not
+	 * responsible for any damages, direct, indirect, or otherwise. You should
+	 * have made backups. It's your own fault for not making them.
+	 * 
+	 * NO ATTEMPT AT SECURITY IS MADE. This code is USE AT YOUR OWN RISK.
+	 * Regardless of what you may think, the reality is, that the moment you
+	 * connected your computer to the Internet, Uncle Sam, among many others,
+	 * hacked it. DO NOT KEEP VALUABLE INFORMATION ON INTERNET-CONNECTED
+	 * COMPUTERS. Or your phone...
+	 */
 
 	// Generate those block/item entities!
 	public void rightclick(World world, int side)
@@ -175,31 +178,32 @@ public class EntityDropper extends Entity
 
 		if (ic.count > 0)
 		{
-			//Make a throwable item entity!
-			if(world.isServer)
+			if (world.isServer)
 			{
-				double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR, 
-						world.getblockmeta(dimension, (int)posx, (int)posy, (int)posz));
-				
-				ThrownBlockItem e = (ThrownBlockItem)world.createEntityByName("DangerZone:ThrownBlockItem", 
-						dimension, posx+(float)getRelativeForward[0]/2, 
-						posy+(float)getRelativeForward[1]/2, posz+(float)getRelativeForward[2]/2);
-				if(e != null)
+				double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR,
+						world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
+
+				ThrownBlockItem e = (ThrownBlockItem) world.createEntityByName("DangerZone:ThrownBlockItem", dimension,
+						posx + (float) getRelativeForward[0] / 2, posy + (float) getRelativeForward[1] / 2,
+						posz + (float) getRelativeForward[2] / 2);
+				if (e != null)
 				{
 					e.init();
 					e.setBID(ic.bid);
 					e.setIID(ic.iid);
 					e.thrower = this;
 					e.setDirectionAndVelocity(
-							(float)Math.sin(Math.toRadians(rotation_yaw_head))*(float)Math.cos(Math.toRadians(rotation_pitch_head)), 
-							-(float)Math.sin(Math.toRadians(rotation_pitch_head)),
-							(float)Math.cos(Math.toRadians(rotation_yaw_head))*(float)Math.cos(Math.toRadians(rotation_pitch_head)),
+							(float) Math.sin(Math.toRadians(rotation_yaw_head))
+									* (float) Math.cos(Math.toRadians(rotation_pitch_head)),
+							-(float) Math.sin(Math.toRadians(rotation_pitch_head)),
+							(float) Math.cos(Math.toRadians(rotation_yaw_head))
+									* (float) Math.cos(Math.toRadians(rotation_pitch_head)),
 							1f, 0.01f);
-					
+
 					world.spawnEntityInWorld(e);
 				}
-				world.playSound("DangerZone:bow", dimension, posx, posy, posz, 0.5f, 0.5f+((world.rand.nextFloat()*0.2f
-						-world.rand.nextFloat())*0.3f));
+				world.playSound("DangerZone:bow", dimension, posx, posy, posz, 0.5f,
+						0.5f + ((world.rand.nextFloat() * 0.2f - world.rand.nextFloat()) * 0.3f));
 			}
 		}
 

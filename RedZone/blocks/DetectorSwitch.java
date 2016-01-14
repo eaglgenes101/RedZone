@@ -6,8 +6,11 @@ import java.util.ListIterator;
 import dangerzone.DangerZone;
 import dangerzone.Player;
 import dangerzone.World;
+import dangerzone.blocks.Block;
 import dangerzone.entities.Entity;
 import dangerzone.entities.EntityLiving;
+import dangerzone.threads.FastBlockTicker;
+import mechanics.PoweredComponent;
 
 /*/
  * Copyright 2015 Eugene "eaglgenes101" Wang
@@ -23,31 +26,39 @@ import dangerzone.entities.EntityLiving;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
- * 
- * Detector Switch. 
- * Activates when a mob is standing in it. 
- * 
 /*/
 
-public class DetectorSwitch extends Wire
+/**
+ * Detector switches activate whenever a mob is inside them.
+ * 
+ * Detector switches are designed for traps. Though wispy and highly visible to
+ * trap-builders, they are deceptively durable, and, at night or in enclosed
+ * areas, can easily be tripped accidentally by mobs and players that are not
+ * aware of them, or are too distracted to notice or avoid them. Detector
+ * switches may also be placed out in the open as decoys to direct other mobs
+ * and players to more favorable areas.
+ * 
+ * @author eaglgenes101
+ * @see PoweredComponent
+ */
+
+public class DetectorSwitch extends Block implements PoweredComponent
 {
 
-	public DetectorSwitch(String n)
+	public DetectorSwitch(String n, String txt)
 	{
-		super(n);
+		super(n, txt);
 
-		isStone = true;
-		mindamage = 5;
+		isSolidForRendering = false;
+		isSolid = false;
+		renderAllSides = true;
 		maxdamage = 50;
 		showInInventory = true;
-
-		topname = "RedZone_res/res/blocks/detector.png";
-		bottomname = "RedZone_res/res/blocks/detector.png";
-		leftname = "RedZone_res/res/blocks/detector.png";
-		rightname = "RedZone_res/res/blocks/detector.png";
-		frontname = "RedZone_res/res/blocks/detector.png";
-		backname = "RedZone_res/res/blocks/detector.png";
+		alwaystick = true;
+		breaksound = "DangerZone:leavesbreak";
+		placesound = "DangerZone:leavesplace";
+		hitsound = "DangerZone:leaves_hit";
+		renderSmaller = true;
 	}
 
 	@Override
@@ -67,6 +78,22 @@ public class DetectorSwitch extends Wire
 		if (entityInBlock(w, d, x, y, z))
 			return 63;
 		return 0;
+	}
+
+	@Override
+	public void finishStep(World w, int d, int x, int y, int z)
+	{
+	}
+
+	@Override
+	public void tickMe(World w, int d, int x, int y, int z)
+	{
+		FastBlockTicker.addFastTick(d, x, y, z);
+	}
+
+	public void tickMeFast(World w, int d, int x, int y, int z)
+	{
+		((PoweredComponent) this).powerBump(w, d, x, y, z);
 	}
 
 	// The below methods were copied from DangerZone in accordance with the DangerZone license,
