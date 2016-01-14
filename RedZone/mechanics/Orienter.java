@@ -26,10 +26,19 @@ import dangerzone.blocks.BlockRotation;
  * RedZone uses a quaternion rotation system to efficiently support
  * orientation-dependent behavior.
  * 
- * 
+ * To the uninitiated, Euler angles are easy enough to grasp, and seem like a
+ * no-brainer in rotation systems. However, this apparent conceptual simplicity
+ * belies the considerable computational complexity of Euler angles. Other
+ * rotation systems are less easy to describe, but are much more computationally
+ * simple. My choice of rotation system for RedZone is based on quaternions.
+ * <p>
+ * Internally, DangerZone makes use of a Euler angle system. RedZone was
+ * designed to be very orientation-dependent, and trying to sort through the
+ * Euler angles would be time-consuming for me, the developer, so I wrote this
+ * collection of helper methods to do this hard work for me. Go ahead and use it
+ * yourself.
  * 
  * @author eaglgenes101
- *
  */
 
 public class Orienter
@@ -84,7 +93,7 @@ public class Orienter
 	 * @param q2
 	 *            Quarternion 2
 	 * @return The quarternion product of the two quarternions
-	 **/
+	 */
 	public static double[] quartproduct(double[] q1, double[] q2)
 	{
 		double[] returnQuart = {q1[0] * q2[0] - q1[1] * q2[1] - q1[2] * q2[2] - q1[3] * q2[3], // Real part
@@ -96,14 +105,14 @@ public class Orienter
 	}
 
 	/**
-	 * Rotates a vector through the quarternion rotation.
+	 * Rotates a vector through a quarternion rotation.
 	 * 
 	 * @param start
 	 *            The vector to be rotated
 	 * @param rotate
 	 *            The quarternion representation of the rotation
 	 * @return The vector result of the rotation
-	 **/
+	 */
 	public static double[] rotate(double[] start, double[] rotate)
 	{
 		double[] startQ = {0.0, start[0], start[1], start[2]};
@@ -122,7 +131,7 @@ public class Orienter
 	 * @param meta
 	 *            The metadata of the block
 	 * @return The vector's actual facing
-	 **/
+	 */
 	public static double[] getDirection(double[] start, int meta)
 	{
 		while ((meta & BlockRotation.Z_MASK) > 0)
@@ -152,12 +161,12 @@ public class Orienter
 	//side 4 = right (1, 0, 0)
 	//side 5 = bottom (0, -1, 0)
 	/**
-	 * Returns the enumerated side form of a position vector
+	 * Returns the enumerated side form of a position vector.
 	 * 
 	 * @param vec
 	 *            The position vector
 	 * @return The side which the position vector corresponds to
-	 **/
+	 */
 	public static int getSideForm(int[] vec)
 	{
 		// -1 means default case

@@ -89,7 +89,7 @@ public interface PoweredComponent
 	 * @param z
 	 *            The z-coordinate
 	 * @return The current power level of the block
-	 **/
+	 */
 	public default int getPowerLevel(World w, int d, int x, int y, int z)
 	{
 		return w.getblockmeta(d, x, y, z) & POWER_MASK;
@@ -113,7 +113,7 @@ public interface PoweredComponent
 	 *            The z-coordinate
 	 * @return The power level of the block at the start of the tick (with
 	 *         default notifyNeighborChanged)
-	 **/
+	 */
 	public int basePowerLevel(World w, int d, int x, int y, int z);
 
 	/**
@@ -133,7 +133,7 @@ public interface PoweredComponent
 	 * @param meta
 	 *            The metadata of this block
 	 * @return Whether this block can send power to the given block
-	 **/
+	 */
 	public boolean canConnect(int dx, int dy, int dz, int meta);
 
 	/**
@@ -153,7 +153,7 @@ public interface PoweredComponent
 	 *            The z-coordinate
 	 * @param shouldMatch
 	 *            Whether the set cycle should match the clock cycle
-	 **/
+	 */
 	public default void setCycle(World w, int d, int x, int y, int z, boolean shouldMatch)
 	{
 		boolean whichMatch = (shouldMatch == (FastBlockTicker.cycle % 2 == 0));
@@ -177,7 +177,7 @@ public interface PoweredComponent
 	 * @param z
 	 *            The z-coordinate
 	 * @return This block's cycle match status
-	 **/
+	 */
 	public default boolean getCycle(World w, int d, int x, int y, int z)
 	{
 		return (w.getblockmeta(d, x, y, z) & CYCLE_MASK) == ((FastBlockTicker.cycle % 2) * CYCLE_MASK);
@@ -199,7 +199,7 @@ public interface PoweredComponent
 	 *            The y-coordinate
 	 * @param z
 	 *            The z-coordinate
-	 **/
+	 */
 	public default void setStatus(World w, int d, int x, int y, int z)
 	{
 		w.setblockandmetanonotify(d, x, y, z, w.getblock(d, x, y, z), (w.getblockmeta(d, x, y, z) & NOT_STATUS_MASK)
@@ -220,7 +220,7 @@ public interface PoweredComponent
 	 * @param z
 	 *            The z-coordinate
 	 * @return The status of this block
-	 **/
+	 */
 	public default boolean getStatus(World w, int d, int x, int y, int z)
 	{
 		return (w.getblockmeta(d, x, y, z) & STATUS_MASK) == STATUS_MASK;
@@ -242,7 +242,7 @@ public interface PoweredComponent
 	 *            The y-coordinate
 	 * @param z
 	 *            The z-coordinate
-	 **/
+	 */
 	public default void initStep(World w, int d, int x, int y, int z)
 	{
 		if (!this.getCycle(w, d, x, y, z)) //If they don't match
@@ -280,7 +280,7 @@ public interface PoweredComponent
 	 *            The y-coordinate
 	 * @param z
 	 *            The z-coordinate
-	 **/
+	 */
 	public default void powerStep(World w, int d, int x, int y, int z)
 	{
 		if (this.getCycle(w, d, x, y, z))
@@ -335,7 +335,7 @@ public interface PoweredComponent
 	 *            The y-coordinate
 	 * @param z
 	 *            The z-coordinate
-	 **/
+	 */
 	public default void closingStep(World w, int d, int x, int y, int z)
 	{
 		if (!this.getCycle(w, d, x, y, z))
@@ -370,7 +370,7 @@ public interface PoweredComponent
 	 *            The y-coordinate
 	 * @param z
 	 *            The z-coordinate
-	 **/
+	 */
 	public void finishStep(World w, int d, int x, int y, int z);
 
 	/**
@@ -389,7 +389,7 @@ public interface PoweredComponent
 	 *            The y-coordinate
 	 * @param z
 	 *            The z-coordinate
-	 **/
+	 */
 	public default void powerBump(World w, int d, int x, int y, int z)
 	{
 		this.initStep(w, d, x, y, z);

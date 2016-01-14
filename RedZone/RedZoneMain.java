@@ -59,6 +59,9 @@ import entities.EntityStraightPipe;
  * </ul>
  * 
  * @author Eugene "eaglgenes101" Wang
+ * @see ItemSupplier
+ * @see Orienter
+ * @see PoweredComponent
  */
 
 public class RedZoneMain extends BaseMod
