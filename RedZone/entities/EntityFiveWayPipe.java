@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 
+import mechanics.ItemSupplier;
 import mechanics.Orienter;
 import blocks.RedZoneBlocks;
 import dangerzone.DangerZone;
@@ -106,7 +107,7 @@ public class EntityFiveWayPipe extends EntityPipe
 
 		List<Entity> nearby_list = null;
 		ArrayList<EntityChest> chests = new ArrayList<>();
-		ArrayList<EntityItemSupplier> itemSuppliers = new ArrayList<>();
+		ArrayList<ItemSupplier> itemSuppliers = new ArrayList<>();
 
 		nearby_list = DangerZone.entityManager.findEntitiesInRange(5, dimension, (int) posx, (int) posy, (int) posz);
 		if (nearby_list != null)
@@ -130,7 +131,7 @@ public class EntityFiveWayPipe extends EntityPipe
 							chests.add((EntityChest) e);
 						}
 					}
-					else if (e instanceof EntityItemSupplier)
+					else if (e instanceof ItemSupplier)
 					{
 
 						int xdiff = (int) posx - (int) e.posx;
@@ -139,7 +140,7 @@ public class EntityFiveWayPipe extends EntityPipe
 						int[] checkArray = {xdiff, ydiff, zdiff};
 						if (!Arrays.equals(checkArray, roundedTo) && Orienter.getSideForm(checkArray) >= 0)
 						{
-							itemSuppliers.add((EntityItemSupplier) e);
+							itemSuppliers.add((ItemSupplier) e);
 						}
 					}
 				}
@@ -176,7 +177,7 @@ public class EntityFiveWayPipe extends EntityPipe
 			return returnIC;
 		}
 		
-		for (EntityItemSupplier eis : itemSuppliers)
+		for (ItemSupplier eis : itemSuppliers)
 		{
 			if(eis.hasItem(this, power-1))
 				return eis.getItem(this, power-1);
@@ -206,7 +207,7 @@ public class EntityFiveWayPipe extends EntityPipe
 
 		List<Entity> nearby_list = null;
 		ArrayList<EntityChest> chests = new ArrayList<>();
-		ArrayList<EntityItemSupplier> itemSuppliers = new ArrayList<>();
+		ArrayList<ItemSupplier> itemSuppliers = new ArrayList<>();
 
 		nearby_list = DangerZone.entityManager.findEntitiesInRange(5, dimension, (int) posx, (int) posy, (int) posz);
 		if (nearby_list != null)
@@ -230,7 +231,7 @@ public class EntityFiveWayPipe extends EntityPipe
 							chests.add((EntityChest) e);
 						}
 					}
-					else if (e instanceof EntityItemSupplier)
+					else if (e instanceof ItemSupplier)
 					{
 
 						int xdiff = (int) posx - (int) e.posx;
@@ -239,7 +240,7 @@ public class EntityFiveWayPipe extends EntityPipe
 						int[] checkArray = {xdiff, ydiff, zdiff};
 						if (!Arrays.equals(checkArray, roundedTo) && Orienter.getSideForm(checkArray) >= 0)
 						{
-							itemSuppliers.add((EntityItemSupplier) e);
+							itemSuppliers.add((ItemSupplier) e);
 						}
 					}
 				}
@@ -268,7 +269,7 @@ public class EntityFiveWayPipe extends EntityPipe
 			return true;
 		}
 		
-		for (EntityItemSupplier eis : itemSuppliers)
+		for (ItemSupplier eis : itemSuppliers)
 		{
 			if(eis.hasItem(this, power-1))
 				return true;

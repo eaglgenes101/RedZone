@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 
+import mechanics.ItemSupplier;
 import mechanics.Orienter;
 import dangerzone.ChestInventoryPacket;
 import dangerzone.DangerZone;
@@ -32,7 +33,7 @@ import dangerzone.entities.EntityChest;
  * 
 /*/
 
-public abstract class EntityPipe extends EntityItemSupplier
+public abstract class EntityPipe extends Entity implements ItemSupplier
 {
 	
 	protected ChestInventoryPacket cip = null;
@@ -79,7 +80,7 @@ public abstract class EntityPipe extends EntityItemSupplier
 
 		List<Entity> nearby_list = null;
 		EntityChest ec = null;
-		EntityItemSupplier eis = null;
+		ItemSupplier eis = null;
 
 		nearby_list = DangerZone.entityManager.findEntitiesInRange(5, dimension, (int) posx, (int) posy, (int) posz);
 		if (nearby_list != null)
@@ -104,7 +105,7 @@ public abstract class EntityPipe extends EntityItemSupplier
 							break;
 						}
 					}
-					else if (e instanceof EntityItemSupplier)
+					else if (e instanceof ItemSupplier)
 					{
 
 						int xdiff = (int) e.posx - (int) posx;
@@ -113,7 +114,7 @@ public abstract class EntityPipe extends EntityItemSupplier
 						int[] checkArray = {xdiff, ydiff, zdiff};
 						if (Arrays.equals(checkArray, roundedFrom))
 						{
-							eis = (EntityItemSupplier) e;
+							eis = (ItemSupplier) e;
 							break;
 						}
 					}
@@ -183,7 +184,7 @@ public abstract class EntityPipe extends EntityItemSupplier
 			return false;
 		List<Entity> nearby_list = null;
 		EntityChest ec = null;
-		EntityItemSupplier eis = null;
+		ItemSupplier eis = null;
 
 		nearby_list = DangerZone.entityManager.findEntitiesInRange(3, dimension, (int) posx, (int) posy, (int) posz);
 		if (nearby_list != null)
@@ -208,7 +209,7 @@ public abstract class EntityPipe extends EntityItemSupplier
 							break;
 						}
 					}
-					else if (e instanceof EntityItemSupplier)
+					else if (e instanceof ItemSupplier)
 					{
 						int xdiff = (int) e.posx - (int) posx;
 						int ydiff = (int) e.posy - (int) posy;
@@ -216,7 +217,7 @@ public abstract class EntityPipe extends EntityItemSupplier
 						int[] checkArray = {xdiff, ydiff, zdiff};
 						if (Arrays.equals(checkArray, roundedFrom))
 						{
-							eis = (EntityItemSupplier) e;
+							eis = (ItemSupplier) e;
 							break;
 						}
 					}

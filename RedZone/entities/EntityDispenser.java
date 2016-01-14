@@ -3,6 +3,7 @@ package entities;
 import java.util.List;
 import java.util.ListIterator;
 
+import mechanics.ItemSupplier;
 import mechanics.Orienter;
 import blocks.Dispenser;
 import blocks.RedZoneBlocks;
@@ -154,7 +155,7 @@ public class EntityDispenser extends Entity
 				while (li.hasNext())
 				{
 					e = (Entity) li.next();
-					if (e instanceof EntityItemSupplier)
+					if (e instanceof ItemSupplier)
 					{
 						int xdiff = (int) posx - (int) e.posx;
 						int ydiff = (int) posy - (int) e.posy;
@@ -162,9 +163,9 @@ public class EntityDispenser extends Entity
 						int[] checkArray = {xdiff, ydiff, zdiff};
 						if (Orienter.getSideForm(checkArray) >= 0)
 						{
-							if (((EntityItemSupplier) e).hasItem(this, 7))
+							if (((ItemSupplier) e).hasItem(this, 7))
 							{
-								ic = ((EntityItemSupplier) e).getItem(this, 7);
+								ic = ((ItemSupplier) e).getItem(this, 7);
 								break;
 							}
 						}
