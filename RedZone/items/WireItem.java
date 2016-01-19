@@ -24,22 +24,35 @@ import dangerzone.items.Item;
  * 
 /*/
 
+/**
+ * WireItem is used to circumvent a technical limitation in DangerZone.
+ * <p>
+ * DangerZone obtains block inventory sprites from the blocks themselves.
+ * However, since wires are implemented as non-solid blocks that are transparent
+ * on all but one side, DangerZone ends up picking a transparent sprite for its
+ * depiction of wires by default. WireItem is a hack that makes it so that
+ * DangerZone renders the correct sprites in the inventory.
+ * 
+ * @author eaglgenes101
+ *
+ */
+
 public class WireItem extends Item
 {
 	int blockFormID;
 	Block blockForm;
-	
+
 	public WireItem(String n, String txt, Block blockit)
 	{
 		super(n, txt);
 		blockForm = blockit;
 		blockFormID = blockit.blockID;
 	}
-	
+
 	public boolean rightClickOnBlock(Player p, int dimension, int x, int y, int z, int side)
 	{
-		if(p != null && !p.world.isServer)
-		{	
+		if (p != null && !p.world.isServer)
+		{
 			int bid = p.world.getblock(dimension, x, y, z);
 			blockForm.doPlaceBlock(bid, p, p.world, dimension, x, y, z, side);
 		}

@@ -31,7 +31,7 @@ import entities.EntityStraightPipe;
 /**
  * Pusher corner pipes are corner pipes that can be used to put blocks and items
  * into chests.
- * 
+ * <p>
  * Pusher corner pipes act like regular corner pipes when items are drawn from
  * them. When supplied with a signal, they will themselves draw an item or block
  * from their input face and push it to a chest on the output face. The block or

@@ -31,7 +31,7 @@ import dangerzone.threads.FastBlockTicker;
 /**
  * Power sticks are special components that will supply power if and only if
  * they are not powered themselves.
- * 
+ * <p>
  * Power sticks are placed like light sticks, which are dependent on the
  * orientation of surface they are placed on. They are attached to a surface,
  * and will drop if the block they are attached to is not solid during a block

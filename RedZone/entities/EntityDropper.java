@@ -30,11 +30,20 @@ import dangerzone.threads.FastBlockTicker;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
- * 
- * Dropper Entity. 
- * 
 /*/
+
+/**
+ * EntityDropper is an entity that is used internally by Dropper to handle
+ * block/item dropping.
+ * <p>
+ * To prevent needless memory usage, each block type in DangerZone shares one
+ * class. Like other special blocks in RedZone, droppers utilize special
+ * internal entities to handle behavior that can't be implemented through the
+ * block itself.
+ * 
+ * @author eaglgenes101
+ * @see blocks.Dropper
+ */
 
 public class EntityDropper extends Entity
 {

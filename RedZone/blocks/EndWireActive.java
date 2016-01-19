@@ -22,7 +22,7 @@ package blocks;
 
 /**
  * Active end wires are the active form of end wires.
- * 
+ * <p>
  * An end wire becomes active when supplied with at least 1 power. As soon as
  * power is exhausted, an end wire will become inactive again. This glow effect
  * is entirely aesthetic, and supplies no illumination.

@@ -32,7 +32,7 @@ import entities.EntityStraightPipe;
 /**
  * Pusher five-way pipes are five-way pipes that can be used to put blocks and
  * items into chests.
- * 
+ * <p>
  * Pusher five-way pipes act like regular five-way pipes when items are drawn
  * from them. When supplied with a signal, they will themselves draw an item or
  * block from one of their input faces and push it to a chest on the output

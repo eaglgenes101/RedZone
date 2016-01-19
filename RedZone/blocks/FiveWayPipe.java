@@ -29,7 +29,7 @@ import entities.EntityStraightPipe;
 /**
  * Five-way pipes are one of three basic kinds of pipes, which supply blocks and
  * items to powered devices they are attached to.
- * 
+ * <p>
  * Like other pipes, five-way pipes are placed with their output end facing up.
  * They are solid, and cannot be broken without a pickaxe. Five-way pipes draw
  * items from every face except their output face.

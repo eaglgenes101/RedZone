@@ -36,11 +36,26 @@ import dangerzone.threads.FastBlockTicker;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
- * 
- * Pushing straight pipe entity. 
- * 
 /*/
+
+/**
+ * EntityPusherStraightPipe is an entity that is used internally by
+ * PusherStraightPipe to handle block/item movement.
+ * <p>
+ * To prevent needless memory usage, each block type in DangerZone shares one
+ * class. Like other special blocks in RedZone, pipes utilize special internal
+ * entities to handle behavior that can't be implemented through the block
+ * itself. All pipe entities inherit from one base entity class, and only differ
+ * by which directions the pipes will accept as input.
+ * <p>
+ * In the case of pusher pipes, however, extra functionality is implemented so
+ * that they can push as well as draw items.
+ * 
+ * @author eaglgenes101
+ * @see EntityStraightPipe
+ * @see blocks.PusherStraightPipe
+ * @see mechanics.ItemSupplier
+ */
 
 public class EntityPusherStraightPipe extends EntityStraightPipe
 {

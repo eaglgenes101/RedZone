@@ -30,7 +30,7 @@ import mechanics.PoweredComponent;
 
 /**
  * Proximity detectors activate whenever mobs are near them.
- * 
+ * <p>
  * Proximity detectors are designed for situations where a wide space needs to
  * be monitored for mobs. The signal they emit is inversely proportional to the
  * distance between the mob and the block (up to 16 blocks away; mobs further

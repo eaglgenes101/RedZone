@@ -26,7 +26,7 @@ import dangerzone.threads.FastBlockTicker;
 /**
  * Pipes are devices that will draw items from components and deliver them to
  * components that use them.
- * 
+ * <p>
  * All pipes have at least one input face and one output face. They are solid,
  * and cannot be broken without a pickaxe. If a component calls for an item, any
  * pipes outputting to it will call nearby chests and item suppliers and try to

@@ -27,7 +27,7 @@ import dangerzone.items.Items;
 
 /**
  * Active press switches are the active form of press switches.
- * 
+ * <p>
  * After being clicked, press switches turn on. To turn them back off, left
  * click them. To turn them on again, left click them again. To break them, use
  * a pickaxe.

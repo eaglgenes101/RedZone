@@ -20,7 +20,7 @@ import dangerzone.World;
 
 /**
  * Inactive power sticks are the active form of power sticks.
- * 
+ * <p>
  * A power stick becomes inactive when supplied with at least 1 power. As soon
  * as power is exhausted, a power stick will become active again. Unlike for
  * wires, the active power stick's glow effect supplies illumination.

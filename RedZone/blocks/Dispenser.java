@@ -33,7 +33,7 @@ import entities.EntityDispenser;
 
 /**
  * Dispensers shoot items and blocks and spawn mobs when supplied with a signal.
- * 
+ * <p>
  * When supplied with a signal, dispensers will try to draw a block or item from
  * any item supplier that outputs into them. One they have one, they will use
  * the right-click action on the block/item, using the coordinates of itself and

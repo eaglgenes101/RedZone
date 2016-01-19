@@ -37,7 +37,7 @@ import dangerzone.threads.FastBlockTicker;
 /**
  * Wires are basic components that transfer signals without affecting them or
  * being affected by them.
- * 
+ * <p>
  * Wires come in four varieties, each characterized by their own transmission
  * patterns. All of them, when placed, will be placed such that their bottom
  * face is contacting the face that they were placed on, and their front face is

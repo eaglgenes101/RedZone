@@ -24,7 +24,7 @@ import dangerzone.threads.FastBlockTicker;
 
 /**
  * Smoke testers generate smoke particles when supplied with a signal.
- * 
+ * <p>
  * Unlike most components, smoke testers cannot themselves connect to other
  * powered components. This makes them useful for testing new components and
  * contraptions without causing side effects, like other components would.

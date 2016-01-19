@@ -30,7 +30,7 @@ import dangerzone.items.Items;
 /**
  * Press switches are components that can be set to supply or not supply a
  * current at the user's control.
- * 
+ * <p>
  * Press switches are designed for manual operation. To turn on, left click
  * them. To turn them back off, left click them again. To break them, use a
  * pickaxe on them.

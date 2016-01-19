@@ -24,7 +24,7 @@ import dangerzone.threads.FastBlockTicker;
 /**
  * Signals in RedZone follow a set of simple rules, as detailed by the
  * PoweredComponent interface.
- * 
+ * <p>
  * In RedZone, there are 64 levels of power. 0 is the lowest, and 63 is the
  * highest. Powered components may generate any level of power, and will send a
  * signal equal to that level of power minus one to all components that they
@@ -51,14 +51,14 @@ import dangerzone.threads.FastBlockTicker;
  * </ul>
  * 
  * @author eaglgenes101
- * @see Wire
- * @see PowerStick
- * @see Dispenser
- * @see Dropper
- * @see SmokeTester
- * @see DetectorSwitch
- * @see PressSwitch
- * @see ProximityDetector
+ * @see blocks.Wire
+ * @see blocks.PowerStick
+ * @see blocks.Dispenser
+ * @see blocks.Dropper
+ * @see blocks.SmokeTester
+ * @see blocks.DetectorSwitch
+ * @see blocks.PressSwitch
+ * @see blocks.ProximityDetector
  */
 
 public interface PoweredComponent

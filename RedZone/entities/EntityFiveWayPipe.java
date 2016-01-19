@@ -27,11 +27,23 @@ import dangerzone.entities.EntityChest;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
- * 
- * Five-way pipe entity. 
- * 
 /*/
+
+/**
+ * EntityFiveWayPipe is an entity that is used internally by FiveWayPipe to handle
+ * block/item movement.
+ * <p>
+ * To prevent needless memory usage, each block type in DangerZone shares one
+ * class. Like other special blocks in RedZone, pipes utilize special internal
+ * entities to handle behavior that can't be implemented through the block
+ * itself. All pipe entities inherit from one base entity class, and only differ
+ * by which directions the pipes will accept as input.
+ * 
+ * @author eaglgenes101
+ * @see EntityPipe
+ * @see blocks.FiveWayPipe
+ * @see mechanics.ItemSupplier
+ */
 
 public class EntityFiveWayPipe extends EntityPipe
 {

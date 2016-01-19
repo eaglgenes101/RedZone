@@ -34,7 +34,7 @@ import entities.EntityDropper;
 
 /**
  * Droppers drop items and blocks when supplied with a signal.
- * 
+ * <p>
  * When supplied with a signal, droppers will try to draw a block or item from
  * any item supplier that outputs into them. One they have one, they will
  * generate the corresponding item/block entity right in front of it, and

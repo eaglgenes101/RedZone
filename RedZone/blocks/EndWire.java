@@ -26,7 +26,7 @@ import dangerzone.World;
 /**
  * End wire blocks are one of four kinds of wires, which transmit signals
  * without affecting or being affected by them.
- * 
+ * <p>
  * Like other wire blocks, end wire blocks are placed by using a wire item on a
  * flat surface, and are positioned according to wire positioning rules. They
  * are attached to a surface, and will drop if the block they are attached to is

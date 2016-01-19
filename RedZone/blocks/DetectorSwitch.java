@@ -30,7 +30,7 @@ import mechanics.PoweredComponent;
 
 /**
  * Detector switches activate whenever a mob is inside them.
- * 
+ * <p>
  * Detector switches are designed for traps. Though wispy and highly visible to
  * trap-builders, they are deceptively durable, and, at night or in enclosed
  * areas, can easily be tripped accidentally by mobs and players that are not

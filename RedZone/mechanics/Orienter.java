@@ -25,7 +25,7 @@ import dangerzone.blocks.BlockRotation;
 /**
  * RedZone uses a quaternion rotation system to efficiently support
  * orientation-dependent behavior.
- * 
+ * <p>
  * To the uninitiated, Euler angles are easy enough to grasp, and seem like a
  * no-brainer in rotation systems. However, this apparent conceptual simplicity
  * belies the considerable computational complexity of Euler angles. Other

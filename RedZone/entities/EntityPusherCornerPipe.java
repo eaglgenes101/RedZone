@@ -32,11 +32,23 @@ import dangerzone.threads.FastBlockTicker;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
- * 
- * Pushing straight pipe entity. 
- * 
 /*/
+
+/**
+ * EntityPusherCornerPipe is an entity that is used internally by
+ * PusherCornerPipe to handle block/item movement.
+ * <p>
+ * To prevent needless memory usage, each block type in DangerZone shares one
+ * class. Like other special blocks in RedZone, pipes utilize special internal
+ * entities to handle behavior that can't be implemented through the block
+ * itself. All pipe entities inherit from one base entity class, and only differ
+ * by which directions the pipes will accept as input.
+ * 
+ * @author eaglgenes101
+ * @see EntityCornerPipe
+ * @see blocks.PusherCornerPipe
+ * @see mechanics.ItemSupplier
+ */
 
 public class EntityPusherCornerPipe extends EntityCornerPipe
 {
@@ -47,31 +59,32 @@ public class EntityPusherCornerPipe extends EntityCornerPipe
 		uniquename = "RedZone:EntityPusherCornerPipe";
 		setVarInt(21, 0);
 	}
-	
+
 	public void update(float deltaT)
 	{
 		int myBlockID = world.getblock(dimension, (int) posx, (int) posy, (int) posz);
 		Block myBlock = Blocks.getBlock(myBlockID);
-		
+
 		if (myBlockID != RedZoneBlocks.PUSHER_CORNER_PIPE.blockID)
 		{
 			this.deadflag = true;
 			return;
 		}
-		
-		else if ( ((PusherCornerPipe) myBlock).getStatus(world, dimension, (int) posx, (int) posy, (int) posz))
+
+		else if (((PusherCornerPipe) myBlock).getStatus(world, dimension, (int) posx, (int) posy, (int) posz))
 		{
 			if (FastBlockTicker.cycle % 2 != getVarInt(21))
 			{
-				double[] receiveFrom = Orienter.getDirection(outVector, 
+				double[] receiveFrom = Orienter.getDirection(outVector,
 						world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
 				int[] roundedReceiveFrom = {(int) Math.round(receiveFrom[0]), (int) Math.round(receiveFrom[1]),
 						(int) Math.round(receiveFrom[2])};
-				
+
 				EntityChest ec = null;
-				
+
 				List<Entity> nearby_list = null;
-				nearby_list = DangerZone.entityManager.findEntitiesInRange(4, dimension, (int) posx, (int) posy, (int) posz);
+				nearby_list = DangerZone.entityManager.findEntitiesInRange(4, dimension, (int) posx, (int) posy,
+						(int) posz);
 				if (nearby_list != null)
 				{
 					if (!nearby_list.isEmpty())
@@ -90,18 +103,18 @@ public class EntityPusherCornerPipe extends EntityCornerPipe
 								int[] checkArray = {xdiff, ydiff, zdiff};
 								if (Arrays.equals(checkArray, roundedReceiveFrom))
 								{
-									ec = (EntityChest)e;
+									ec = (EntityChest) e;
 									break;
 								}
 							}
 						}
 					}
 				}
-				
+
 				if (ec != null)
 				{
 					InventoryContainer ic = getItem(ec, 7);
-					
+
 					//If we have an item to give
 					if (ic.count > 0)
 					{
@@ -111,7 +124,7 @@ public class EntityPusherCornerPipe extends EntityCornerPipe
 							//Check if filled container
 							if (ec.inventory[i] != null && ec.inventory[i].count > 0)
 							{
-								if (ec.inventory[i].bid == ic.bid && ec.inventory[i].iid == ic.iid 
+								if (ec.inventory[i].bid == ic.bid && ec.inventory[i].iid == ic.iid
 										&& ec.inventory[i].currentuses >= ic.currentuses)
 								{
 									if (ic.bid != 0)
@@ -147,7 +160,7 @@ public class EntityPusherCornerPipe extends EntityCornerPipe
 						}
 						if (toInventoryIndex >= 0 && ec.inventory[toInventoryIndex] == null)
 							ec.inventory[toInventoryIndex] = new InventoryContainer(ic.bid, ic.iid, 0, 0);
-						
+
 						//If we have a valid container
 						if (toInventoryIndex >= 0)
 						{
@@ -155,9 +168,9 @@ public class EntityPusherCornerPipe extends EntityCornerPipe
 							cip.inventoryUpdateToServer(ec.entityID, toInventoryIndex, ec.inventory[toInventoryIndex]);
 						}
 					}
-					
+
 				}
-				
+
 				setVarInt(21, FastBlockTicker.cycle % 2);
 			}
 		}

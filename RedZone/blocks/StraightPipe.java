@@ -28,7 +28,7 @@ import entities.EntityStraightPipe;
 /**
  * Straight pipes are one of three basic kinds of pipes, which supply blocks and
  * items to powered devices they are attached to.
- * 
+ * <p>
  * Like other pipes, straight pipes are placed with their output end facing up.
  * They are solid, and cannot be broken without a pickaxe. Straight pipes draw
  * items from the face that is opposite of their output face.

@@ -18,7 +18,7 @@ package blocks;
 
 /**
  * Active straight wires are the active form of straight wires.
- * 
+ * <p>
  * A straight wire becomes active when supplied with at least 1 power. As soon
  * as power is exhausted, a straight wire will become inactive again. This glow
  * effect is entirely aesthetic, and supplies no illumination.

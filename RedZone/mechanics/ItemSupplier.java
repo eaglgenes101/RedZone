@@ -21,7 +21,7 @@ import dangerzone.entities.Entity;
 
 /**
  * Certain components supply items and blocks to other components.
- * 
+ * <p>
  * Internally, these components must draw off surrounding ItemSupplier entities.
  * Item suppliers may release, generate, or transfer items, depending on what
  * type of item supplier they are.
@@ -38,9 +38,9 @@ import dangerzone.entities.Entity;
  * </ul>
  * 
  * @author eaglgenes101
- * @see Pipe
- * @see Dispenser
- * @see Dropper
+ * @see blocks.Pipe
+ * @see blocks.Dispenser
+ * @see blocks.Dropper
  */
 
 public interface ItemSupplier

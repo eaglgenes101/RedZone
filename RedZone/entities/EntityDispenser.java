@@ -32,11 +32,20 @@ import dangerzone.threads.FastBlockTicker;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
- * 
- * Dispenser Entity. 
- * 
 /*/
+
+/**
+ * EntityDispenser is an entity that is used internally by Dispenser to handle
+ * block/item dispensing.
+ * <p>
+ * To prevent needless memory usage, each block type in DangerZone shares one
+ * class. Like other special blocks in RedZone, dispensers utilize special
+ * internal entities to handle behavior that can't be implemented through the
+ * block itself.
+ * 
+ * @author eaglgenes101
+ * @see blocks.Dispenser
+ */
 
 public class EntityDispenser extends Entity
 {
@@ -64,8 +73,10 @@ public class EntityDispenser extends Entity
 		{
 			if (FastBlockTicker.cycle % 2 != getVarInt(21))
 			{
-				double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR, world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
-				int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]), (int) Math.round(getRelativeForward[2])};
+				double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR,
+						world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
+				int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]),
+						(int) Math.round(getRelativeForward[2])};
 				positionSelf(world, dimension, (int) posx, (int) posy, (int) posz);
 				rightclick(this.world, Orienter.getSideForm(rounded));
 				setVarInt(21, FastBlockTicker.cycle % 2);
@@ -77,7 +88,8 @@ public class EntityDispenser extends Entity
 	private void positionSelf(World w, int d, int x, int y, int z)
 	{
 		double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR, w.getblockmeta(d, x, y, z));
-		int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]), (int) Math.round(getRelativeForward[2])};
+		int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]),
+				(int) Math.round(getRelativeForward[2])};
 		switch (Orienter.getSideForm(rounded))
 		{
 			case 0: // Top
@@ -138,8 +150,10 @@ public class EntityDispenser extends Entity
 	// Do right-clicks by a phantom "player"
 	public void rightclick(World world, int side)
 	{
-		double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR, world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
-		int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]), (int) Math.round(getRelativeForward[2])};
+		double[] getRelativeForward = Orienter.getDirection(Orienter.NORTH_VECTOR,
+				world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
+		int[] rounded = {(int) Math.round(getRelativeForward[0]), (int) Math.round(getRelativeForward[1]),
+				(int) Math.round(getRelativeForward[2])};
 
 		List<Entity> nearby_list = null;
 		InventoryContainer ic = null;
@@ -221,7 +235,8 @@ public class EntityDispenser extends Entity
 		{
 			if (bid != 0)
 			{
-				if (world.getblock(dimension, (int) posx + rounded[0], (int) posy + rounded[1], (int) posz + rounded[2]) == 0)
+				if (world.getblock(dimension, (int) posx + rounded[0], (int) posy + rounded[1],
+						(int) posz + rounded[2]) == 0)
 				{
 					Blocks.doPlaceBlock(bid, fbid, null, world, dimension, (int) posx, (int) posy, (int) posz, side);
 				}
