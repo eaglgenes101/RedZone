@@ -53,7 +53,7 @@ public class ProximityDetector extends Block implements PoweredComponent
 	@Override
 	public int basePowerLevel(World w, int d, int x, int y, int z)
 	{
-		return (signalStrength(w, d, x, y, z) >= 15.999) ? 63 : (int) (signalStrength(w, d, x, y, z) * 4);
+		return (signalStrength(w, d, x, y, z) >= 16) ? 63 : (int) (signalStrength(w, d, x, y, z) * 4);
 	}
 
 	@Override

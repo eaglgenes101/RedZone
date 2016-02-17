@@ -58,22 +58,19 @@ import entities.EntityStraightPipe;
  * please file a bug report.
  * </ul>
  * 
- * License for RedZone:
- * <blockquote>
- * Copyright 2015 Eugene "eaglgenes101" Wang
+ * License for RedZone: <blockquote> Copyright 2015 Eugene "eaglgenes101" Wang
  * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
  * <p>
  * &nbsp;&nbsp;&nbsp;&nbsp;http://www.apache.org/licenses/LICENSE-2.0
  * <p>
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * </blockquote>
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License. </blockquote>
  * 
  * @author Eugene "eaglgenes101" Wang
  * @see mechanics.ItemSupplier
@@ -97,7 +94,7 @@ public class RedZoneMain extends BaseMod
 	@Override
 	public String versionBuiltWith()
 	{
-		return "0.8";
+		return "0.9";
 	}
 
 	public void registerThings()
@@ -227,6 +224,9 @@ public class RedZoneMain extends BaseMod
 		Crafting.registerCraftingRecipe(Items.lumptin, RedZoneItems.PRESS_SWITCH_ITEM, Items.lumptin,
 				RedZoneItems.PRESS_SWITCH_ITEM, null, RedZoneItems.PRESS_SWITCH_ITEM, Items.lumptin,
 				RedZoneItems.PRESS_SWITCH_ITEM, Items.lumptin, RedZoneBlocks.DETECTOR_SWITCH, 4, true);
+
+		Crafting.registerCraftingRecipe(null, Items.lumptin, null, Items.lumptin, RedZoneBlocks.DETECTOR_SWITCH,
+				Items.lumptin, null, Items.lumptin, null, RedZoneBlocks.PROXIMITY_DETECTOR, 1, true);
 
 		Crafting.registerCraftingRecipe(Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, null, null, null,
 				Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, RedZoneBlocks.STRAIGHT_PIPE, 3, true);
