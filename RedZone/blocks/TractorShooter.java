@@ -1,49 +1,20 @@
 package blocks;
 
-import java.util.List;
-import java.util.ListIterator;
-
-import mechanics.PoweredComponent;
-
 import org.newdawn.slick.opengl.Texture;
 
-import dangerzone.DangerZone;
 import dangerzone.StitchedTexture;
 import dangerzone.World;
 import dangerzone.blocks.Block;
-import dangerzone.entities.Entity;
+import dangerzone.blocks.Blocks;
 import dangerzone.threads.FastBlockTicker;
-import entities.EntityDropper;
-
-/*/
- * Copyright 2015 Eugene "eaglgenes101" Wang
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
-/*/
+import mechanics.Orienter;
+import mechanics.PoweredComponent;
 
 /**
- * Droppers drop items and blocks when supplied with a signal.
- * <p>
- * When supplied with a signal, droppers will try to draw a block or item from
- * any item supplier that outputs into them. One they have one, they will
- * generate the corresponding item/block entity right in front of it, and
- * destroy the inventory copy.
- * 
  * @author eaglgenes101
- * @see Pipe
+ *
  */
-
-public class Dropper extends Block implements PoweredComponent
+public class TractorShooter extends Block implements PoweredComponent
 {
 
 	Texture ttop = null;
@@ -67,14 +38,14 @@ public class Dropper extends Block implements PoweredComponent
 	StitchedTexture stfront = new StitchedTexture();
 	StitchedTexture stback = new StitchedTexture();
 
-	public Dropper(String n)
+	public TractorShooter(String n)
 	{
 		super(n, "");
 		topname = "RedZone_res/res/blocks/dispenser_side.png";
 		bottomname = "RedZone_res/res/blocks/dispenser_side.png";
 		leftname = "RedZone_res/res/blocks/dispenser_side.png";
 		rightname = "RedZone_res/res/blocks/dispenser_side.png";
-		frontname = "RedZone_res/res/blocks/dropper_front.png";
+		frontname = "RedZone_res/res/blocks/tractor_front.png";
 		backname = "RedZone_res/res/blocks/dispenser_side.png";
 
 		mindamage = 5;
@@ -83,17 +54,6 @@ public class Dropper extends Block implements PoweredComponent
 		isStone = true;
 		hasFront = true;
 		isSolidForRendering = false;
-	}
-
-	@Override
-	public void tickMe(World w, int dimension, int x, int y, int z)
-	{
-		FastBlockTicker.addFastTick(dimension, x, y, z);
-	}
-
-	public void tickMeFast(World w, int dimension, int x, int y, int z)
-	{
-		((PoweredComponent) this).powerBump(w, dimension, x, y, z);
 	}
 
 	@Override
@@ -111,48 +71,33 @@ public class Dropper extends Block implements PoweredComponent
 	@Override
 	public void finishStep(World w, int d, int x, int y, int z)
 	{
-		List<Entity> nearby_list = null;
-		EntityDropper ed = null;
-
-		nearby_list = DangerZone.entityManager.findEntitiesInRange(2, d, x, y, z);
-		if (nearby_list != null)
+		int powerLevel = getPowerLevel(w, d, x, y, z);
+		int reach = 1;
+		double[] forward = Orienter.getDirection(Orienter.NORTH_VECTOR, w.getblockmeta(d, x, y, z));
+		int[] offset = {(int) Math.round(forward[0]), (int) Math.round(forward[1]), (int) Math.round(forward[2])};
+		while (!Blocks.isSolid(w.getblock(d, x+offset[0]*reach, y+offset[1]*reach, z+offset[2]*reach)) && powerLevel > 0)
 		{
-			if (!nearby_list.isEmpty())
-			{
-				Entity e = null;
-				ListIterator<Entity> li;
-				li = nearby_list.listIterator();
-				while (li.hasNext())
-				{
-					e = (Entity) li.next();
-					if (e instanceof EntityDropper)
-					{
-						if ((int) e.posx == x && (int) e.posy == y && (int) e.posz == z)
-						{
-							ed = (EntityDropper) e;
-							break;
-						}
-						ed = null;
-					}
-				}
-			}
+			if (w.getblock(d, x+offset[0]*reach, y+offset[1]*reach, z+offset[2]*reach) != RedZoneBlocks.TRACTOR_BEAM.blockID)
+				w.setblockandmeta(d, x+offset[0]*reach, y+offset[1]*reach, z+offset[2]*reach, 
+						RedZoneBlocks.TRACTOR_BEAM.blockID, Orienter.getSideForm(offset)<<8);
+			else if (w.getblockmeta(d, x+offset[0]*reach, y+offset[1]*reach, z+offset[2]*reach)>>8 != Orienter.getSideForm(offset))
+				w.setblockandmeta(d, x+offset[0]*reach, y+offset[1]*reach, z+offset[2]*reach, 
+						RedZoneBlocks.TRACTOR_BEAM.blockID, Orienter.getSideForm(offset)<<8);
+			powerLevel--;
+			reach++;
 		}
+		FastBlockTicker.addFastTick(d, x+offset[0], y+offset[1], z+offset[2]);
+	}
 
-		if (ed == null)
-		{ // where did our entity go???
-			if (!w.isServer)
-			{
-				// System.out.printf("spawning new chest entity\n");
-				Entity eb = w.createEntityByName("RedZone:EntityDropper", d, (float) (x) + 0.5f, (float) (y) + 0.5f,
-						(float) (z) + 0.5f);
-				if (eb != null)
-				{
-					eb.init();
-					w.spawnEntityInWorld(eb);
-				}
-			}
-		}
+	@Override
+	public void tickMe(World w, int d, int x, int y, int z)
+	{
+		FastBlockTicker.addFastTick(d, x, y, z);
+	}
 
+	public void tickMeFast(World w, int d, int x, int y, int z)
+	{
+		((PoweredComponent) this).powerBump(w, d, x, y, z);
 	}
 
 	// The below methods were copied from DangerZone in accordance with the DangerZone license,
@@ -181,21 +126,6 @@ public class Dropper extends Block implements PoweredComponent
 	 * hacked it. DO NOT KEEP VALUABLE INFORMATION ON INTERNET-CONNECTED
 	 * COMPUTERS. Or your phone...
 	 */
-
-	public void onBlockPlaced(World w, int dimension, int x, int y, int z)
-	{
-		if (!w.isServer)
-		{
-			// System.out.printf("onBlockPlaced spawning new dispenser entity\n");
-			Entity eb = w.createEntityByName("RedZone:EntityDropper", dimension, (float) (x) + 0.5f, (float) (y) + 0.5f,
-					(float) (z) + 0.5f);
-			if (eb != null)
-			{
-				eb.init();
-				w.spawnEntityInWorld(eb);
-			}
-		}
-	}
 
 	// side 0 = top
 	// side 1 = front

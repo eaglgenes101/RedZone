@@ -39,6 +39,8 @@ public class RedZoneBlocks
 	public static Block DETECTOR_SWITCH = new DetectorSwitch("RedZone:Detector Switch Block", "RedZone_res/res/blocks/detector.png");
 	public static Block PROXIMITY_DETECTOR = new ProximityDetector("RedZone:Proximity Detector", "RedZone_res/res/blocks/smoketester.png");
 	public static Block DROPPER = new Dropper("RedZone:Dropper");
+	public static Block TRACTOR_SHOOTER = new TractorShooter("RedZone:Tractor Shooter");
+	public static Block TRACTOR_BEAM = new TractorBeam("RedZone:Tractor Beam", "RedZone_res/res/blocks/tractor_beam.png");
 	
 	public static Block STRAIGHT_PIPE = new StraightPipe("RedZone:Straight Pipe");
 	public static Block CORNER_PIPE = new CornerPipe("RedZone:Corner Pipe");

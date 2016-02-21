@@ -3,8 +3,6 @@ package blocks;
 import mechanics.Orienter;
 import mechanics.PoweredComponent;
 
-import java.util.Arrays;
-
 import org.newdawn.slick.opengl.Texture;
 
 import dangerzone.DangerZone;

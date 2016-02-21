@@ -1,7 +1,6 @@
 package blocks;
 
 import items.RedZoneItems;
-import mechanics.PoweredComponent;
 import dangerzone.Player;
 import dangerzone.World;
 import dangerzone.items.ItemPickAxe;

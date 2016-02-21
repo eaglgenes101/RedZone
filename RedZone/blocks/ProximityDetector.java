@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.ListIterator;
 
 import dangerzone.DangerZone;
-import dangerzone.Utils;
 import dangerzone.World;
 import dangerzone.blocks.Block;
 import dangerzone.entities.Entity;

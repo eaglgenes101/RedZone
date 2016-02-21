@@ -5,6 +5,7 @@ import dangerzone.Crafting;
 import dangerzone.blocks.Blocks;
 import dangerzone.entities.Entities;
 import dangerzone.items.Items;
+import entities.EntityBlock;
 import entities.EntityCornerPipe;
 import entities.EntityDispenser;
 import entities.EntityDropper;
@@ -13,6 +14,7 @@ import entities.EntityPusherCornerPipe;
 import entities.EntityPusherFiveWayPipe;
 import entities.EntityPusherStraightPipe;
 import entities.EntityStraightPipe;
+import entities.ModelBlock;
 
 /*/
  * Copyright 2015 Eugene "eaglgenes101" Wang
@@ -94,7 +96,7 @@ public class RedZoneMain extends BaseMod
 	@Override
 	public String versionBuiltWith()
 	{
-		return "0.9";
+		return "0.93";
 	}
 
 	public void registerThings()
@@ -118,6 +120,8 @@ public class RedZoneMain extends BaseMod
 		Blocks.registerBlock(RedZoneBlocks.DETECTOR_SWITCH);
 		Blocks.registerBlock(RedZoneBlocks.PROXIMITY_DETECTOR);
 		Blocks.registerBlock(RedZoneBlocks.DROPPER);
+		Blocks.registerBlock(RedZoneBlocks.TRACTOR_SHOOTER);
+		Blocks.registerBlock(RedZoneBlocks.TRACTOR_BEAM);
 
 		Blocks.registerBlock(RedZoneBlocks.STRAIGHT_PIPE);
 		Blocks.registerBlock(RedZoneBlocks.PUSHER_STRAIGHT_PIPE);
@@ -140,6 +144,7 @@ public class RedZoneMain extends BaseMod
 		Entities.registerEntity(EntityFiveWayPipe.class, "RedZone:EntityFiveWayPipe", null);
 		Entities.registerEntity(EntityPusherFiveWayPipe.class, "RedZone:EntityPusherFiveWayPipe", null);
 		Entities.registerEntity(EntityDropper.class, "RedZone:EntityDropper", null);
+		Entities.registerEntity(EntityBlock.class, "RedZone:EntityBlock", new ModelBlock());
 
 		Crafting.registerCraftingRecipe(Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, null, null, null, null,
 				null, null, RedZoneItems.STRAIGHT_WIRE_ITEM, 6, true);

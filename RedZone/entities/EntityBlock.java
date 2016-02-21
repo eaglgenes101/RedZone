@@ -24,41 +24,35 @@ import dangerzone.entities.Entity;
 
 public class EntityBlock extends Entity
 {
-	float distance;
-	int meta;
+	float origx;
+	float origy;
+	float origz;
 
-	public EntityBlock(World w, int side, int meta)
+	public EntityBlock(World w)
 	{
 		super(w);
 		uniquename = "RedZone:EntityBlock";
 		width = 1.0f;
 		height = 1.0f;
-		distance = 0;
 		this.takesFallDamage = false;
-		switch (side)
-		{
-			case 0:
-				motiony = 1;
-				break;
-			case 1:
-				motionz = 1;
-				break;
-			case 2:
-				motionz = -1;
-				break;
-			case 3:
-				motionx = -1;
-				break;
-			case 4:
-				motionx = 1;
-				break;
-			case 5:
-				motiony = -1;
-				break;
-			default:
-				// Do nothing	
-		}
-		this.meta = meta;
+		canthitme = false;
+		ignoreCollisions = false;
+	}
+	
+	public void init()
+	{
+		int x = Math.round(posx);
+		int y = Math.round(posy);
+		int z = Math.round(posz);
+		setBID(world.getblock(dimension, x, y, z));
+		setIID(world.getblockmeta(dimension, x, y, z));
+		origx = posx;
+		origy = posy;
+		origz = posz;
+		this.rotation_pitch = 0;
+		this.rotation_roll = 0;
+		this.rotation_yaw = 0;
+		
 	}
 
 	public void update(float deltaT)
@@ -71,13 +65,13 @@ public class EntityBlock extends Entity
 			}
 			else
 			{
-				if (distance >= 1.0)
+				float combinedDistance = posx-origx + posy-origy + posz-origz;
+				if (combinedDistance > 1 || combinedDistance < -1)
 				{
-					world.setblockandmeta(dimension, Math.round(posx), Math.round(posy), Math.round(posz), getBID(), meta);
+					world.setblockandmeta(dimension, Math.round(posx), Math.round(posy), Math.round(posz), getBID(), getIID());
+					System.out.println("Died at combinedDistance" + combinedDistance);
 					deadflag = true;
 				}
-				else
-					distance += deltaT;
 			}
 		}
 		super.update(deltaT);

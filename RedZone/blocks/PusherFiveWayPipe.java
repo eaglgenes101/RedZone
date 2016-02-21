@@ -8,10 +8,7 @@ import dangerzone.DangerZone;
 import dangerzone.World;
 import dangerzone.entities.Entity;
 import dangerzone.threads.FastBlockTicker;
-import entities.EntityPusherCornerPipe;
 import entities.EntityPusherFiveWayPipe;
-import entities.EntityPusherStraightPipe;
-import entities.EntityStraightPipe;
 
 /*/
  * Copyright 2015 Eugene "eaglgenes101" Wang

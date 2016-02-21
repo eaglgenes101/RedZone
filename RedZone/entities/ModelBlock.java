@@ -1,7 +1,10 @@
 package entities;
 
+import blocks.RedZoneBlocks;
+import dangerzone.DangerZone;
 import dangerzone.ModelBase;
 import dangerzone.ModelRenderer;
+import dangerzone.blocks.Blocks;
 import dangerzone.entities.Entity;
 
 // This class was copied from DangerZone in accordance with the DangerZone license,
@@ -34,27 +37,24 @@ import dangerzone.entities.Entity;
 
 public class ModelBlock extends ModelBase
 {
-
-	ModelRenderer Shape1;
-
 	public ModelBlock()
 	{
-		textureWidth = 16;
-		textureHeight = 16;
-
-		Shape1 = new ModelRenderer(this, 0, 0);
-		Shape1.addBox(-8F, -8F, -8F, 16, 16, 16);
-		Shape1.setRotationPoint(0F, 16F, 0F);
-		Shape1.setTextureSize(16, 16);
-		Shape1.mirror = true;
-		setRotation(Shape1, 0F, 0F, 0F);
+		//Nothing. 
 	}
 
-	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float deathfactor)
 	{
 		//draws an ENTITY block
-		Shape1.render(deathfactor);
+		if (Blocks.hasOwnRenderer(entity.getBID()))
+		{
+			Blocks.renderMe(DangerZone.wr, entity.world, entity.dimension, (int) Math.round(entity.posx), (int) Math.round(entity.posy),
+					(int) Math.round(entity.posz), entity.getBID(), entity.getIID(), 0xff, false);
+		}
+		else
+		{
+			DangerZone.wr.drawTexturedCube(0xff, Blocks.isSolidForRender(entity.getBID()), /*entity.getBID()*/ 
+					RedZoneBlocks.SMOKE_TESTER.blockID, entity.getIID(), false);
+		}
 	}
 
 }

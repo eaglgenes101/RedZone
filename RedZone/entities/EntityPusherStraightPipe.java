@@ -5,10 +5,6 @@ import java.util.List;
 import java.util.ListIterator;
 
 import mechanics.Orienter;
-
-import org.lwjgl.input.Mouse;
-
-import blocks.Dispenser;
 import blocks.PusherStraightPipe;
 import blocks.RedZoneBlocks;
 import dangerzone.DangerZone;
