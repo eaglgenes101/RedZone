@@ -1,12 +1,20 @@
 package blocks;
 
+import java.util.List;
+import java.util.ListIterator;
+
 import org.newdawn.slick.opengl.Texture;
 
+import dangerzone.DangerZone;
 import dangerzone.StitchedTexture;
 import dangerzone.World;
 import dangerzone.blocks.Block;
 import dangerzone.blocks.Blocks;
+import dangerzone.entities.Entity;
+import dangerzone.entities.EntityBlockItem;
+import dangerzone.entities.EntityLiving;
 import dangerzone.threads.FastBlockTicker;
+import entities.EntityPushedBlock;
 import mechanics.Orienter;
 import mechanics.PoweredComponent;
 
@@ -75,6 +83,8 @@ public class TractorShooter extends Block implements PoweredComponent
 		int reach = 1;
 		double[] forward = Orienter.getDirection(Orienter.NORTH_VECTOR, w.getblockmeta(d, x, y, z));
 		int[] offset = {(int) Math.round(forward[0]), (int) Math.round(forward[1]), (int) Math.round(forward[2])};
+		
+		outerLoop:
 		while (!Blocks.isSolid(w.getblock(d, x+offset[0]*reach, y+offset[1]*reach, z+offset[2]*reach)) && powerLevel > 0)
 		{
 			if (w.getblock(d, x+offset[0]*reach, y+offset[1]*reach, z+offset[2]*reach) != RedZoneBlocks.TRACTOR_BEAM.blockID)
@@ -85,6 +95,44 @@ public class TractorShooter extends Block implements PoweredComponent
 						RedZoneBlocks.TRACTOR_BEAM.blockID, Orienter.getSideForm(offset)<<8);
 			powerLevel--;
 			reach++;
+
+			List<Entity> nearby_list = DangerZone.entityManager.findEntitiesInRange(2.0f, d, x+0.5f, y+0.5f, z+0.5f);
+			ListIterator<Entity> li;
+			
+			if (nearby_list != null)
+			{
+				li = nearby_list.listIterator();
+				Entity e;
+				while (li.hasNext())
+				{
+					e = (Entity) li.next();
+					if (!e.canthitme)
+					{
+						if (x+offset[0]*reach == (int) e.posx && y+offset[1]*reach == (int) e.posy && z+offset[2]*reach == (int) e.posz)
+						{
+							break outerLoop;
+						}
+						if (e instanceof EntityLiving)
+						{
+							EntityLiving el = (EntityLiving) e;
+							int intheight = (int) (el.height + 0.995f);
+							float dx, dz;
+							for (int k = 0; k < intheight; k++)
+							{
+								if ((int) el.posy + k == y)
+								{
+									dx = el.posx - ((float) x + 0.5f);
+									dz = el.posz - ((float) z + 0.5f);
+									if (Math.sqrt((dx * dx) + (dz * dz)) < (0.5f + (el.width / 2.0f)))
+									{
+										break outerLoop;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 		FastBlockTicker.addFastTick(d, x+offset[0], y+offset[1], z+offset[2]);
 	}

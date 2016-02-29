@@ -13,7 +13,7 @@ import dangerzone.entities.Entity;
 import dangerzone.entities.EntityBlockItem;
 import dangerzone.entities.EntityLiving;
 import dangerzone.threads.FastBlockTicker;
-import entities.EntityBlock;
+import entities.EntityPushedBlock;
 import mechanics.Orienter;
 
 public class TractorBeam extends LightStick
@@ -88,7 +88,7 @@ public class TractorBeam extends LightStick
 			while (li.hasNext())
 			{
 				e = (Entity) li.next();
-				if (!(e.canthitme) && !e.ignoreCollisions)
+				if (!e.canthitme)
 				{
 					boolean shouldPush = false;
 					if (x+itsvec[0] == (int) e.posx && y+itsvec[1] == (int) e.posy && z+itsvec[2] == (int) e.posz)
@@ -126,7 +126,7 @@ public class TractorBeam extends LightStick
 					}
 					if (shouldPush && e instanceof EntityBlockItem)
 						e.deadflag = true;
-					if (e instanceof EntityBlock)
+					if (e instanceof EntityPushedBlock)
 					{
 						hitBlockEntity = true;
 					}
@@ -139,12 +139,15 @@ public class TractorBeam extends LightStick
 		{
 			if (Blocks.isSolid(w.getblock(d, x + rounded[0], y + rounded[1], z + rounded[2])))
 			{
-				Entity e = w.createEntityByName("RedZone:EntityBlock", d, x + rounded[0] + 0.5f, y + rounded[1] + 0.5f,
+				Entity e = w.createEntityByName("RedZone:EntityPushedBlock", d, x + rounded[0] + 0.5f, y + rounded[1] + 0.5f,
 						z + rounded[2] + 0.5f);
-				e.init();
-				w.spawnEntityInWorld(e);
+				if (e != null)
+				{
+					e.init();
+					w.spawnEntityInWorld(e);
+					w.setblock(d, x+rounded[0], y+rounded[1], z+rounded[2], 0);
+				}
 			}
-			w.setblock(d, x+rounded[0], y+rounded[1], z+rounded[2], 0);
 		}
 		
 		if (w.getblock(d, x - rounded[0], y - rounded[1], z - rounded[2]) == RedZoneBlocks.TRACTOR_BEAM.blockID)

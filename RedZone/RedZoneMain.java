@@ -5,7 +5,7 @@ import dangerzone.Crafting;
 import dangerzone.blocks.Blocks;
 import dangerzone.entities.Entities;
 import dangerzone.items.Items;
-import entities.EntityBlock;
+import entities.EntityPushedBlock;
 import entities.EntityCornerPipe;
 import entities.EntityDispenser;
 import entities.EntityDropper;
@@ -144,7 +144,7 @@ public class RedZoneMain extends BaseMod
 		Entities.registerEntity(EntityFiveWayPipe.class, "RedZone:EntityFiveWayPipe", null);
 		Entities.registerEntity(EntityPusherFiveWayPipe.class, "RedZone:EntityPusherFiveWayPipe", null);
 		Entities.registerEntity(EntityDropper.class, "RedZone:EntityDropper", null);
-		Entities.registerEntity(EntityBlock.class, "RedZone:EntityBlock", new ModelBlock());
+		Entities.registerEntity(EntityPushedBlock.class, "RedZone:EntityPushedBlock", new ModelBlock());
 
 		Crafting.registerCraftingRecipe(Items.lumpcopper, Items.lumpcopper, Items.lumpcopper, null, null, null, null,
 				null, null, RedZoneItems.STRAIGHT_WIRE_ITEM, 6, true);

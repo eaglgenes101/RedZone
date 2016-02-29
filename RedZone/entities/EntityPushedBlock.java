@@ -22,17 +22,17 @@ import dangerzone.entities.Entity;
  * limitations under the License. 
 /*/
 
-public class EntityBlock extends Entity
+public class EntityPushedBlock extends Entity
 {
 	float origx;
 	float origy;
 	float origz;
 	float deathtimer;
 
-	public EntityBlock(World w)
+	public EntityPushedBlock(World w)
 	{
 		super(w);
-		uniquename = "RedZone:EntityBlock";
+		uniquename = "RedZone:EntityPushedBlock";
 		width = 1.0f;
 		height = 1.0f;
 		this.takesFallDamage = false;
@@ -42,9 +42,9 @@ public class EntityBlock extends Entity
 	
 	public void init()
 	{
-		int x = Math.round(posx);
-		int y = Math.round(posy);
-		int z = Math.round(posz);
+		int x = (int)posx;
+		int y = (int)posy;
+		int z = (int)posz;
 		setBID(world.getblock(dimension, x, y, z));
 		setIID(world.getblockmeta(dimension, x, y, z));
 		origx = posx;
