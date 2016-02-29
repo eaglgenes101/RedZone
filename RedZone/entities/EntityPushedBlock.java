@@ -1,10 +1,16 @@
 package entities;
 
+import java.util.List;
+import java.util.ListIterator;
+
 import org.newdawn.slick.opengl.Texture;
 
+import dangerzone.DangerZone;
 import dangerzone.World;
 import dangerzone.blocks.Blocks;
 import dangerzone.entities.Entity;
+import dangerzone.entities.EntityBlockItem;
+import dangerzone.entities.EntityLiving;
 
 /*/
  * Copyright 2015 Eugene "eaglgenes101" Wang
@@ -24,10 +30,6 @@ import dangerzone.entities.Entity;
 
 public class EntityPushedBlock extends Entity
 {
-	float origx;
-	float origy;
-	float origz;
-	float deathtimer;
 
 	public EntityPushedBlock(World w)
 	{
@@ -35,25 +37,27 @@ public class EntityPushedBlock extends Entity
 		uniquename = "RedZone:EntityPushedBlock";
 		width = 1.0f;
 		height = 1.0f;
-		this.takesFallDamage = false;
+		takesFallDamage = false;
 		movement_friction = false;
-		deathtimer = 10000;
 	}
-	
+
 	public void init()
 	{
-		int x = (int)posx;
-		int y = (int)posy;
-		int z = (int)posz;
-		setBID(world.getblock(dimension, x, y, z));
-		setIID(world.getblockmeta(dimension, x, y, z));
-		origx = posx;
-		origy = posy;
-		origz = posz;
+		int x = (int) posx;
+		int y = (int) posy;
+		int z = (int) posz;
+		this.motionx = 0;
+		this.motiony = 0;
+		this.motionz = 0;
 		this.rotation_pitch = 0;
 		this.rotation_roll = 0;
 		this.rotation_yaw = 0;
-		
+		setBID(world.getblock(dimension, x, y, z));
+		setIID(world.getblockmeta(dimension, x, y, z));
+		setVarFloat(22, posx);
+		setVarFloat(23, posy);
+		setVarFloat(24, posz);
+		world.setblock(dimension, (int)posx, (int)posy, (int)posz, 0);
 	}
 
 	public void update(float deltaT)
@@ -62,17 +66,23 @@ public class EntityPushedBlock extends Entity
 		{
 			deadflag = true; //illegal block ID!
 		}
+		else if (!Blocks.isSolid(this.getBID()))
+		{
+			deadflag = true; //Why are we a non-solid block?
+		}
+		else if (Blocks.isSolid(world.getblock(dimension, (int)posx, (int)posy, (int)posz)))
+		{
+			deadflag = true; //We shouldn't exist here
+		}
 		else
 		{
-			float combinedDistance = posx-origx + posy-origy + posz-origz;
-			if (combinedDistance > 1 || combinedDistance < -1 || deathtimer < 0)
+			float combinedDistance = posx - getVarFloat(22) + posy - getVarFloat(23) + posz - getVarFloat(24);
+			if (combinedDistance > 1 || combinedDistance < -1 || lifetimeticker > 100)
 			{
-				world.setblockandmeta(dimension, (int)(posx), (int)(posy), (int)(posz), getBID(), getIID());
+				world.setblockandmeta(dimension, (int) (posx), (int) (posy), (int) (posz), getBID(), getIID());
 				deadflag = true;
-				System.out.printf("Started at (%f, %f, %f), died at (%f, %f, %f)\n", origx, origy, origz, posx, posy, posz);
 			}
 		}
-		deathtimer -= deltaT;
 		super.update(deltaT);
 	}
 
@@ -95,6 +105,9 @@ public class EntityPushedBlock extends Entity
 	@Override
 	public void doDeathAnimation()
 	{
+		posx = (float) ((int)posx + 0.5);
+		posy = (float) ((int)posy + 0.5);
+		posz = (float) ((int)posz + 0.5);
 		motiony = motionx = motionz = 0;
 	}
 

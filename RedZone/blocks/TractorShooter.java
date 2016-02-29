@@ -61,7 +61,7 @@ public class TractorShooter extends Block implements PoweredComponent
 		maxstack = 8;
 		isStone = true;
 		hasFront = true;
-		isSolidForRendering = false;
+		isSolidForRendering = true;
 	}
 
 	@Override
@@ -83,22 +83,24 @@ public class TractorShooter extends Block implements PoweredComponent
 		int reach = 1;
 		double[] forward = Orienter.getDirection(Orienter.NORTH_VECTOR, w.getblockmeta(d, x, y, z));
 		int[] offset = {(int) Math.round(forward[0]), (int) Math.round(forward[1]), (int) Math.round(forward[2])};
-		
-		outerLoop:
-		while (!Blocks.isSolid(w.getblock(d, x+offset[0]*reach, y+offset[1]*reach, z+offset[2]*reach)) && powerLevel > 0)
-		{
-			if (w.getblock(d, x+offset[0]*reach, y+offset[1]*reach, z+offset[2]*reach) != RedZoneBlocks.TRACTOR_BEAM.blockID)
-				w.setblockandmeta(d, x+offset[0]*reach, y+offset[1]*reach, z+offset[2]*reach, 
-						RedZoneBlocks.TRACTOR_BEAM.blockID, Orienter.getSideForm(offset)<<8);
-			else if (w.getblockmeta(d, x+offset[0]*reach, y+offset[1]*reach, z+offset[2]*reach)>>8 != Orienter.getSideForm(offset))
-				w.setblockandmeta(d, x+offset[0]*reach, y+offset[1]*reach, z+offset[2]*reach, 
-						RedZoneBlocks.TRACTOR_BEAM.blockID, Orienter.getSideForm(offset)<<8);
-			powerLevel--;
-			reach++;
 
-			List<Entity> nearby_list = DangerZone.entityManager.findEntitiesInRange(2.0f, d, x+0.5f, y+0.5f, z+0.5f);
-			ListIterator<Entity> li;
+		outerLoop:
+		while (!Blocks.isSolid(w.getblock(d, x + offset[0] * reach, y + offset[1] * reach, z + offset[2] * reach))
+				&& powerLevel > 0)
+		{
+			if (w.getblock(d, x + offset[0] * reach, y + offset[1] * reach,
+					z + offset[2] * reach) != RedZoneBlocks.TRACTOR_BEAM.blockID)
+				w.setblockandmeta(d, x + offset[0] * reach, y + offset[1] * reach, z + offset[2] * reach,
+						RedZoneBlocks.TRACTOR_BEAM.blockID, Orienter.getSideForm(offset) << 8);
+			else if (w.getblockmeta(d, x + offset[0] * reach, y + offset[1] * reach,
+					z + offset[2] * reach) >> 8 != Orienter.getSideForm(offset))
+				w.setblockandmeta(d, x + offset[0] * reach, y + offset[1] * reach, z + offset[2] * reach,
+						RedZoneBlocks.TRACTOR_BEAM.blockID, Orienter.getSideForm(offset) << 8);
 			
+			List<Entity> nearby_list = DangerZone.entityManager.findEntitiesInRange(2.0f, d,
+					x + offset[0] * reach + 0.5f, y + offset[1] * reach + 0.5f, z + offset[2] * reach + 0.5f);
+			ListIterator<Entity> li;
+
 			if (nearby_list != null)
 			{
 				li = nearby_list.listIterator();
@@ -108,7 +110,8 @@ public class TractorShooter extends Block implements PoweredComponent
 					e = (Entity) li.next();
 					if (!e.canthitme)
 					{
-						if (x+offset[0]*reach == (int) e.posx && y+offset[1]*reach == (int) e.posy && z+offset[2]*reach == (int) e.posz)
+						if (x + offset[0] * reach == (int) e.posx && y + offset[1] * reach == (int) e.posy
+								&& z + offset[2] * reach == (int) e.posz)
 						{
 							break outerLoop;
 						}
@@ -119,10 +122,10 @@ public class TractorShooter extends Block implements PoweredComponent
 							float dx, dz;
 							for (int k = 0; k < intheight; k++)
 							{
-								if ((int) el.posy + k == y)
+								if ((int) el.posy + k == y + offset[1] * reach)
 								{
-									dx = el.posx - ((float) x + 0.5f);
-									dz = el.posz - ((float) z + 0.5f);
+									dx = el.posx - ((float) x + offset[0] * reach + 0.5f);
+									dz = el.posz - ((float) z + offset[2] * reach + 0.5f);
 									if (Math.sqrt((dx * dx) + (dz * dz)) < (0.5f + (el.width / 2.0f)))
 									{
 										break outerLoop;
@@ -133,8 +136,11 @@ public class TractorShooter extends Block implements PoweredComponent
 					}
 				}
 			}
+			
+			powerLevel--;
+			reach++;
 		}
-		FastBlockTicker.addFastTick(d, x+offset[0], y+offset[1], z+offset[2]);
+		FastBlockTicker.addFastTick(d, x + offset[0], y + offset[1], z + offset[2]);
 	}
 
 	@Override

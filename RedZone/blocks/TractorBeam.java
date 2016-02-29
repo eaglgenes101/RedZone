@@ -27,23 +27,18 @@ public class TractorBeam extends LightStick
 		alwaystick = true;
 		isSolid = false;
 		maxdamage = 10000;
-		mindamage = 10000;
+		mindamage = 1000000;
 	}
-	
+
 	public void tickMe(World w, int d, int x, int y, int z)
 	{
 		FastBlockTicker.addFastTick(d, x, y, z);
 		//Nothing else :)
 	}
-	
+
 	public void notifyNeighborChanged(World w, int d, int x, int y, int z)
 	{
 		this.tickMeFast(w, d, x, y, z);
-	}
-	
-	public boolean leftClickOnBlock(Player p, int dimension, int x, int y, int z)
-	{
-		return false;
 	}
 
 	@Override
@@ -76,11 +71,11 @@ public class TractorBeam extends LightStick
 		}
 		int[] rounded = {(int) Math.round(itsvec[0]), (int) Math.round(itsvec[1]), (int) Math.round(itsvec[2])};
 
-		List<Entity> nearby_list = DangerZone.entityManager.findEntitiesInRange(2.0f, d, x+0.5f, y+0.5f, z+0.5f);
+		List<Entity> nearby_list = DangerZone.entityManager.findEntitiesInRange(2.0f, d, x + 0.5f, y + 0.5f, z + 0.5f);
 		ListIterator<Entity> li;
-		
+
 		boolean hitBlockEntity = false;
-		
+
 		if (nearby_list != null)
 		{
 			li = nearby_list.listIterator();
@@ -91,13 +86,13 @@ public class TractorBeam extends LightStick
 				if (!e.canthitme)
 				{
 					boolean shouldPush = false;
-					if (x+itsvec[0] == (int) e.posx && y+itsvec[1] == (int) e.posy && z+itsvec[2] == (int) e.posz)
+					if (x + rounded[0] == (int) e.posx && y + rounded[1] == (int) e.posy && z + rounded[2] == (int) e.posz)
 					{
 						shouldPush = true;
 					}
 					if (x == (int) e.posx && y == (int) e.posy && z == (int) e.posz)
 					{
-						shouldPush = true; 
+						shouldPush = true;
 					}
 					if (e instanceof EntityLiving)
 					{
@@ -120,11 +115,11 @@ public class TractorBeam extends LightStick
 
 					if (shouldPush)
 					{
-						e.motionx -= rounded[0];
-						e.motiony -= rounded[1];
-						e.motionz -= rounded[2];
+						e.motionx -= rounded[0] * 0.5;
+						e.motiony -= rounded[1] * 0.5;
+						e.motionz -= rounded[2] * 0.5;
 					}
-					if (shouldPush && e instanceof EntityBlockItem)
+					if (e instanceof EntityBlockItem)
 						e.deadflag = true;
 					if (e instanceof EntityPushedBlock)
 					{
@@ -133,26 +128,25 @@ public class TractorBeam extends LightStick
 				}
 			}
 		}
-		
-		if (w.getblock(d, x + rounded[0], y + rounded[1], z + rounded[2]) != RedZoneBlocks.TRACTOR_BEAM.blockID && 
-				!hitBlockEntity)
+		if (w.getblock(d, x + rounded[0], y + rounded[1], z + rounded[2]) != RedZoneBlocks.TRACTOR_BEAM.blockID
+				&& !hitBlockEntity)
 		{
 			if (Blocks.isSolid(w.getblock(d, x + rounded[0], y + rounded[1], z + rounded[2])))
 			{
-				Entity e = w.createEntityByName("RedZone:EntityPushedBlock", d, x + rounded[0] + 0.5f, y + rounded[1] + 0.5f,
-						z + rounded[2] + 0.5f);
-				if (e != null)
+				if (w.isServer)
 				{
+					Entity e = w.createEntityByName("RedZone:EntityPushedBlock", d, x + rounded[0] + 0.5f,
+							y + rounded[1] + 0.5f, z + rounded[2] + 0.5f);
 					e.init();
 					w.spawnEntityInWorld(e);
-					w.setblock(d, x+rounded[0], y+rounded[1], z+rounded[2], 0);
 				}
+				w.setblock(d, x + rounded[0], y + rounded[1], z + rounded[2], 0);
 			}
 		}
-		
+
 		if (w.getblock(d, x - rounded[0], y - rounded[1], z - rounded[2]) == RedZoneBlocks.TRACTOR_BEAM.blockID)
 		{
-			if (w.getblockmeta(d, x - rounded[0], y - rounded[1], z - rounded[2]) == w.getblockmeta(d, x, y, z))
+			if (w.getblockmeta(d, x - rounded[0], y - rounded[1], z - rounded[2])>>8 == w.getblockmeta(d, x, y, z)>>8)
 				return;
 		}
 		else if (w.getblock(d, x - rounded[0], y - rounded[1], z - rounded[2]) == RedZoneBlocks.TRACTOR_SHOOTER.blockID)
@@ -163,8 +157,9 @@ public class TractorBeam extends LightStick
 					(int) Math.round(otherBlockDir[2])};
 			if (Orienter.getSideForm(roundedDir) == (w.getblockmeta(d, x, y, z) >> 8))
 			{
-				TractorShooter ts = (TractorShooter)Blocks.getBlock(w.getblock(d, x-rounded[0], y-rounded[1], z-rounded[2]));
-				if (ts != null && ts.getPowerLevel(w, d, x-rounded[0], y-rounded[1], z-rounded[2]) > 0)
+				TractorShooter ts = (TractorShooter) Blocks
+						.getBlock(w.getblock(d, x - rounded[0], y - rounded[1], z - rounded[2]));
+				if (ts != null && ts.getPowerLevel(w, d, x - rounded[0], y - rounded[1], z - rounded[2]) > 0)
 					return;
 			}
 		}
@@ -179,7 +174,7 @@ public class TractorBeam extends LightStick
 	{
 		return 0;
 	}
-	
+
 	@Override
 	public int getItemDrop(Player p, World w, int dimension, int x, int y, int z)
 	{
