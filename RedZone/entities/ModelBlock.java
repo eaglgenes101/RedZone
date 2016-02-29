@@ -52,8 +52,7 @@ public class ModelBlock extends ModelBase
 		}
 		else
 		{
-			DangerZone.wr.drawTexturedCube(0xff, Blocks.isSolidForRender(entity.getBID()), /*entity.getBID()*/ 
-					RedZoneBlocks.SMOKE_TESTER.blockID, entity.getIID(), false);
+			DangerZone.wr.drawTexturedCube(0xff, Blocks.isSolidForRender(entity.getBID()), entity.getBID(), entity.getIID(), false);
 		}
 	}
 

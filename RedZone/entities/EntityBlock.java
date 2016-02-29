@@ -27,6 +27,7 @@ public class EntityBlock extends Entity
 	float origx;
 	float origy;
 	float origz;
+	float deathtimer;
 
 	public EntityBlock(World w)
 	{
@@ -35,8 +36,8 @@ public class EntityBlock extends Entity
 		width = 1.0f;
 		height = 1.0f;
 		this.takesFallDamage = false;
-		canthitme = false;
-		ignoreCollisions = false;
+		movement_friction = false;
+		deathtimer = 10000;
 	}
 	
 	public void init()
@@ -57,23 +58,21 @@ public class EntityBlock extends Entity
 
 	public void update(float deltaT)
 	{
-		if (world.isServer)
+		if (Blocks.getMaxStack(getBID()) == 0)
 		{
-			if (Blocks.getMaxStack(getBID()) == 0)
+			deadflag = true; //illegal block ID!
+		}
+		else
+		{
+			float combinedDistance = posx-origx + posy-origy + posz-origz;
+			if (combinedDistance > 1 || combinedDistance < -1 || deathtimer < 0)
 			{
-				deadflag = true; //illegal block ID!
-			}
-			else
-			{
-				float combinedDistance = posx-origx + posy-origy + posz-origz;
-				if (combinedDistance > 1 || combinedDistance < -1)
-				{
-					world.setblockandmeta(dimension, Math.round(posx), Math.round(posy), Math.round(posz), getBID(), getIID());
-					System.out.println("Died at combinedDistance" + combinedDistance);
-					deadflag = true;
-				}
+				world.setblockandmeta(dimension, (int)(posx), (int)(posy), (int)(posz), getBID(), getIID());
+				deadflag = true;
+				System.out.printf("Started at (%f, %f, %f), died at (%f, %f, %f)\n", origx, origy, origz, posx, posy, posz);
 			}
 		}
+		deathtimer -= deltaT;
 		super.update(deltaT);
 	}
 

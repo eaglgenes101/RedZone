@@ -15,7 +15,6 @@ import dangerzone.entities.EntityLiving;
 import dangerzone.threads.FastBlockTicker;
 import entities.EntityBlock;
 import mechanics.Orienter;
-import mechanics.PoweredComponent;
 
 public class TractorBeam extends LightStick
 {
@@ -26,6 +25,9 @@ public class TractorBeam extends LightStick
 		showInInventory = false;
 		brightness = 0.6f;
 		alwaystick = true;
+		isSolid = false;
+		maxdamage = 10000;
+		mindamage = 10000;
 	}
 	
 	public void tickMe(World w, int d, int x, int y, int z)
@@ -74,19 +76,11 @@ public class TractorBeam extends LightStick
 		}
 		int[] rounded = {(int) Math.round(itsvec[0]), (int) Math.round(itsvec[1]), (int) Math.round(itsvec[2])};
 
-		List<Entity> nearby_list = null;
+		List<Entity> nearby_list = DangerZone.entityManager.findEntitiesInRange(2.0f, d, x+0.5f, y+0.5f, z+0.5f);
 		ListIterator<Entity> li;
 		
 		boolean hitBlockEntity = false;
-
-		if (w.isServer)
-		{
-			nearby_list = DangerZone.server.entityManager.findEntitiesInRange(2.0f, d, x, y, z);
-		}
-		else
-		{
-			nearby_list = DangerZone.entityManager.findEntitiesInRange(2.0f, d, x, y, z);
-		}
+		
 		if (nearby_list != null)
 		{
 			li = nearby_list.listIterator();
@@ -97,9 +91,13 @@ public class TractorBeam extends LightStick
 				if (!(e.canthitme) && !e.ignoreCollisions)
 				{
 					boolean shouldPush = false;
-					if (x == (int) e.posx && y == (int) e.posy && z == (int) e.posz)
+					if (x+itsvec[0] == (int) e.posx && y+itsvec[1] == (int) e.posy && z+itsvec[2] == (int) e.posz)
 					{
 						shouldPush = true;
+					}
+					if (x == (int) e.posx && y == (int) e.posy && z == (int) e.posz)
+					{
+						shouldPush = true; 
 					}
 					if (e instanceof EntityLiving)
 					{
@@ -122,15 +120,16 @@ public class TractorBeam extends LightStick
 
 					if (shouldPush)
 					{
-						System.out.println("Reached!");
 						e.motionx -= rounded[0];
 						e.motiony -= rounded[1];
 						e.motionz -= rounded[2];
 					}
 					if (shouldPush && e instanceof EntityBlockItem)
 						e.deadflag = true;
-					if (shouldPush && e instanceof EntityBlock)
+					if (e instanceof EntityBlock)
+					{
 						hitBlockEntity = true;
+					}
 				}
 			}
 		}
@@ -142,11 +141,8 @@ public class TractorBeam extends LightStick
 			{
 				Entity e = w.createEntityByName("RedZone:EntityBlock", d, x + rounded[0] + 0.5f, y + rounded[1] + 0.5f,
 						z + rounded[2] + 0.5f);
-				if (e != null)
-				{
-					e.init();
-					w.spawnEntityInWorld(e);
-				}
+				e.init();
+				w.spawnEntityInWorld(e);
 			}
 			w.setblock(d, x+rounded[0], y+rounded[1], z+rounded[2], 0);
 		}
