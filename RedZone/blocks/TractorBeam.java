@@ -76,7 +76,7 @@ public class TractorBeam extends LightStick
 
 		boolean hitBlockEntity = false;
 
-		if (nearby_list != null)
+		if (nearby_list != null && w.isServer)
 		{
 			li = nearby_list.listIterator();
 			Entity e;
@@ -115,9 +115,9 @@ public class TractorBeam extends LightStick
 
 					if (shouldPush)
 					{
-						e.motionx -= rounded[0] * 0.5;
-						e.motiony -= rounded[1] * 0.5;
-						e.motionz -= rounded[2] * 0.5;
+						e.motionx -= rounded[0];
+						e.motiony -= rounded[1];
+						e.motionz -= rounded[2];
 					}
 					if (e instanceof EntityBlockItem)
 						e.deadflag = true;
@@ -128,8 +128,7 @@ public class TractorBeam extends LightStick
 				}
 			}
 		}
-		if (w.getblock(d, x + rounded[0], y + rounded[1], z + rounded[2]) != RedZoneBlocks.TRACTOR_BEAM.blockID
-				&& !hitBlockEntity)
+		if (w.getblock(d, x + rounded[0], y + rounded[1], z + rounded[2]) != RedZoneBlocks.TRACTOR_BEAM.blockID)
 		{
 			if (Blocks.isSolid(w.getblock(d, x + rounded[0], y + rounded[1], z + rounded[2])))
 			{
@@ -137,10 +136,16 @@ public class TractorBeam extends LightStick
 				{
 					Entity e = w.createEntityByName("RedZone:EntityPushedBlock", d, x + rounded[0] + 0.5f,
 							y + rounded[1] + 0.5f, z + rounded[2] + 0.5f);
+
+					int bid = w.getblock(d, x+rounded[0], y+rounded[1], z+rounded[2]);
+					int meta = w.getblockmeta(d, x+rounded[0], y+rounded[1], z+rounded[2]);
+					w.setblock(d, x + rounded[0], y + rounded[1], z + rounded[2], 0);
+
 					e.init();
+					e.setBID(bid);
+					e.setIID(meta);
 					w.spawnEntityInWorld(e);
 				}
-				w.setblock(d, x + rounded[0], y + rounded[1], z + rounded[2], 0);
 			}
 		}
 
@@ -157,8 +162,7 @@ public class TractorBeam extends LightStick
 					(int) Math.round(otherBlockDir[2])};
 			if (Orienter.getSideForm(roundedDir) == (w.getblockmeta(d, x, y, z) >> 8))
 			{
-				TractorShooter ts = (TractorShooter) Blocks
-						.getBlock(w.getblock(d, x - rounded[0], y - rounded[1], z - rounded[2]));
+				TractorShooter ts = (TractorShooter) RedZoneBlocks.TRACTOR_SHOOTER;
 				if (ts != null && ts.getPowerLevel(w, d, x - rounded[0], y - rounded[1], z - rounded[2]) > 0)
 					return;
 			}

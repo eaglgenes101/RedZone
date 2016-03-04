@@ -1,7 +1,6 @@
 package entities;
 
-import java.util.List;
-import java.util.ListIterator;
+import java.util.Random;
 
 import org.newdawn.slick.opengl.Texture;
 
@@ -30,6 +29,7 @@ import dangerzone.entities.EntityLiving;
 
 public class EntityPushedBlock extends Entity
 {
+	int callNumber;
 
 	public EntityPushedBlock(World w)
 	{
@@ -39,21 +39,18 @@ public class EntityPushedBlock extends Entity
 		height = 1.0f;
 		takesFallDamage = false;
 		movement_friction = false;
+		Random r = new Random();
+		callNumber = r.nextInt();
 	}
 
 	public void init()
 	{
-		int x = (int) posx;
-		int y = (int) posy;
-		int z = (int) posz;
 		this.motionx = 0;
 		this.motiony = 0;
 		this.motionz = 0;
 		this.rotation_pitch = 0;
 		this.rotation_roll = 0;
 		this.rotation_yaw = 0;
-		setBID(world.getblock(dimension, x, y, z));
-		setIID(world.getblockmeta(dimension, x, y, z));
 		setVarFloat(22, posx);
 		setVarFloat(23, posy);
 		setVarFloat(24, posz);
@@ -62,15 +59,15 @@ public class EntityPushedBlock extends Entity
 
 	public void update(float deltaT)
 	{
-		if (Blocks.getMaxStack(getBID()) == 0)
+		if (Blocks.getMaxStack(getBID()) == 0 && world.isServer)
 		{
 			deadflag = true; //illegal block ID!
 		}
-		else if (!Blocks.isSolid(this.getBID()))
+		else if (!Blocks.isSolid(this.getBID()) && world.isServer)
 		{
 			deadflag = true; //Why are we a non-solid block?
 		}
-		else if (Blocks.isSolid(world.getblock(dimension, (int)posx, (int)posy, (int)posz)))
+		else if (Blocks.isSolid(world.getblock(dimension, (int)posx, (int)posy, (int)posz)) && world.isServer)
 		{
 			deadflag = true; //We shouldn't exist here
 		}
@@ -79,8 +76,16 @@ public class EntityPushedBlock extends Entity
 			float combinedDistance = posx - getVarFloat(22) + posy - getVarFloat(23) + posz - getVarFloat(24);
 			if (combinedDistance > 1 || combinedDistance < -1 || lifetimeticker > 100)
 			{
-				world.setblockandmeta(dimension, (int) (posx), (int) (posy), (int) (posz), getBID(), getIID());
-				deadflag = true;
+				if (world.isServer)
+				{
+					System.out.println(callNumber + " dead at distance " + Math.abs(combinedDistance));
+					posx = (float) ((int)posx + 0.5);
+					posy = (float) ((int)posy + 0.5);
+					posz = (float) ((int)posz + 0.5);
+					motiony = motionx = motionz = 0;
+					world.setblockandmeta(dimension, (int) (posx), (int) (posy), (int) (posz), getBID(), getIID());
+					deadflag = true;
+				}
 			}
 		}
 		super.update(deltaT);
@@ -100,15 +105,6 @@ public class EntityPushedBlock extends Entity
 	public boolean isDying()
 	{
 		return false; //we are already dead.
-	}
-
-	@Override
-	public void doDeathAnimation()
-	{
-		posx = (float) ((int)posx + 0.5);
-		posy = (float) ((int)posy + 0.5);
-		posz = (float) ((int)posz + 0.5);
-		motiony = motionx = motionz = 0;
 	}
 
 }
