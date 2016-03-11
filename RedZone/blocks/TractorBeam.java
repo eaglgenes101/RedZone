@@ -71,74 +71,77 @@ public class TractorBeam extends LightStick
 		}
 		int[] rounded = {(int) Math.round(itsvec[0]), (int) Math.round(itsvec[1]), (int) Math.round(itsvec[2])};
 
-		List<Entity> nearby_list = DangerZone.entityManager.findEntitiesInRange(2.0f, d, x + 0.5f, y + 0.5f, z + 0.5f);
-		ListIterator<Entity> li;
-
-		boolean hitBlockEntity = false;
-
-		if (nearby_list != null && w.isServer)
+		if (w.isServer)
 		{
-			li = nearby_list.listIterator();
-			Entity e;
-			while (li.hasNext())
+			List<Entity> nearby_list = DangerZone.server.entityManager.findEntitiesInRange(2.0f, d, x + 0.5f, y + 0.5f,
+					z + 0.5f);
+			ListIterator<Entity> li;
+
+			boolean hitBlockEntity = false;
+
+			if (nearby_list != null)
 			{
-				e = (Entity) li.next();
-				if (!e.canthitme)
+				li = nearby_list.listIterator();
+				Entity e;
+				while (li.hasNext())
 				{
-					boolean shouldPush = false;
-					if (x + rounded[0] == (int) e.posx && y + rounded[1] == (int) e.posy && z + rounded[2] == (int) e.posz)
+					e = (Entity) li.next();
+					if (!e.canthitme)
 					{
-						shouldPush = true;
-					}
-					if (x == (int) e.posx && y == (int) e.posy && z == (int) e.posz)
-					{
-						shouldPush = true;
-					}
-					if (e instanceof EntityLiving)
-					{
-						EntityLiving el = (EntityLiving) e;
-						int intheight = (int) (el.height + 0.995f);
-						float dx, dz;
-						for (int k = 0; k < intheight; k++)
+						boolean shouldPush = false;
+						if (x + rounded[0] == (int) e.posx && y + rounded[1] == (int) e.posy
+								&& z + rounded[2] == (int) e.posz)
 						{
-							if ((int) el.posy + k == y)
+							shouldPush = true;
+						}
+						if (x == (int) e.posx && y == (int) e.posy && z == (int) e.posz)
+						{
+							shouldPush = true;
+						}
+						if (e instanceof EntityLiving)
+						{
+							EntityLiving el = (EntityLiving) e;
+							int intheight = (int) (el.height + 0.995f);
+							float dx, dz;
+							for (int k = 0; k < intheight; k++)
 							{
-								dx = el.posx - ((float) x + 0.5f);
-								dz = el.posz - ((float) z + 0.5f);
-								if (Math.sqrt((dx * dx) + (dz * dz)) < (0.5f + (el.width / 2.0f)))
+								if ((int) el.posy + k == y)
 								{
-									shouldPush = true;
+									dx = el.posx - ((float) x + 0.5f);
+									dz = el.posz - ((float) z + 0.5f);
+									if (Math.sqrt((dx * dx) + (dz * dz)) < (0.5f + (el.width / 2.0f)))
+									{
+										shouldPush = true;
+									}
 								}
 							}
 						}
-					}
 
-					if (shouldPush)
-					{
-						e.motionx -= rounded[0];
-						e.motiony -= rounded[1];
-						e.motionz -= rounded[2];
-					}
-					if (e instanceof EntityBlockItem)
-						e.deadflag = true;
-					if (e instanceof EntityPushedBlock)
-					{
-						hitBlockEntity = true;
+						if (shouldPush)
+						{
+							e.motionx -= rounded[0];
+							e.motiony -= rounded[1];
+							e.motionz -= rounded[2];
+						}
+						if (e instanceof EntityBlockItem)
+							e.deadflag = true;
+						if (e instanceof EntityPushedBlock)
+						{
+							hitBlockEntity = true;
+						}
 					}
 				}
 			}
-		}
-		if (w.getblock(d, x + rounded[0], y + rounded[1], z + rounded[2]) != RedZoneBlocks.TRACTOR_BEAM.blockID)
-		{
-			if (Blocks.isSolid(w.getblock(d, x + rounded[0], y + rounded[1], z + rounded[2])))
+			if (w.getblock(d, x + rounded[0], y + rounded[1], z + rounded[2]) != RedZoneBlocks.TRACTOR_BEAM.blockID
+					&& !hitBlockEntity)
 			{
-				if (w.isServer)
+				if (Blocks.isSolid(w.getblock(d, x + rounded[0], y + rounded[1], z + rounded[2])))
 				{
 					Entity e = w.createEntityByName("RedZone:EntityPushedBlock", d, x + rounded[0] + 0.5f,
 							y + rounded[1] + 0.5f, z + rounded[2] + 0.5f);
 
-					int bid = w.getblock(d, x+rounded[0], y+rounded[1], z+rounded[2]);
-					int meta = w.getblockmeta(d, x+rounded[0], y+rounded[1], z+rounded[2]);
+					int bid = w.getblock(d, x + rounded[0], y + rounded[1], z + rounded[2]);
+					int meta = w.getblockmeta(d, x + rounded[0], y + rounded[1], z + rounded[2]);
 					w.setblock(d, x + rounded[0], y + rounded[1], z + rounded[2], 0);
 
 					e.init();
@@ -148,10 +151,11 @@ public class TractorBeam extends LightStick
 				}
 			}
 		}
-
+		
 		if (w.getblock(d, x - rounded[0], y - rounded[1], z - rounded[2]) == RedZoneBlocks.TRACTOR_BEAM.blockID)
 		{
-			if (w.getblockmeta(d, x - rounded[0], y - rounded[1], z - rounded[2])>>8 == w.getblockmeta(d, x, y, z)>>8)
+			if (w.getblockmeta(d, x - rounded[0], y - rounded[1], z - rounded[2]) >> 8 == w.getblockmeta(d, x, y,
+					z) >> 8)
 				return;
 		}
 		else if (w.getblock(d, x - rounded[0], y - rounded[1], z - rounded[2]) == RedZoneBlocks.TRACTOR_SHOOTER.blockID)
