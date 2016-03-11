@@ -117,7 +117,7 @@ public class TractorBeam extends LightStick
 							}
 						}
 
-						if (shouldPush)
+						if (shouldPush || true)
 						{
 							e.motionx -= rounded[0];
 							e.motiony -= rounded[1];

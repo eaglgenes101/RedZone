@@ -76,18 +76,21 @@ public class EntityPushedBlock extends Entity
 			float combinedDistance = posx - getVarFloat(22) + posy - getVarFloat(23) + posz - getVarFloat(24);
 			if (combinedDistance > 1 || combinedDistance < -1 || lifetimeticker > 100)
 			{
-				posx = (float) ((int)posx + 0.5);
-				posy = (float) ((int)posy + 0.5);
-				posz = (float) ((int)posz + 0.5);
-				motiony = motionx = motionz = 0;
 				if (world.isServer)
 				{
+				    posx = (float) ((int)posx + 0.5);
+				    posy = (float) ((int)posy + 0.5);
+				    posz = (float) ((int)posz + 0.5);
+				    motiony = motionx = motionz = 0;
 					System.out.println(callNumber + " dead at distance " + Math.abs(combinedDistance));
 					world.setblockandmeta(dimension, (int) (posx), (int) (posy), (int) (posz), getBID(), getIID());
 					deadflag = true;
 				}
 			}
 		}
+		if (motionx != 0) System.out.println(motionx);
+		if (motiony != 0) System.out.println(motiony);
+		if (motionz != 0) System.out.println(motionz);
 		super.update(deltaT);
 	}
 
