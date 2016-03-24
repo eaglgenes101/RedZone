@@ -73,7 +73,7 @@ public class TractorBeam extends LightStick
 
 		if (w.isServer)
 		{
-			List<Entity> nearby_list = DangerZone.server.entityManager.findEntitiesInRange(2.0f, d, x + 0.5f, y + 0.5f,
+			List<Entity> nearby_list = DangerZone.server.entityManager.findALLEntitiesInRange(2.0f, d, x + 0.5f, y + 0.5f,
 					z + 0.5f);
 			ListIterator<Entity> li;
 
@@ -117,11 +117,11 @@ public class TractorBeam extends LightStick
 							}
 						}
 
-						if (shouldPush || true)
+						if (shouldPush)
 						{
-							e.motionx -= rounded[0];
-							e.motiony -= rounded[1];
-							e.motionz -= rounded[2];
+							e.motionx -= rounded[0]*0.05;
+							e.motiony -= rounded[1]*0.05;
+							e.motionz -= rounded[2]*0.05;
 						}
 						if (e instanceof EntityBlockItem)
 							e.deadflag = true;
@@ -139,14 +139,7 @@ public class TractorBeam extends LightStick
 				{
 					Entity e = w.createEntityByName("RedZone:EntityPushedBlock", d, x + rounded[0] + 0.5f,
 							y + rounded[1] + 0.5f, z + rounded[2] + 0.5f);
-
-					int bid = w.getblock(d, x + rounded[0], y + rounded[1], z + rounded[2]);
-					int meta = w.getblockmeta(d, x + rounded[0], y + rounded[1], z + rounded[2]);
-					w.setblock(d, x + rounded[0], y + rounded[1], z + rounded[2], 0);
-
 					e.init();
-					e.setBID(bid);
-					e.setIID(meta);
 					w.spawnEntityInWorld(e);
 				}
 			}

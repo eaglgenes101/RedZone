@@ -4,12 +4,22 @@ import java.util.Random;
 
 import org.newdawn.slick.opengl.Texture;
 
+import dangerzone.DamageTypes;
 import dangerzone.DangerZone;
+import dangerzone.GameModes;
+import dangerzone.InventoryContainer;
+import dangerzone.Player;
+import dangerzone.Utils;
 import dangerzone.World;
+import dangerzone.WorldRenderer;
+import dangerzone.blocks.Block;
 import dangerzone.blocks.Blocks;
 import dangerzone.entities.Entity;
 import dangerzone.entities.EntityBlockItem;
 import dangerzone.entities.EntityLiving;
+import dangerzone.items.Item;
+import dangerzone.items.ItemSword;
+import dangerzone.items.Items;
 
 /*/
  * Copyright 2015 Eugene "eaglgenes101" Wang
@@ -29,8 +39,6 @@ import dangerzone.entities.EntityLiving;
 
 public class EntityPushedBlock extends Entity
 {
-	int callNumber;
-
 	public EntityPushedBlock(World w)
 	{
 		super(w);
@@ -39,8 +47,6 @@ public class EntityPushedBlock extends Entity
 		height = 1.0f;
 		takesFallDamage = false;
 		movement_friction = false;
-		Random r = new Random();
-		callNumber = r.nextInt();
 	}
 
 	public void init()
@@ -54,7 +60,13 @@ public class EntityPushedBlock extends Entity
 		setVarFloat(22, posx);
 		setVarFloat(23, posy);
 		setVarFloat(24, posz);
-		world.setblock(dimension, (int)posx, (int)posy, (int)posz, 0);
+		setBID(world.getblock(dimension, (int) posx, (int) posy, (int) posz));
+		setIID(world.getblock(dimension, (int) posx, (int) posy, (int) posz));
+		if (Blocks.getBlock(getBID()) != null)
+			setMaxHealth(Blocks.getBlock(getBID()).maxdamage);
+		setHealth(getMaxHealth());
+		//TODO insert life code
+		world.setblock(dimension, (int) posx, (int) posy, (int) posz, 0);
 	}
 
 	public void update(float deltaT)
@@ -67,7 +79,7 @@ public class EntityPushedBlock extends Entity
 		{
 			deadflag = true; //Why are we a non-solid block?
 		}
-		else if (Blocks.isSolid(world.getblock(dimension, (int)posx, (int)posy, (int)posz)) && world.isServer)
+		else if (Blocks.isSolid(world.getblock(dimension, (int) posx, (int) posy, (int) posz)) && world.isServer)
 		{
 			deadflag = true; //We shouldn't exist here
 		}
@@ -76,22 +88,111 @@ public class EntityPushedBlock extends Entity
 			float combinedDistance = posx - getVarFloat(22) + posy - getVarFloat(23) + posz - getVarFloat(24);
 			if (combinedDistance > 1 || combinedDistance < -1 || lifetimeticker > 100)
 			{
+				posx = (float) ((int) posx + 0.5);
+				posy = (float) ((int) posy + 0.5);
+				posz = (float) ((int) posz + 0.5);
+				motiony = motionx = motionz = 0;
 				if (world.isServer)
 				{
-				    posx = (float) ((int)posx + 0.5);
-				    posy = (float) ((int)posy + 0.5);
-				    posz = (float) ((int)posz + 0.5);
-				    motiony = motionx = motionz = 0;
-					System.out.println(callNumber + " dead at distance " + Math.abs(combinedDistance));
+					System.out.println("Dead at distance " + Math.abs(combinedDistance));
 					world.setblockandmeta(dimension, (int) (posx), (int) (posy), (int) (posz), getBID(), getIID());
 					deadflag = true;
 				}
 			}
 		}
-		if (motionx != 0) System.out.println(motionx);
-		if (motiony != 0) System.out.println(motiony);
-		if (motionz != 0) System.out.println(motionz);
 		super.update(deltaT);
+	}
+
+	public String getHurtSound()
+	{
+		return Blocks.getBlock(getBID()).getHitSound();
+	}
+
+	public String getDeathSound()
+	{
+		return Blocks.getBlock(getBID()).getBreakSound();
+	}
+
+	/*
+	 * Entity is BEING attacked by this.
+	 */
+	public void doAttackFrom(/* entity that hit me */Entity e, /* DamageTypes */int dt, float pain)
+	{
+		if (!world.isServer)
+			return;
+		if (!(e instanceof Player))
+			return;
+		InventoryContainer ic = e.getHotbar(e.gethotbarindex());
+		int bid = getBID();
+		if (bid > 0)
+		{
+			if (Blocks.leftClickOnBlock(bid, (Player) e, dimension, (int) posx, (int) posy, (int) posz))
+			{
+				int dmg = 1;
+				if (ic != null && ic.iid != 0)
+				{
+					if (Blocks.isWood(bid) || Blocks.isLeaves(bid))
+					{
+						dmg = Items.getWoodStrength(ic.iid);
+					}
+					if (Blocks.isStone(bid))
+					{
+						dmg = Items.getStoneStrength(ic.iid);
+					}
+					if (Blocks.isDirt(bid))
+					{
+						dmg = Items.getDirtStrength(ic.iid);
+					}
+					if (ic.getItem() instanceof ItemSword && !Blocks.isLeaves(bid))
+					{
+						dmg = 0;
+					}
+					if (ic.getItem() instanceof ItemSword && Blocks.isLeaves(bid))
+					{
+						dmg = Items.getAttackStrength(ic.iid);
+					}
+					if (e.getGameMode() != GameModes.SURVIVAL)
+					{
+						dmg = (int)getMaxHealth()+1;
+					}
+					ic.getItem().leftClickOnBlock((Player) e, dimension, (int) posx, (int) posy, (int) posz, 0);
+				}
+
+				String particlename = Blocks.getParticleName(bid);
+				if (particlename == null || particlename.equals(""))
+					particlename = "DangerZone:ParticleBreak";
+				Utils.spawnParticles(this.world, particlename, 10, this.dimension, posx, posy, posz, true);
+				int md = Blocks.getMinDamage(bid);
+				if (dmg >= md)
+					setHealth(getHealth() - dmg);
+			}
+
+		}
+
+		if (getHealth() > 0)
+		{
+			if (getHurtSound() != null)
+			{
+				this.world.playSound(getHurtSound(), dimension, posx, posy, posz, 1.0f,
+						1.0f + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2f);
+			}
+			DangerZone.server.sendEntityHitToAll(this);
+		}
+		else
+		{
+			if (getDeathSound() != null)
+			{
+				this.world.playSound(getDeathSound(), dimension, posx, posy, posz, 1.0f,
+						1.0f + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.1f);
+			}
+			Blocks.doBreakBlock(bid, world, dimension, (int)posx, (int)posy, (int)posz);
+
+			this.doDeathDrops();
+			this.deadflag = true;
+			this.onDeath();
+
+			DangerZone.server.sendEntityDeathToAll(this);
+		}
 	}
 
 	public Texture getTexture()

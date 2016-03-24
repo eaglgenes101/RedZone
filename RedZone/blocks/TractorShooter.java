@@ -88,14 +88,6 @@ public class TractorShooter extends Block implements PoweredComponent
 		while (!Blocks.isSolid(w.getblock(d, x + offset[0] * reach, y + offset[1] * reach, z + offset[2] * reach))
 				&& powerLevel > 0)
 		{
-			if (w.getblock(d, x + offset[0] * reach, y + offset[1] * reach,
-					z + offset[2] * reach) != RedZoneBlocks.TRACTOR_BEAM.blockID)
-				w.setblockandmeta(d, x + offset[0] * reach, y + offset[1] * reach, z + offset[2] * reach,
-						RedZoneBlocks.TRACTOR_BEAM.blockID, Orienter.getSideForm(offset) << 8);
-			else if (w.getblockmeta(d, x + offset[0] * reach, y + offset[1] * reach,
-					z + offset[2] * reach) >> 8 != Orienter.getSideForm(offset))
-				w.setblockandmeta(d, x + offset[0] * reach, y + offset[1] * reach, z + offset[2] * reach,
-						RedZoneBlocks.TRACTOR_BEAM.blockID, Orienter.getSideForm(offset) << 8);
 			
 			List<Entity> nearby_list = DangerZone.entityManager.findEntitiesInRange(2.0f, d,
 					x + offset[0] * reach + 0.5f, y + offset[1] * reach + 0.5f, z + offset[2] * reach + 0.5f);
@@ -136,6 +128,15 @@ public class TractorShooter extends Block implements PoweredComponent
 					}
 				}
 			}
+
+			if (w.getblock(d, x + offset[0] * reach, y + offset[1] * reach,
+					z + offset[2] * reach) != RedZoneBlocks.TRACTOR_BEAM.blockID)
+				w.setblockandmeta(d, x + offset[0] * reach, y + offset[1] * reach, z + offset[2] * reach,
+						RedZoneBlocks.TRACTOR_BEAM.blockID, Orienter.getSideForm(offset) << 8);
+			else if (w.getblockmeta(d, x + offset[0] * reach, y + offset[1] * reach,
+					z + offset[2] * reach) >> 8 != Orienter.getSideForm(offset))
+				w.setblockandmeta(d, x + offset[0] * reach, y + offset[1] * reach, z + offset[2] * reach,
+						RedZoneBlocks.TRACTOR_BEAM.blockID, Orienter.getSideForm(offset) << 8);
 			
 			powerLevel--;
 			reach++;
