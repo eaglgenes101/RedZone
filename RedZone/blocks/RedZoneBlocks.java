@@ -41,6 +41,8 @@ public class RedZoneBlocks
 	public static Block DROPPER = new Dropper("RedZone:Dropper");
 	public static Block TRACTOR_SHOOTER = new TractorShooter("RedZone:Tractor Shooter");
 	public static Block TRACTOR_BEAM = new TractorBeam("RedZone:Tractor Beam", "RedZone_res/res/blocks/tractor_beam.png");
+	public static Block REPULSOR_SHOOTER = new RepulsorShooter("RedZone:Repulsor Shooter");
+	public static Block REPULSOR_BEAM = new RepulsorBeam("RedZone:Repulsor Beam", "RedZone_res/res/blocks/repulsor_beam.png");
 	
 	public static Block STRAIGHT_PIPE = new StraightPipe("RedZone:Straight Pipe");
 	public static Block CORNER_PIPE = new CornerPipe("RedZone:Corner Pipe");

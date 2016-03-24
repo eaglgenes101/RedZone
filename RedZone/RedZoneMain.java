@@ -122,6 +122,8 @@ public class RedZoneMain extends BaseMod
 		Blocks.registerBlock(RedZoneBlocks.DROPPER);
 		Blocks.registerBlock(RedZoneBlocks.TRACTOR_SHOOTER);
 		Blocks.registerBlock(RedZoneBlocks.TRACTOR_BEAM);
+		Blocks.registerBlock(RedZoneBlocks.REPULSOR_SHOOTER);
+		Blocks.registerBlock(RedZoneBlocks.REPULSOR_BEAM);
 
 		Blocks.registerBlock(RedZoneBlocks.STRAIGHT_PIPE);
 		Blocks.registerBlock(RedZoneBlocks.PUSHER_STRAIGHT_PIPE);

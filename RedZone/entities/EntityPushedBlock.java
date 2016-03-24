@@ -94,7 +94,6 @@ public class EntityPushedBlock extends Entity
 				motiony = motionx = motionz = 0;
 				if (world.isServer)
 				{
-					System.out.println("Dead at distance " + Math.abs(combinedDistance));
 					world.setblockandmeta(dimension, (int) (posx), (int) (posy), (int) (posz), getBID(), getIID());
 					deadflag = true;
 				}
