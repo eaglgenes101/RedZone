@@ -58,7 +58,7 @@ public class SmokeTester extends Block implements PoweredComponent
 	public void finishStep(World w, int d, int x, int y, int z)
 	{
 		if (getPowerLevel(w, d, x, y, z) > 0)
-			Utils.spawnParticlesFromServer(w, "DangerZone:ParticleFire", 1, d, x + 0.5f, y + 0.5f, z + 0.5f);
+			Utils.spawnParticlesFromServer(w, "DangerZone:ParticleFire", 1, d, x + 0.5, y + 0.5, z + 0.5);
 	}
 
 	@Override

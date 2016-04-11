@@ -131,9 +131,9 @@ public class ProximityDetector extends Block implements PoweredComponent
 					if (e instanceof EntityLiving)
 					{
 						EntityLiving el = (EntityLiving) e;
-						float dx = el.posx - ((float) x + 0.5f);
-						float dy = el.posy - ((float) y + 0.5f);
-						float dz = el.posz - ((float) z + 0.5f);
+						double dx = el.posx - (x + 0.5);
+						double dy = el.posy - (y + 0.5);
+						double dz = el.posz - (z + 0.5);
 						rawOutput += 1 / Math.sqrt(dx * dx + dy * dy + dz * dz);
 					}
 				}

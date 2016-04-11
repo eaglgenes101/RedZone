@@ -76,7 +76,7 @@ public class PowerStick extends LightStick implements PoweredComponent
 	{
 		FastBlockTicker.addFastTick(d, x, y, z);
 		Utils.spawnParticlesFromServer(w, "DangerZone:ParticleFire", getPowerLevel(w, d, x, y, z) / 16, d,
-				x + 0.5f, y + 0.5f, z + 0.5f);
+				x + 0.5, y + 0.5, z + 0.5);
 	}
 
 	public void finishStep(World w, int d, int x, int y, int z)

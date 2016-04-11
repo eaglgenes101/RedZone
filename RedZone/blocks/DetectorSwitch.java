@@ -153,15 +153,15 @@ public class DetectorSwitch extends Block implements PoweredComponent
 					if (e instanceof EntityLiving)
 					{
 						EntityLiving el = (EntityLiving) e;
-						int intheight = (int) (el.height + 0.995f);
-						float dx, dz;
+						int intheight = (int) (el.height + 0.995);
+						double dx, dz;
 						for (int k = 0; k < intheight; k++)
 						{
 							if ((int) el.posy + k == y)
 							{
-								dx = el.posx - ((float) x + 0.5f);
-								dz = el.posz - ((float) z + 0.5f);
-								if (Math.sqrt((dx * dx) + (dz * dz)) < (0.5f + (el.width / 2.0f)))
+								dx = el.posx - x + 0.5f;
+								dz = el.posz - z + 0.5f;
+								if (Math.sqrt((dx * dx) + (dz * dz)) < (0.5 + (el.width / 2.0)))
 								{
 									return true;
 								}

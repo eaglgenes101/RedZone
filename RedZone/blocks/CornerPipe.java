@@ -87,8 +87,7 @@ public class CornerPipe extends Pipe
 			if (!w.isServer)
 			{
 				// System.out.printf("spawning new chest entity\n");
-				Entity eb = w.createEntityByName("RedZone:EntityCornerPipe", d, (float) (x) + 0.5f, (float) (y) + 0.5f,
-						(float) (z) + 0.5f);
+				Entity eb = w.createEntityByName("RedZone:EntityCornerPipe", d, x + 0.5, y + 0.5, z + 0.5);
 				if (eb != null)
 				{
 					eb.init();
@@ -130,8 +129,7 @@ public class CornerPipe extends Pipe
 		if (!w.isServer)
 		{
 			// System.out.printf("onBlockPlaced spawning new dispenser entity\n");
-			Entity eb = w.createEntityByName("RedZone:EntityCornerPipe", dimension, (float) (x) + 0.5f,
-					(float) (y) + 0.5f, (float) (z) + 0.5f);
+			Entity eb = w.createEntityByName("RedZone:EntityCornerPipe", dimension, x + 0.5, y + 0.5, z + 0.5);
 			if (eb != null)
 			{
 				eb.init();

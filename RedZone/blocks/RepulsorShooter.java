@@ -19,12 +19,22 @@ import mechanics.Orienter;
 import mechanics.PoweredComponent;
 
 /**
+ * Repulsor shooters shoot out repulsor beams, which can move entities and
+ * blocks around.
+ * <p>
+ * Repulsor shooters, when powered, shoot a repulsor beam out of their front.
+ * How far this beam goes is determined by the closest entity or block in that
+ * direction, or the power supplied, whichever is smaller. If the repulsor beam
+ * is not obstructed, it will cause the first block or entity it hits to move
+ * away from the repulsor shooter.
+ * 
  * @author eaglgenes101
- *
+ * @see TractorShooter
+ * @see RepulsorBeam
+ * @see EntityPushedBlock
  */
 public class RepulsorShooter extends TractorShooter
 {
-
 
 	public RepulsorShooter(String n)
 	{
@@ -49,9 +59,9 @@ public class RepulsorShooter extends TractorShooter
 		while (!Blocks.isSolid(w.getblock(d, x + offset[0] * reach, y + offset[1] * reach, z + offset[2] * reach))
 				&& powerLevel > 0)
 		{
-			
+
 			List<Entity> nearby_list = DangerZone.entityManager.findEntitiesInRange(2.0f, d,
-					x + offset[0] * reach + 0.5f, y + offset[1] * reach + 0.5f, z + offset[2] * reach + 0.5f);
+					x + offset[0] * reach + 0.5, y + offset[1] * reach + 0.5, z + offset[2] * reach + 0.5);
 			ListIterator<Entity> li;
 
 			if (nearby_list != null)
@@ -71,15 +81,15 @@ public class RepulsorShooter extends TractorShooter
 						if (e instanceof EntityLiving)
 						{
 							EntityLiving el = (EntityLiving) e;
-							int intheight = (int) (el.height + 0.995f);
-							float dx, dz;
+							int intheight = (int) (el.height + 0.995);
+							double dx, dz;
 							for (int k = 0; k < intheight; k++)
 							{
 								if ((int) el.posy + k == y + offset[1] * reach)
 								{
-									dx = el.posx - ((float) x + offset[0] * reach + 0.5f);
-									dz = el.posz - ((float) z + offset[2] * reach + 0.5f);
-									if (Math.sqrt((dx * dx) + (dz * dz)) < (0.5f + (el.width / 2.0f)))
+									dx = el.posx - (x + offset[0] * reach + 0.5);
+									dz = el.posz - (z + offset[2] * reach + 0.5);
+									if (Math.sqrt((dx * dx) + (dz * dz)) < (0.5 + (el.width / 2.0)))
 									{
 										break outerLoop;
 									}
@@ -98,7 +108,7 @@ public class RepulsorShooter extends TractorShooter
 					z + offset[2] * reach) >> 8 != Orienter.getSideForm(offset))
 				w.setblockandmeta(d, x + offset[0] * reach, y + offset[1] * reach, z + offset[2] * reach,
 						RedZoneBlocks.REPULSOR_BEAM.blockID, Orienter.getSideForm(offset) << 8);
-			
+
 			powerLevel--;
 			reach++;
 		}

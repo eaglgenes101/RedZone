@@ -34,7 +34,7 @@ import dangerzone.items.Item;
  * DangerZone renders the correct sprites in the inventory.
  * 
  * @author eaglgenes101
- *
+ * @see Wire
  */
 
 public class WireItem extends Item

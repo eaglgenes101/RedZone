@@ -56,8 +56,8 @@ public class RepulsorBeam extends TractorBeam
 
 		if (w.isServer)
 		{
-			List<Entity> nearby_list = DangerZone.server.entityManager.findALLEntitiesInRange(2.0f, d, x + 0.5f, y + 0.5f,
-					z + 0.5f);
+			List<Entity> nearby_list = DangerZone.server.entityManager.findALLEntitiesInRange(2.0f, d, x + 0.5, y + 0.5,
+					z + 0.5);
 			ListIterator<Entity> li;
 
 			boolean hitBlockEntity = false;
@@ -84,15 +84,15 @@ public class RepulsorBeam extends TractorBeam
 						if (e instanceof EntityLiving)
 						{
 							EntityLiving el = (EntityLiving) e;
-							int intheight = (int) (el.height + 0.995f);
-							float dx, dz;
+							int intheight = (int) (el.height + 0.995);
+							double dx, dz;
 							for (int k = 0; k < intheight; k++)
 							{
 								if ((int) el.posy + k == y)
 								{
-									dx = el.posx - ((float) x + 0.5f);
-									dz = el.posz - ((float) z + 0.5f);
-									if (Math.sqrt((dx * dx) + (dz * dz)) < (0.5f + (el.width / 2.0f)))
+									dx = el.posx - (x + 0.5);
+									dz = el.posz - (z + 0.5);
+									if (Math.sqrt((dx * dx) + (dz * dz)) < (0.5 + (el.width / 2.0)))
 									{
 										shouldPush = true;
 									}
@@ -120,8 +120,8 @@ public class RepulsorBeam extends TractorBeam
 			{
 				if (Blocks.isSolid(w.getblock(d, x + rounded[0], y + rounded[1], z + rounded[2])))
 				{
-					Entity e = w.createEntityByName("RedZone:EntityPushedBlock", d, x + rounded[0] + 0.5f,
-							y + rounded[1] + 0.5f, z + rounded[2] + 0.5f);
+					Entity e = w.createEntityByName("RedZone:EntityPushedBlock", d, x + rounded[0] + 0.5,
+							y + rounded[1] + 0.5, z + rounded[2] + 0.5);
 					e.init();
 					w.spawnEntityInWorld(e);
 				}

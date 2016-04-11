@@ -143,8 +143,7 @@ public class Dropper extends Block implements PoweredComponent
 			if (!w.isServer)
 			{
 				// System.out.printf("spawning new chest entity\n");
-				Entity eb = w.createEntityByName("RedZone:EntityDropper", d, (float) (x) + 0.5f, (float) (y) + 0.5f,
-						(float) (z) + 0.5f);
+				Entity eb = w.createEntityByName("RedZone:EntityDropper", d, x + 0.5, y + 0.5, z + 0.5);
 				if (eb != null)
 				{
 					eb.init();
@@ -187,8 +186,7 @@ public class Dropper extends Block implements PoweredComponent
 		if (!w.isServer)
 		{
 			// System.out.printf("onBlockPlaced spawning new dispenser entity\n");
-			Entity eb = w.createEntityByName("RedZone:EntityDropper", dimension, (float) (x) + 0.5f, (float) (y) + 0.5f,
-					(float) (z) + 0.5f);
+			Entity eb = w.createEntityByName("RedZone:EntityDropper", dimension, x + 0.5, y + 0.5, z + 0.5);
 			if (eb != null)
 			{
 				eb.init();

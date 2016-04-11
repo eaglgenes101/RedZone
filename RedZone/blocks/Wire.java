@@ -153,8 +153,8 @@ public class Wire extends Block implements PoweredComponent
 		if (!Blocks.isSolid(bid))
 		{
 			w.setblock(d, x, y, z, 0);
-			EntityBlockItem e = (EntityBlockItem) w.createEntityByName(DangerZone.blockitemname, d, x + 0.5f, y + 0.5f,
-					z + 0.5f);
+			EntityBlockItem e = (EntityBlockItem) w.createEntityByName(DangerZone.blockitemname, d, x + 0.5, y + 0.5,
+					z + 0.5);
 			if (e != null)
 			{
 				e.setBID(this.blockID);
@@ -173,15 +173,15 @@ public class Wire extends Block implements PoweredComponent
 			return;
 
 		int meta = 0;
-		float dx = 1.0f / 3.0f;
-		float dy = 2.0f / 3.0f;
-		float dz = 1;
+		double dx = 1.0 / 3.0;
+		double dy = 2.0 / 3.0;
+		double dz = 1;
 
 		if (p != null)
 		{
-			dx = (x + 0.5f) - p.posx;
-			dy = (y + 0.5f) - p.posy;
-			dz = (z + 0.5f) - p.posz;
+			dx = (x + 0.5) - p.posx;
+			dy = (y + 0.5) - p.posy;
+			dz = (z + 0.5) - p.posz;
 		}
 
 		switch (side)

@@ -4,6 +4,7 @@ import dangerzone.BaseMod;
 import dangerzone.Crafting;
 import dangerzone.blocks.Blocks;
 import dangerzone.entities.Entities;
+import dangerzone.entities.ModelBlock;
 import dangerzone.items.Items;
 import entities.EntityPushedBlock;
 import entities.EntityCornerPipe;
@@ -14,7 +15,6 @@ import entities.EntityPusherCornerPipe;
 import entities.EntityPusherFiveWayPipe;
 import entities.EntityPusherStraightPipe;
 import entities.EntityStraightPipe;
-import entities.ModelBlock;
 
 /*/
  * Copyright 2015 Eugene "eaglgenes101" Wang
@@ -78,6 +78,8 @@ import entities.ModelBlock;
  * @see mechanics.ItemSupplier
  * @see mechanics.Orienter
  * @see mechanics.PoweredComponent
+ * @see blocks.RedZoneBlocks
+ * @see item.RedZoneItems
  */
 
 public class RedZoneMain extends BaseMod
@@ -90,13 +92,13 @@ public class RedZoneMain extends BaseMod
 	@Override
 	public String getModName()
 	{
-		return "RedZone v0.2.6";
+		return "RedZone v0.2.7";
 	}
 
 	@Override
 	public String versionBuiltWith()
 	{
-		return "0.93";
+		return "1.0";
 	}
 
 	public void registerThings()

@@ -37,6 +37,22 @@ import dangerzone.items.Items;
  * limitations under the License. 
 /*/
 
+/**
+ * EntityPushedBlock is an entity that is used to represent pushed blocks.
+ * <p>
+ * When a solid block is hit by a TractorBeam or a RepulsorBeam, it turns into
+ * an EntityPushedBlock. This EntityPushedBlock then can be affected by forces,
+ * and will settle back into a block when it is pushed far enough. The block
+ * inherits the blockID and itemID of the block it originates from, and will
+ * break under the same circumstances the block would, but block-related
+ * entities will not recognize the pushed block entity.
+ * 
+ * @author eaglgenes101
+ * @see TractorBeam
+ * @see RepulsorBeam
+ * @see ModelBlock
+ */
+
 public class EntityPushedBlock extends Entity
 {
 	public EntityPushedBlock(World w)
@@ -57,15 +73,14 @@ public class EntityPushedBlock extends Entity
 		this.rotation_pitch = 0;
 		this.rotation_roll = 0;
 		this.rotation_yaw = 0;
-		setVarFloat(22, posx);
-		setVarFloat(23, posy);
-		setVarFloat(24, posz);
+		setVarInt(22, (int)posx);
+		setVarInt(23, (int)posy);
+		setVarInt(24, (int)posz);
 		setBID(world.getblock(dimension, (int) posx, (int) posy, (int) posz));
 		setIID(world.getblock(dimension, (int) posx, (int) posy, (int) posz));
 		if (Blocks.getBlock(getBID()) != null)
 			setMaxHealth(Blocks.getBlock(getBID()).maxdamage);
 		setHealth(getMaxHealth());
-		//TODO insert life code
 		world.setblock(dimension, (int) posx, (int) posy, (int) posz, 0);
 	}
 
@@ -85,12 +100,12 @@ public class EntityPushedBlock extends Entity
 		}
 		else
 		{
-			float combinedDistance = posx - getVarFloat(22) + posy - getVarFloat(23) + posz - getVarFloat(24);
+			double combinedDistance = posx - getVarInt(22) + posy - getVarInt(23) + posz - getVarInt(24);
 			if (combinedDistance > 1 || combinedDistance < -1 || lifetimeticker > 100)
 			{
-				posx = (float) ((int) posx + 0.5);
-				posy = (float) ((int) posy + 0.5);
-				posz = (float) ((int) posz + 0.5);
+				posx = ((int) posx + 0.5);
+				posy = ((int) posy + 0.5);
+				posz = ((int) posz + 0.5);
 				motiony = motionx = motionz = 0;
 				if (world.isServer)
 				{
@@ -152,7 +167,7 @@ public class EntityPushedBlock extends Entity
 					}
 					if (e.getGameMode() != GameModes.SURVIVAL)
 					{
-						dmg = (int)getMaxHealth()+1;
+						dmg = (int) getMaxHealth() + 1;
 					}
 					ic.getItem().leftClickOnBlock((Player) e, dimension, (int) posx, (int) posy, (int) posz, 0);
 				}
@@ -184,7 +199,7 @@ public class EntityPushedBlock extends Entity
 				this.world.playSound(getDeathSound(), dimension, posx, posy, posz, 1.0f,
 						1.0f + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.1f);
 			}
-			Blocks.doBreakBlock(bid, world, dimension, (int)posx, (int)posy, (int)posz);
+			Blocks.doBreakBlock(bid, world, dimension, (int) posx, (int) posy, (int) posz);
 
 			this.doDeathDrops();
 			this.deadflag = true;
