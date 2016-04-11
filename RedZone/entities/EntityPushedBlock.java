@@ -100,7 +100,7 @@ public class EntityPushedBlock extends Entity
 		}
 		else
 		{
-			double combinedDistance = posx - getVarInt(22) + posy - getVarInt(23) + posz - getVarInt(24);
+			double combinedDistance = posx - getVarInt(22) + posy - getVarInt(23) + posz - getVarInt(24) - 1.5;
 			if (combinedDistance > 1 || combinedDistance < -1 || lifetimeticker > 100)
 			{
 				posx = ((int) posx + 0.5);
