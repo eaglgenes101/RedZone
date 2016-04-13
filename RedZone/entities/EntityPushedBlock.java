@@ -1,23 +1,15 @@
 package entities;
 
-import java.util.Random;
-
 import org.newdawn.slick.opengl.Texture;
 
-import dangerzone.DamageTypes;
 import dangerzone.DangerZone;
 import dangerzone.GameModes;
 import dangerzone.InventoryContainer;
 import dangerzone.Player;
 import dangerzone.Utils;
 import dangerzone.World;
-import dangerzone.WorldRenderer;
-import dangerzone.blocks.Block;
 import dangerzone.blocks.Blocks;
 import dangerzone.entities.Entity;
-import dangerzone.entities.EntityBlockItem;
-import dangerzone.entities.EntityLiving;
-import dangerzone.items.Item;
 import dangerzone.items.ItemSword;
 import dangerzone.items.Items;
 
@@ -103,9 +95,9 @@ public class EntityPushedBlock extends Entity
 			double combinedDistance = posx - getVarInt(22) + posy - getVarInt(23) + posz - getVarInt(24) - 1.5;
 			if (combinedDistance > 1 || combinedDistance < -1 || lifetimeticker > 100)
 			{
-				posx = ((int) posx + 0.5);
-				posy = ((int) posy + 0.5);
-				posz = ((int) posz + 0.5);
+				posx = getVarInt(22) + Math.signum(Math.round(posx - 0.5 - getVarInt(22))) + 0.5;
+				posy = getVarInt(23) + Math.signum(Math.round(posy - 0.5 - getVarInt(23))) + 0.5;
+				posz = getVarInt(24) + Math.signum(Math.round(posz - 0.5 - getVarInt(24))) + 0.5;
 				motiony = motionx = motionz = 0;
 				if (world.isServer)
 				{

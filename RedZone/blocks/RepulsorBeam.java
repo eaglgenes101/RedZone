@@ -102,9 +102,9 @@ public class RepulsorBeam extends TractorBeam
 
 						if (shouldPush)
 						{
-							e.motionx += rounded[0]*0.05;
-							e.motiony += rounded[1]*0.05;
-							e.motionz += rounded[2]*0.05;
+							e.motionx += rounded[0]*0.2;
+							e.motiony += rounded[1]*0.2;
+							e.motionz += rounded[2]*0.2;
 						}
 						if (e instanceof EntityBlockItem)
 							e.deadflag = true;
