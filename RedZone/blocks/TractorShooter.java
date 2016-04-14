@@ -11,7 +11,6 @@ import dangerzone.World;
 import dangerzone.blocks.Block;
 import dangerzone.blocks.Blocks;
 import dangerzone.entities.Entity;
-import dangerzone.entities.EntityBlockItem;
 import dangerzone.entities.EntityLiving;
 import dangerzone.threads.FastBlockTicker;
 import entities.EntityPushedBlock;
@@ -99,6 +98,14 @@ public class TractorShooter extends Block implements PoweredComponent
 		while (!Blocks.isSolid(w.getblock(d, x + offset[0] * reach, y + offset[1] * reach, z + offset[2] * reach))
 				&& powerLevel > 0)
 		{
+			if (w.getblock(d, x + offset[0] * reach, y + offset[1] * reach,
+					z + offset[2] * reach) != RedZoneBlocks.TRACTOR_BEAM.blockID)
+				w.setblockandmeta(d, x + offset[0] * reach, y + offset[1] * reach, z + offset[2] * reach,
+						RedZoneBlocks.TRACTOR_BEAM.blockID, (Orienter.getSideForm(offset) << 8)|(powerLevel));
+			else if (w.getblockmeta(d, x + offset[0] * reach, y + offset[1] * reach,
+					z + offset[2] * reach) >> 8 != Orienter.getSideForm(offset))
+				w.setblockandmeta(d, x + offset[0] * reach, y + offset[1] * reach, z + offset[2] * reach,
+						RedZoneBlocks.TRACTOR_BEAM.blockID, (Orienter.getSideForm(offset) << 8)|(powerLevel));
 			
 			List<Entity> nearby_list = DangerZone.entityManager.findEntitiesInRange(2.0f, d,
 					x + offset[0] * reach + 0.5, y + offset[1] * reach + 0.5, z + offset[2] * reach + 0.5);
@@ -113,11 +120,9 @@ public class TractorShooter extends Block implements PoweredComponent
 					e = (Entity) li.next();
 					if (!e.canthitme)
 					{
-						if (x + offset[0] * reach == (int) e.posx && y + offset[1] * reach == (int) e.posy
-								&& z + offset[2] * reach == (int) e.posz)
-						{
+						if (x + offset[0] * (reach+1) == (int) e.posx && y + offset[1] * (reach+1) == (int) e.posy
+								&& z + offset[2] * (reach+1) == (int) e.posz)
 							break outerLoop;
-						}
 						if (e instanceof EntityLiving)
 						{
 							EntityLiving el = (EntityLiving) e;
@@ -130,24 +135,13 @@ public class TractorShooter extends Block implements PoweredComponent
 									dx = el.posx - (x + offset[0] * reach + 0.5);
 									dz = el.posz - (z + offset[2] * reach + 0.5);
 									if (Math.sqrt((dx * dx) + (dz * dz)) < (0.5 + (el.width / 2.0)))
-									{
 										break outerLoop;
-									}
 								}
 							}
 						}
 					}
 				}
 			}
-
-			if (w.getblock(d, x + offset[0] * reach, y + offset[1] * reach,
-					z + offset[2] * reach) != RedZoneBlocks.TRACTOR_BEAM.blockID)
-				w.setblockandmeta(d, x + offset[0] * reach, y + offset[1] * reach, z + offset[2] * reach,
-						RedZoneBlocks.TRACTOR_BEAM.blockID, Orienter.getSideForm(offset) << 8);
-			else if (w.getblockmeta(d, x + offset[0] * reach, y + offset[1] * reach,
-					z + offset[2] * reach) >> 8 != Orienter.getSideForm(offset))
-				w.setblockandmeta(d, x + offset[0] * reach, y + offset[1] * reach, z + offset[2] * reach,
-						RedZoneBlocks.TRACTOR_BEAM.blockID, Orienter.getSideForm(offset) << 8);
 			
 			powerLevel--;
 			reach++;

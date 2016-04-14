@@ -8,11 +8,9 @@ import dangerzone.Player;
 import dangerzone.World;
 import dangerzone.blocks.Block;
 import dangerzone.blocks.Blocks;
-import dangerzone.blocks.LightStick;
 import dangerzone.entities.Entity;
 import dangerzone.entities.EntityBlockItem;
 import dangerzone.entities.EntityLiving;
-import dangerzone.threads.FastBlockTicker;
 import entities.EntityPushedBlock;
 import mechanics.Orienter;
 
@@ -74,13 +72,9 @@ public class RepulsorBeam extends TractorBeam
 						boolean shouldPush = false;
 						if (x + rounded[0] == (int) e.posx && y + rounded[1] == (int) e.posy
 								&& z + rounded[2] == (int) e.posz)
-						{
 							shouldPush = true;
-						}
 						if (x == (int) e.posx && y == (int) e.posy && z == (int) e.posz)
-						{
 							shouldPush = true;
-						}
 						if (e instanceof EntityLiving)
 						{
 							EntityLiving el = (EntityLiving) e;
@@ -93,48 +87,52 @@ public class RepulsorBeam extends TractorBeam
 									dx = el.posx - (x + 0.5);
 									dz = el.posz - (z + 0.5);
 									if (Math.sqrt((dx * dx) + (dz * dz)) < (0.5 + (el.width / 2.0)))
-									{
 										shouldPush = true;
-									}
 								}
 							}
 						}
 
 						if (shouldPush)
 						{
-							e.motionx += rounded[0]*0.2;
-							e.motiony += rounded[1]*0.2;
-							e.motionz += rounded[2]*0.2;
+							e.motionx += rounded[0]*0.1;
+							e.motiony += rounded[1]*0.1;
+							e.motionz += rounded[2]*0.1;
 						}
+						if (e instanceof Player)
+							((Player)e).server_thread.sendVelocityUpdateToPlayer(e.motionx, e.motiony, e.motionz);
 						if (e instanceof EntityBlockItem)
 							e.deadflag = true;
 						if (e instanceof EntityPushedBlock)
-						{
 							hitBlockEntity = true;
-						}
 					}
 				}
 			}
-			if (w.getblock(d, x + rounded[0], y + rounded[1], z + rounded[2]) != RedZoneBlocks.REPULSOR_BEAM.blockID
+			if (w.getblock(d, x + rounded[0], y + rounded[1], z + rounded[2]) != RedZoneBlocks.TRACTOR_BEAM.blockID
 					&& !hitBlockEntity)
 			{
-				if (Blocks.isSolid(w.getblock(d, x + rounded[0], y + rounded[1], z + rounded[2])))
+				int checkBlock = w.getblock(d, x + rounded[0], y + rounded[1], z + rounded[2]);
+				if (Blocks.isSolid(checkBlock))
 				{
-					Entity e = w.createEntityByName("RedZone:EntityPushedBlock", d, x + rounded[0] + 0.5,
-							y + rounded[1] + 0.5, z + rounded[2] + 0.5);
-					e.init();
-					w.spawnEntityInWorld(e);
+					if (Blocks.getMinDamage(checkBlock) * Blocks.getMinDamage(checkBlock)
+							+ Blocks.getMaxDamage(checkBlock) <= (w.getblockmeta(d, x, y, z)%256)*4)
+					{
+						Entity e = w.createEntityByName("RedZone:EntityPushedBlock", d, x + rounded[0] + 0.5,
+								y + rounded[1] + 0.5, z + rounded[2] + 0.5);
+						e.init();
+						w.spawnEntityInWorld(e);
+					}
 				}
 			}
 		}
-		
+
 		if (w.getblock(d, x - rounded[0], y - rounded[1], z - rounded[2]) == RedZoneBlocks.REPULSOR_BEAM.blockID)
 		{
 			if (w.getblockmeta(d, x - rounded[0], y - rounded[1], z - rounded[2]) >> 8 == w.getblockmeta(d, x, y,
 					z) >> 8)
 				return;
 		}
-		else if (w.getblock(d, x - rounded[0], y - rounded[1], z - rounded[2]) == RedZoneBlocks.REPULSOR_SHOOTER.blockID)
+		else if (w.getblock(d, x - rounded[0], y - rounded[1],
+				z - rounded[2]) == RedZoneBlocks.REPULSOR_SHOOTER.blockID)
 		{
 			double[] otherBlockDir = Orienter.getDirection(Orienter.NORTH_VECTOR,
 					w.getblockmeta(d, x - rounded[0], y - rounded[1], z - rounded[2]));

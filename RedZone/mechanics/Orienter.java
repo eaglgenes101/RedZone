@@ -149,6 +149,39 @@ public class Orienter
 		}
 		return start;
 	}
+	
+	public static double[] bodyxyzToQuart(double x, double y, double z)
+	{
+		double[] quartx = {Math.cos(x/2.0), Math.sin(x/2.0), 0.0, 0.0};
+		double[] quarty = {Math.cos(y/2.0), 0.0, Math.sin(y/2.0), 0.0};
+		double[] quartz = {Math.cos(z/2.0), 0.0, 0.0, Math.sin(z/2.0)};
+		return quartproduct(quartx, quartproduct(quarty, quartz));
+	}
+	
+	public static double[] quartToBodyZYX(double[] rot)
+	{
+		double[] returnVal = new double[3];
+		double check = rot[0]*rot[2] - rot[3]*rot[1];
+		if (check > 0.499)
+		{
+			returnVal[0] = 0;
+			returnVal[1] = Math.PI/2.0;
+			returnVal[2] = 2*Math.atan2(rot[1], rot[0]);
+		}
+		else if (check < -.499)
+		{
+			returnVal[0] = 0;
+			returnVal[1] = Math.PI/2.0;
+			returnVal[2] = -2*Math.atan2(rot[1], rot[0]);
+		}
+		else
+		{
+			returnVal[0] = Math.atan2(2*(rot[0]*rot[1] + rot[2]*rot[3]), 1 - 2*(rot[1]*rot[1] + rot[2]*rot[2]));
+			returnVal[1] = Math.asin(2*(rot[0]*rot[2] - rot[3]*rot[1]));
+			returnVal[2] = Math.atan2(2*(rot[0]*rot[3] + rot[1]*rot[2]), 1 - 2*(rot[2]*rot[2] + rot[3]*rot[3]));
+		}
+		return returnVal;
+	}
 
 	//side 0 = top (0, 1, 0)
 	//side 1 = front (0, 0, 1)

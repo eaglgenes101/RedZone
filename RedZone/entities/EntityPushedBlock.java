@@ -1,5 +1,7 @@
 package entities;
 
+import java.util.Arrays;
+
 import org.newdawn.slick.opengl.Texture;
 
 import dangerzone.DangerZone;
@@ -8,10 +10,12 @@ import dangerzone.InventoryContainer;
 import dangerzone.Player;
 import dangerzone.Utils;
 import dangerzone.World;
+import dangerzone.blocks.BlockRotation;
 import dangerzone.blocks.Blocks;
 import dangerzone.entities.Entity;
 import dangerzone.items.ItemSword;
 import dangerzone.items.Items;
+import mechanics.Orienter;
 
 /*/
  * Copyright 2015 Eugene "eaglgenes101" Wang
@@ -54,6 +58,7 @@ public class EntityPushedBlock extends Entity
 		width = 1.0f;
 		height = 1.0f;
 		takesFallDamage = false;
+		ignoreCollisions = false;
 		movement_friction = false;
 	}
 
@@ -62,14 +67,26 @@ public class EntityPushedBlock extends Entity
 		this.motionx = 0;
 		this.motiony = 0;
 		this.motionz = 0;
-		this.rotation_pitch = 0;
-		this.rotation_roll = 0;
-		this.rotation_yaw = 0;
 		setVarInt(22, (int)posx);
 		setVarInt(23, (int)posy);
 		setVarInt(24, (int)posz);
 		setBID(world.getblock(dimension, (int) posx, (int) posy, (int) posz));
-		setIID(world.getblock(dimension, (int) posx, (int) posy, (int) posz));
+		setIID(world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
+		
+		double x_rot_times = (getIID()&BlockRotation.X_MASK)/BlockRotation.X_ROT_90;
+		double y_rot_times = (getIID()&BlockRotation.Y_MASK)/BlockRotation.Y_ROT_90;
+		double z_rot_times = (getIID()&BlockRotation.Z_MASK)/BlockRotation.Z_ROT_90;
+		
+		double x_rot = x_rot_times*Math.PI/2.0;
+		double y_rot = y_rot_times*Math.PI/2.0;
+		double z_rot = z_rot_times*Math.PI/2.0;
+		
+		double[] rotPosition = Orienter.quartToBodyZYX(Orienter.bodyxyzToQuart(x_rot, y_rot, z_rot));
+		
+		this.rotation_pitch = (float)(0*rotPosition[2]/Math.PI*180.0);
+		this.rotation_yaw = 0;
+		this.rotation_roll = (float)(0*rotPosition[0]/Math.PI*180.0);
+		
 		if (Blocks.getBlock(getBID()) != null)
 			setMaxHealth(Blocks.getBlock(getBID()).maxdamage);
 		setHealth(getMaxHealth());
@@ -88,7 +105,10 @@ public class EntityPushedBlock extends Entity
 		}
 		else if (Blocks.isSolid(world.getblock(dimension, (int) posx, (int) posy, (int) posz)) && world.isServer)
 		{
-			deadflag = true; //We shouldn't exist here
+			Blocks.doBreakBlock(this.getBID(), world, dimension, (int) posx, (int) posy, (int) posz);
+			this.doDeathDrops();
+			this.deadflag = true;
+			this.onDeath();
 		}
 		else
 		{
