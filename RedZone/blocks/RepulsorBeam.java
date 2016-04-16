@@ -94,9 +94,9 @@ public class RepulsorBeam extends TractorBeam
 
 						if (shouldPush)
 						{
-							e.motionx += rounded[0]*0.1;
-							e.motiony += rounded[1]*0.1;
-							e.motionz += rounded[2]*0.1;
+							e.motionx += rounded[0];
+							e.motiony += rounded[1];
+							e.motionz += rounded[2];
 						}
 						if (e instanceof Player)
 							((Player)e).server_thread.sendVelocityUpdateToPlayer(e.motionx, e.motiony, e.motionz);

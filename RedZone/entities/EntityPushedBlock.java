@@ -1,7 +1,5 @@
 package entities;
 
-import java.util.Arrays;
-
 import org.newdawn.slick.opengl.Texture;
 
 import dangerzone.DangerZone;
@@ -113,8 +111,9 @@ public class EntityPushedBlock extends Entity
 		else
 		{
 			double combinedDistance = posx - getVarInt(22) + posy - getVarInt(23) + posz - getVarInt(24) - 1.5;
-			if (combinedDistance > 1 || combinedDistance < -1 || lifetimeticker > 100)
+			if (combinedDistance > 1 || combinedDistance < -1 || lifetimeticker > 50)
 			{
+				System.out.println(lifetimeticker);
 				posx = getVarInt(22) + Math.signum(Math.round(posx - 0.5 - getVarInt(22))) + 0.5;
 				posy = getVarInt(23) + Math.signum(Math.round(posy - 0.5 - getVarInt(23))) + 0.5;
 				posz = getVarInt(24) + Math.signum(Math.round(posz - 0.5 - getVarInt(24))) + 0.5;
@@ -179,7 +178,7 @@ public class EntityPushedBlock extends Entity
 					}
 					if (e.getGameMode() != GameModes.SURVIVAL)
 					{
-						dmg = (int) getMaxHealth() + 1;
+						setHealth(0); //Just shortcut the entire process
 					}
 					ic.getItem().leftClickOnBlock((Player) e, dimension, (int) posx, (int) posy, (int) posz, 0);
 				}
