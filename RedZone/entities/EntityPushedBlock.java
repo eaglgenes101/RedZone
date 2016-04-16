@@ -1,5 +1,8 @@
 package entities;
 
+import java.util.List;
+import java.util.ListIterator;
+
 import org.newdawn.slick.opengl.Texture;
 
 import dangerzone.DangerZone;
@@ -11,6 +14,7 @@ import dangerzone.World;
 import dangerzone.blocks.BlockRotation;
 import dangerzone.blocks.Blocks;
 import dangerzone.entities.Entity;
+import dangerzone.entities.EntityLiving;
 import dangerzone.items.ItemSword;
 import dangerzone.items.Items;
 import mechanics.Orienter;
@@ -65,30 +69,79 @@ public class EntityPushedBlock extends Entity
 		this.motionx = 0;
 		this.motiony = 0;
 		this.motionz = 0;
-		setVarInt(22, (int)posx);
-		setVarInt(23, (int)posy);
-		setVarInt(24, (int)posz);
+		setVarInt(22, (int) posx);
+		setVarInt(23, (int) posy);
+		setVarInt(24, (int) posz);
 		setBID(world.getblock(dimension, (int) posx, (int) posy, (int) posz));
 		setIID(world.getblockmeta(dimension, (int) posx, (int) posy, (int) posz));
-		
-		double x_rot_times = (getIID()&BlockRotation.X_MASK)/BlockRotation.X_ROT_90;
-		double y_rot_times = (getIID()&BlockRotation.Y_MASK)/BlockRotation.Y_ROT_90;
-		double z_rot_times = (getIID()&BlockRotation.Z_MASK)/BlockRotation.Z_ROT_90;
-		
-		double x_rot = x_rot_times*Math.PI/2.0;
-		double y_rot = y_rot_times*Math.PI/2.0;
-		double z_rot = z_rot_times*Math.PI/2.0;
-		
+
+		double x_rot_times = (getIID() & BlockRotation.X_MASK) / BlockRotation.X_ROT_90;
+		double y_rot_times = (getIID() & BlockRotation.Y_MASK) / BlockRotation.Y_ROT_90;
+		double z_rot_times = (getIID() & BlockRotation.Z_MASK) / BlockRotation.Z_ROT_90;
+
+		double x_rot = x_rot_times * Math.PI / 2.0;
+		double y_rot = y_rot_times * Math.PI / 2.0;
+		double z_rot = z_rot_times * Math.PI / 2.0;
+
 		double[] rotPosition = Orienter.quartToBodyZYX(Orienter.bodyxyzToQuart(x_rot, y_rot, z_rot));
-		
-		this.rotation_pitch = (float)(0*rotPosition[2]/Math.PI*180.0);
+
+		this.rotation_pitch = (float) (0 * rotPosition[2] / Math.PI * 180.0);
 		this.rotation_yaw = 0;
-		this.rotation_roll = (float)(0*rotPosition[0]/Math.PI*180.0);
-		
+		this.rotation_roll = (float) (0 * rotPosition[0] / Math.PI * 180.0);
+
 		if (Blocks.getBlock(getBID()) != null)
 			setMaxHealth(Blocks.getBlock(getBID()).maxdamage);
 		setHealth(getMaxHealth());
 		world.setblock(dimension, (int) posx, (int) posy, (int) posz, 0);
+	}
+
+	@Override
+	public void doEntityCollisions(float deltaT)
+	{
+		float wdth = getWidth();
+		List<Entity> nearby_list = null;
+		ListIterator<Entity> li;
+
+		//Get a list of entities within reach of largest mob expected because we may hit their hitbox!
+		nearby_list = DangerZone.server.entityManager.findEntitiesInRange((wdth / 2) + 8f, dimension, posx, posy, posz);
+
+		if (nearby_list != null)
+		{
+			if (!nearby_list.isEmpty())
+			{
+				double dir;
+				double dist;
+				Entity e = null;
+				li = nearby_list.listIterator();
+				while (li.hasNext())
+				{
+					e = (Entity) li.next();
+					if (e != this && !e.ignoreCollisions)
+					{ //don't bump self!
+						if ((e.posy >= posy && e.posy < posy + getHeight())
+								|| (e.posy + e.getHeight() > posy && e.posy + e.getHeight() < posy + getHeight())
+								|| (posy >= e.posy && posy < e.posy + e.getHeight())
+								|| (posy + getHeight() > e.posy && posy + getHeight() < e.posy + e.getHeight()))
+						{
+							dist = e.getHorizontalDistanceFromEntity(this); //Center to center
+							dist -= (wdth / 2); //width of me
+							dist -= (e.getWidth() / 2); //width of it
+							if (dist < 0)
+							{
+								//do x-z bumping...
+								dir = Math.atan2(e.posz - this.posz, e.posx - this.posx);
+								dist = -0.25f;
+								e.motionx -= Math.cos(dir) * dist * deltaT;
+								e.motionz -= Math.sin(dir) * dist * deltaT;
+							}
+						}
+					}
+
+					if (e instanceof Player)
+						((Player) e).server_thread.sendVelocityUpdateToPlayer(e.motionx, e.motiony, e.motionz);
+				}
+			}
+		}
 	}
 
 	public void update(float deltaT)
@@ -113,7 +166,6 @@ public class EntityPushedBlock extends Entity
 			double combinedDistance = posx - getVarInt(22) + posy - getVarInt(23) + posz - getVarInt(24) - 1.5;
 			if (combinedDistance > 1 || combinedDistance < -1 || lifetimeticker > 50)
 			{
-				System.out.println(lifetimeticker);
 				posx = getVarInt(22) + Math.signum(Math.round(posx - 0.5 - getVarInt(22))) + 0.5;
 				posy = getVarInt(23) + Math.signum(Math.round(posy - 0.5 - getVarInt(23))) + 0.5;
 				posz = getVarInt(24) + Math.signum(Math.round(posz - 0.5 - getVarInt(24))) + 0.5;
@@ -176,13 +228,12 @@ public class EntityPushedBlock extends Entity
 					{
 						dmg = Items.getAttackStrength(ic.iid);
 					}
-					if (e.getGameMode() != GameModes.SURVIVAL)
-					{
-						setHealth(0); //Just shortcut the entire process
-					}
 					ic.getItem().leftClickOnBlock((Player) e, dimension, (int) posx, (int) posy, (int) posz, 0);
 				}
-
+				if (e.getGameMode() != GameModes.SURVIVAL)
+				{
+					dmg = (int) getHealth() + 1; //Just shortcut the entire process
+				}
 				String particlename = Blocks.getParticleName(bid);
 				if (particlename == null || particlename.equals(""))
 					particlename = "DangerZone:ParticleBreak";
